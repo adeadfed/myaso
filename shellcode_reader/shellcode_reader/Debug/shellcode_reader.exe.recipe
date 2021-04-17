@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\Blackberry\source\repos\shellcode_reader\Debug\shellcode_reader.exe</FullPath>
+      <FullPath>C:\Users\Blackberry\Desktop\projects\yet-another-shellcode-obfuscator\shellcode_reader\Debug\shellcode_reader.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
