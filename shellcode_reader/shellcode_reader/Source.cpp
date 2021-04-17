@@ -1,10 +1,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
+#include <bitset>
 
 
-char get_lsb(char target, char source, char offset) {
-    return (target << offset) | (source & 1);
+char get_lsb(char target, char source) {
+    return (target << 1) | (source & 1);
 }
 
 
@@ -40,51 +41,44 @@ void ReadBMP(std::string filename)
 
     int row_length = 4 * ((width + 1) * 3 / 4);
     
-    // temporary
-    int message_size = 0;
-
     char* payload_data;
     
-    int bits_to_read = 36;
-    int pixel_num = 0;
+    int bits_to_read = 360;
+    int bits_read = 0;
 
     char* row_data = new char[row_length];
     char r, g, b;
 
     char temp = 0;
-    char offset = 0;
 
     for (int i = 0; i < height; i++)
     {
         file.read(row_data, row_length);
         for (int j = 0; j < width * 3; j += 3)
         {
+            if (bits_to_read) {
+                /*
+                * In binary, pixels are actually stored in reversed format (B, G, R)
+                * https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file/38440684
+                */
 
-            /*
-            * In binary, pixels are actually stored in reversed format (B, G, R)
-            * https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file/38440684
-            */
-           
-            
-            b = row_data[j];
-            g = row_data[j + 1];
-            r = row_data[j + 2];
-            
-            temp = get_lsb(temp, r, offset);
-            offset = (offset + 1) % 8;
-            std::cout << int(temp);
 
-            temp = get_lsb(temp, g, offset);
-            offset = (offset + 1) % 8;
-            std::cout << int(temp);
+                b = row_data[j];
+                g = row_data[j + 1];
+                r = row_data[j + 2];
+                
+                temp = get_lsb(temp, r);
+                temp = get_lsb(temp, g);
+                temp = get_lsb(temp, b);
 
-            temp = get_lsb(temp, g, offset);
-            offset = (offset + 1) % 8;
-            std::cout << int(temp);
-          
+                bits_to_read -= 3;
+            }
+            else {
+                file.close();
+                return;
+            }
         }
     }
-    file.close();
 }
 
 
