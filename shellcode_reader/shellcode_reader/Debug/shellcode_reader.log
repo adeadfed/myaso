@@ -1,3 +1,2 @@
 ﻿  Source.cpp
-C:\Users\Blackberry\Desktop\projects\yet-another-shellcode-obfuscator\shellcode_reader\shellcode_reader\Source.cpp(44,11): warning C4101: 'payload_data': unreferenced local variable
   shellcode_reader.vcxproj -> C:\Users\Blackberry\Desktop\projects\yet-another-shellcode-obfuscator\shellcode_reader\Debug\shellcode_reader.exe
