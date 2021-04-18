@@ -1,26 +1,16 @@
-# C implementation reads pixels left to right, top to bottom
-# Python implementation reads pixels left to right, bottom to top!
-
-
-# TODO: rewrite bit operations on python bitarray
-
+"""
+C implementation reads pixels left to right, top to bottom
+Python implementation reads pixels left to right, bottom to top!
+"""
+import argparse
 
 from PIL import Image
 from bitarray import bitarray
-from bitarray.util import int2ba, ba2int
+
+from algorithms import LSB
 
 
-
-
-# force set last bit to 1 by doing bitwise OR with 0b00000001 
-# force set last bit to 0 by doing bitwise AND with 0b11111110
-def set_lsb(byte, value):
-    return byte | 0b1 if value else byte & ~0b1
-
-
-# get last bit value by doing bitwise AND with 0b00000001
-def get_lsb(byte):
-    return byte & 0b1
+ALGORITHMS = ['LSB']
 
 
 def read_sc_file(sc_filename):
@@ -31,73 +21,43 @@ def read_sc_file(sc_filename):
     return sc_bits.tolist()
 
 
-def save_encoded_image(src_img_filename, tgt_img_filename, sc_bits):
-    img = Image.open(src_img_filename)
+def save_encoded_image(source_file, dest_file, payload_bytes: bytes):
+    payload = bitarray()
+    payload.frombytes(payload_bytes)
+    img = Image.open(source_file)
 
-    # maximum number of less significant bits
-    max_len = img.height * img.width * 3
-
-    if len(sc_bits) > max_len:
-        print('[-] Too much to handle!')
-        return
-
-    # iterate over pixels left to right, top to bottom
-    for y in reversed(range(img.height)):
-        for x in range(img.width):
-            # get initial values
-            r, g, b = img.getpixel((x,y))
-            
-            # print(r,g,b)
-            # set lsb of each color to target value
-            # pop first shellcode bit and set it in the color 
-
-            # in binary, (r,g,b) is stored in reverse (b,g,r)
-            # https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file/38440684
-            if (sc_bits): b = set_lsb(b, sc_bits.pop(0))
-            if (sc_bits): g = set_lsb(g, sc_bits.pop(0))
-            if (sc_bits): r = set_lsb(r, sc_bits.pop(0))
-            
-            
-            img.putpixel((x,y), (r, g, b))
-    img.save(tgt_img_filename)
+    LSB.embed_data(img, payload)
+    
+    img.save(dest_file)
 
 
-def read_encoded_image(img_filename, length):
+def read_encoded_image(img_filename: str, max_bits: int) -> bytes:
     img = Image.open(img_filename)
     
-    message_bits = bitarray()
-   
-    # Iterate over pixels left to right, top to bottom
-    for y in reversed(range(img.height)):
-        for x in range(img.width):
-            # get initial values
-            r, g, b = img.getpixel((x,y))
-            
-            if length > 0:
-                r_bit = get_lsb(r)
-                g_bit = get_lsb(g)
-                b_bit = get_lsb(b)
-
-                message_bits.append(b_bit)
-                message_bits.append(g_bit)
-                message_bits.append(r_bit)
-
-                length -= 3
-            else:
-                return message_bits.tobytes()
+    payload = LSB.extract_data(img, max_bits)
+    return payload.tobytes()
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='A steganographic shellcode obfuscator. ' + \
+                    'The executor reads data from a BMP image and executes it ' + \
+                    'using VirtualAlloc/HeapAlloc. '
+    )
 
+    shellcode_source = parser.add_mutually_exclusive_group(required=True)
+    shellcode_source.add_argument('-f', type=str, help='File with shellcode', dest='sc_file')
+    shellcode_source.add_argument('--sc', type=bytes, help='Shellcode encoded as Python bytes', dest='sc')
 
+    parser.add_argument('-i', type=str, help='Source image', required=True, dest='src')
+    parser.add_argument('-o', type=str, help='Destination image', required=True, dest='dst')
 
+    parser.add_argument('-a', type=str, help=f'Algorithm to use. Available options: {", ".join(ALGORITHMS)}')
+    
+    args = parser.parse_args()
 
+    if args.sc_file:
+        with open(args.sc_file, 'rb') as f:
+            args.sc = f.read()
 
-shellcode = read_sc_file('samples/test_small.txt')
-
-length = len(shellcode) 
-print(length)
-
-save_encoded_image('samples/Untitled2.bmp', 'samples/howareyou.bmp', shellcode)
-message = read_encoded_image('samples/howareyou.bmp', length)
-
-print(message)
+    save_encoded_image(args.src, args.dst, args.sc)
