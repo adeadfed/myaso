@@ -1,4 +1,6 @@
 *.exe
 .idea/
 .vs/
-env/
+.vscode
+Debug/
+Release/

