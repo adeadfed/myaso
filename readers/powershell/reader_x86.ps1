@@ -1,5 +1,4 @@
-# [string] $filename = ".\samples\cat.bmp"
-[string] $filename = "C:\Users\harpsiford\Downloads\Telegram Desktop\Desktop (2)\helpme.bmp"
+[string] $filename = ".\samples\helpme.bmp"
 [Int32] $length = 1544 + 16
 
 $MethodDefinition =
