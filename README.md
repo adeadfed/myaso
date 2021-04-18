@@ -33,3 +33,10 @@ python main.py --sc "\xe4\xed..." -i image.bmp -o evil_image.bmp [-a <algorithm>
 c:\> reader.exe --size <sc_len> -f happy_cat.bmp
 ```
 
+## Definition of Ready
+- [] add length parsing
+- [] parsing/embedding is abstract enough
+- [x] console args
+- [] colored output
+- [] write tests (at least for the Python part)
+- [] proper error handling
