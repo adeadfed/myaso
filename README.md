@@ -6,10 +6,10 @@ Has modules in the following languages:
 - [x] C/C++
 - [x] C#
 - [x] Powershell
+- [x] Go
 - [] VB
 - [] Python
 - [] Rust
-- [] Go
 
 Available algorithms:
 - [x] LSB (generic)
