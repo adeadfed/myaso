@@ -1,0 +1,3 @@
+- a download & exec functionality would be a cool option
+- we should somehow control target arch and propose relevant readers for it
+- we can use embedded bitmaps into exe files

