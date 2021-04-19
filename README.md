@@ -17,11 +17,7 @@ Available algorithms:
 
 Supproted image formats:
 - [x] BMP
-<<<<<<< HEAD
 - [x] PNG
-=======
-- [x] PNG 
->>>>>>> 7e73fedb8a834735d5b9af8f9ee1bd093e2ade92
 - [] JPEG (in progress)
 
 ## Usage
