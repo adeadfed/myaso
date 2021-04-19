@@ -17,8 +17,8 @@ Available algorithms:
 
 Supproted image formats:
 - [x] BMP
-- [] PNG (in progress)
-- [] JPEG
+- [x] PNG
+- [] JPEG (in progress)
 
 ## Usage
 
