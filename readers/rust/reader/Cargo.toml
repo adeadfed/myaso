@@ -1,0 +1,12 @@
+[package]
+name = "reader"
+version = "0.1.0"
+authors = ["harpsiford <kasumi2197@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3.9", features = ["memoryapi", "minwinbase", "processthreadsapi", "winnt"] }
+image = "0.23.14"
