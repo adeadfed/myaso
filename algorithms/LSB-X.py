@@ -13,7 +13,10 @@ def set_lsb(byte, value):
 def get_lsb(byte):
     return byte & 0b1
 
-def embed_data(img: Image, payload: bitarray):
+def embed_data(img: Image, channel: str, payload: bitarray):
+    
+    channels = {'r':0, 'g':0, 'b':0}
+    
     # maximum number of less significant bits
     max_len = img.height * img.width * 3
 
@@ -25,7 +28,7 @@ def embed_data(img: Image, payload: bitarray):
     for y in range(img.height):
         for x in range(img.width):
             # get initial values
-            r, g, b = img.getpixel((x,y))
+            channels['r'], channels['g'], channels['b'] = img.getpixel((x,y))
             
             # print(r,g,b)
             # set lsb of each color to target value
@@ -33,39 +36,25 @@ def embed_data(img: Image, payload: bitarray):
 
             # FYI, in binary, (r,g,b) is stored in reverse (b,g,r)
             # https://stackoverflow.com/questions/9296059/read-pixel-value-in-bmp-file/38440684
-            if payload: r = set_lsb(r, payload.pop(0))
-            if payload: g = set_lsb(g, payload.pop(0))
-            if payload: b = set_lsb(b, payload.pop(0))
+            if payload: channels[channel] = set_lsb(channels[channel], payload.pop(0))
             
-            img.putpixel((x,y), (r, g, b))
+            img.putpixel((x,y), (channels['r'], channels['g'], channels['b']))
 
 
-def extract_data(img: Image, max_bits: int) -> bitarray:
+def extract_data(img: Image, channel: str, max_bits: int) -> bitarray:
     payload = bitarray()
    
-    # Iterate over pixels left to right, top to bottom
-    
-    # Reverse LSB
-    # for y in reversed(range(img.height))
+    channels = {'r':0, 'g':0, 'b':0}
 
+    # Iterate over pixels left to right, top to bottom
     for y in range(img.height):
         for x in range(img.width):
             # get initial values
-            r, g, b = img.getpixel((x,y))
+            channels['r'], channels['g'], channels['b'] = img.getpixel((x,y))
             
             if max_bits > 0:
-                r_bit = get_lsb(r)
-                g_bit = get_lsb(g)
-                b_bit = get_lsb(b)
-
-                payload.append(r_bit)
-                payload.append(g_bit)
-                payload.append(b_bit)
-
-                # reverse LSB
-                # payload.append(b_bit)
-                # payload.append(g_bit)
-                # payload.append(r_bit)
+                lsb_bit = get_lsb(channels[channel])
+                payload.append(lsb_bit)
 
                 max_bits -= 3
             else:
