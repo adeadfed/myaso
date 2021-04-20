@@ -17,13 +17,15 @@ def read_sc_file(sc_filename):
     with open(sc_filename, 'rb') as f:
         sc_bits = bitarray()
         sc_bits.fromfile(f)
-    
     return sc_bits.tolist()
 
 
 def save_encoded_image(source_file, dest_file, payload_bytes: bytes):
     payload = bitarray()
     payload.frombytes(payload_bytes)
+
+    print(len(payload_bytes))
+
     img = Image.open(source_file)
 
     LSB.embed_data(img, payload)
@@ -61,3 +63,5 @@ if __name__ == '__main__':
             args.sc = f.read()
 
     save_encoded_image(args.src, args.dst, args.sc)
+    payload = read_encoded_image(args.dst, 5737*8)
+    print(payload)
