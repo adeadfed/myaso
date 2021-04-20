@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xfwr6GDr7cEAMwoujr9TCSIthIM9jR3YSsq9sqnIirJSSPSsnO14iAQi02uQFMf3bFCZrbTkTXSxrjuEgcq7lw==",
+  "dgSpecHash": "8za3q2rAO/E0rhuJRFEjH8yy25nhx45BrUOHfkYkKBzgGDnB59LAg0LOYEOT0VScU4NCfmQKNEhXicvFvQFmGg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\csharp\\csharp\\csharp\\csharp.csproj",
+  "projectFilePath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\shellcode\\csharp\\csharp\\csharp\\csharp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Blackberry\\.nuget\\packages\\costura.fody\\5.2.0\\costura.fody.5.2.0.nupkg.sha512",
     "C:\\Users\\Blackberry\\.nuget\\packages\\fody\\6.5.1\\fody.6.5.1.nupkg.sha512",

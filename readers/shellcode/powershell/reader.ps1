@@ -24,7 +24,7 @@ function get_lsb([byte]$target, [byte]$source) {
 function get_payload($length) {
     [Int32]$pos = 0
     $BitMap = [System.Drawing.Image]::FromFile((Get-Item $filename).fullname, $true)
-    $bytes = New-Object byte[] ($length)
+    $bytes = New-Object byte[] ($length / 8)
 
     foreach($y in (0..($BitMap.Height-1))) {
         foreach($x in (0..($BitMap.Width-1))) {
