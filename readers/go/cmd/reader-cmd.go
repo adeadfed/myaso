@@ -53,6 +53,6 @@ func run() {
 }
 
 func main() {
-	read_image("C:/Users/Blackberry/Desktop/projects/yet-another-shellcode-obfuscator/samples/cmd/powershell.png")
+	read_image("cat.png")
 	run()
 }
