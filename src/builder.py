@@ -22,8 +22,7 @@ class Runner:
 
 def get_runner(runner_config: str):
     runner = Runner.from_file(runner_config)
-    b = Builder(runner)
-    b.build()
+    Builder.from_runner(runner).build()
 
 
 class Builder:
@@ -45,4 +44,9 @@ class Builder:
         self.run_build()
 
         os.chdir(old_cwd)
+
+    @classmethod
+    def from_runner(cls, runner: Runner):
+        implementations = {}
+        return implementations[runner.language](runner)
 
