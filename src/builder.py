@@ -8,7 +8,7 @@ from yaml import safe_load
 @dataclass
 class Runner:
     """Shellcode runner. Knows how to build itself"""
-    mode: str
+    method: str
     language: str
     algorithm: str
     max_bits: int
@@ -21,7 +21,7 @@ class Runner:
 
     @property
     def sources(self):
-        return os.path.join('readers', self.mode, self.language)
+        return os.path.join('readers', self.language, self.method)
 
 
 def get_runner(runner_config: str):

