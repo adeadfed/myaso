@@ -2,8 +2,6 @@ import os
 import re
 import sys
 
-MSF_RE = re.compile(b'^msf://(.*)')
-
 
 def from_args(args):
     try:
@@ -25,6 +23,9 @@ def from_file(sc_filename: str) -> bytes:
         return f.read()
 
 
-def from_msf_payload(msf_path: str, custom_options: list) -> bytes:
+MSF_RE = re.compile(b'^msf://(.*)')
+
+
+def from_msf_payload(msf_path: str, extra_options: list) -> bytes:
     # FIXME: could have used https://pypi.org/project/pymetasploit3/
-    return os.popen(f'msfvenom -p {msf_path} {custom_options} -f raw').read().encode('utf-8')
+    return os.popen(f'msfvenom -p {msf_path} {extra_options} -f raw').read().encode('utf-8')
