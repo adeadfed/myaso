@@ -14,7 +14,7 @@ use winapi::um::minwinbase::SECURITY_ATTRIBUTES;
 
 fn run(data: Vec<u8>) {
     unsafe {
-        let size: SIZE_T = 2208 / 8;
+        let size: SIZE_T = {{ MAX_BITS }} / 8;
         // let addr: *mut u8;
 
         // Take a pointer
