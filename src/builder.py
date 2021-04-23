@@ -1,5 +1,7 @@
 import os.path
 from dataclasses import dataclass
+
+import chevron
 from yaml import safe_load
 
 
@@ -8,12 +10,14 @@ class Runner:
     """Shellcode runner. Knows how to build itself"""
     mode: str
     language: str
-    delivery_method: str
     algorithm: str
+    max_bits: int
+    delivery_method: str = 'from_image'
 
     @classmethod
     def from_file(cls, filename: str):
-        return cls(**safe_load(filename))
+        with open(filename) as f:
+            return cls(**safe_load(f))
 
     @property
     def sources(self):
@@ -38,8 +42,11 @@ class Builder:
     def build(self):
         old_cwd = os.getcwd()
         os.chdir(self.runner.sources)
+        try:
+            os.mkdir('build')
+        except FileExistsError:
+            pass
 
-        os.mkdir('build')
         self.preprocess_sources()
         self.run_build()
 
@@ -47,6 +54,22 @@ class Builder:
 
     @classmethod
     def from_runner(cls, runner: Runner):
-        implementations = {}
+        implementations = {
+            # 'c': CBuilder,
+            # 'csharp': CSharpBuilder,
+            # 'go': GoBuilder,
+            'powershell': PowershellBuilder,
+            # 'rust': RustBuilder
+        }
         return implementations[runner.language](runner)
 
+
+class PowershellBuilder(Builder):
+    def preprocess_sources(self):
+        with open('template.ps1') as template:
+            script = chevron.render(template, {'MAX_BITS': self.runner.max_bits})
+            with open(os.path.join('build', 'runner.ps1'), 'w') as f:
+                f.write(script)
+
+    def run_build(self):
+        pass

@@ -1,0 +1,4 @@
+mode: shellcode
+language: powershell
+algorithm: LSB
+max_bits: 2208

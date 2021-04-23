@@ -8,3 +8,4 @@ env/
 __pycache__/
 readers/rust/reader/target/
 Cargo.lock
+build/
