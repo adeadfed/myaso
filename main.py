@@ -8,7 +8,7 @@ import os
 from PIL import Image
 from bitarray.util import deserialize
 
-from src import shellcode
+from src import shellcode, builder
 from algorithms import LSB, LSBX
 
 ALGORITHMS = {
@@ -34,8 +34,7 @@ def read_sc(args):
 
 
 def get_runner(args):
-
-    pass
+    builder.get_runner(args.runner_config)
 
 
 command_handlers = {
@@ -76,7 +75,7 @@ if __name__ == '__main__':
     parser.add_argument('-a', dest='algorithm', type=str,
                         help=f'Algorithm to use. Available options: {", ".join(ALGORITHMS.keys())}')
 
-    parser.add_argument('-c', '--runner-config', dest='runner_config', type=str, help='Runner config', required=True)
+    parser.add_argument('-r', '--runner-config', dest='runner_config', type=str, help='Runner config', required=True)
     parser.add_argument('extra_options', type=str, nargs='*',
                         help='Options used when generating a Cobalt or MSF payload')
 
