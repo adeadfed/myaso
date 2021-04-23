@@ -11,8 +11,7 @@ class Runner:
     method: str
     language: str
     algorithm: str
-    max_bits: int
-    delivery_method: str = 'from_image'
+    options: dict
 
     @classmethod
     def from_file(cls, filename: str):
@@ -67,7 +66,7 @@ class Builder:
 class PowershellBuilder(Builder):
     def preprocess_sources(self):
         with open('template.ps1') as template:
-            script = chevron.render(template, {'MAX_BITS': self.runner.max_bits})
+            script = chevron.render(template, self.runner.options)
             with open(os.path.join('build', 'runner.ps1'), 'w') as f:
                 f.write(script)
 
