@@ -1,4 +1,5 @@
 import os.path
+from shutil import copy
 from dataclasses import dataclass
 
 import chevron
@@ -47,6 +48,8 @@ class Builder:
             pass
 
         self.preprocess_sources()
+
+        os.chdir('build')
         self.run_build()
 
         os.chdir(old_cwd)
@@ -56,11 +59,25 @@ class Builder:
         implementations = {
             # 'c': CBuilder,
             # 'csharp': CSharpBuilder,
-            # 'go': GoBuilder,
+            'go': GoBuilder,
             'powershell': PowershellBuilder,
             # 'rust': RustBuilder
         }
         return implementations[runner.language](runner)
+
+
+class GoBuilder(Builder):
+    def preprocess_sources(self):
+        with open('template.go') as template:
+            script = chevron.render(template, self.runner.options)
+            with open(os.path.join('build', 'runner.go'), 'w') as f:
+                f.write(script)
+
+        for file in ['go.mod', 'go.sum']:
+            copy(file, os.path.join('build', file))
+
+    def run_build(self):
+        os.popen('go build')
 
 
 class PowershellBuilder(Builder):

