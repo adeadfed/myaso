@@ -74,7 +74,7 @@ class GoBuilder(Builder):
                 f.write(script)
 
         for file in ['go.mod', 'go.sum']:
-            copy(file, os.path.join('build', file))
+            copy(file, 'build')
 
     def run_build(self):
         os.popen('go build')
