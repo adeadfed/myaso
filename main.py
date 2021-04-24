@@ -29,7 +29,7 @@ def embed_sc(args):
 
 def read_sc(args):
     img = Image.open(args.src)
-    payload = LSB.extract_data(img, args.max_bits)
+    payload = LSB.extract(img, args.max_bits)
     return payload.tobytes()
 
 

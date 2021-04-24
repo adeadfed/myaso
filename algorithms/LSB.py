@@ -1,18 +1,6 @@
 from bitarray import bitarray
 from PIL import Image
-
-
-def __set_lsb(byte, value):
-    """
-    set last bit to 1 by doing bitwise OR with 0b00000001
-    set last bit to 0 by doing bitwise AND with 0b11111110
-    """
-    return byte | 0b1 if value else byte & ~0b1
-
-
-def __get_lsb(byte):
-    """get last bit by doing bitwise AND with 0b00000001"""
-    return byte & 0b1
+from .LSB_utils import __get_lsb, __set_lsb
 
 
 def capacity(img: Image):
@@ -34,7 +22,7 @@ def embed(img: Image, payload: bitarray, **kwargs):
         img.putpixel((x, y), (r, g, b))
 
 
-def extract_data(img: Image, payload_bits: int, **kwargs) -> bitarray:
+def extract(img: Image, payload_bits: int, **kwargs) -> bitarray:
     payload = bitarray()
 
     for y, x in zip(range(img.height), range(img.width)):
