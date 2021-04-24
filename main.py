@@ -29,7 +29,7 @@ def embed_sc(args):
     logger.info(f'Payload size: {len(payload)} bits (save this number!)')
 
     algorithm = ALGORITHMS[args.algorithm]
-    logger.debug(f'Algorithm: {algorithm}, extracting up to {args.max_bits} bits')
+    logger.debug(f'Algorithm: {args.algorithm}')
 
     logger.debug(f'Source image: {args.src}')
     img = Image.open(args.src)
@@ -44,10 +44,10 @@ def read_sc(args):
     img = Image.open(args.src)
 
     algorithm = ALGORITHMS[args.algorithm]
-    logger.debug(f'Algorithm: {algorithm}, extracting up to {args.max_bits} bits')
+    logger.debug(f'Algorithm: {args.algorithm}, extracting up to {args.max_bits} bits')
 
     payload = algorithm.extract(img, args.max_bits)
-    logger.success('Message', payload.tobytes())
+    logger.success('Message: {}', payload.tobytes())
 
 
 def get_runner(args):
