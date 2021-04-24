@@ -23,7 +23,7 @@ def embed_sc(args):
     algorithm = ALGORITHMS[args.algorithm]
 
     img = Image.open(args.src)
-    algorithm.embed_data(img, payload)
+    algorithm.embed(img, payload)
     img.save(args.dst)
 
 
