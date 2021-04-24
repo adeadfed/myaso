@@ -59,7 +59,6 @@ class Builder:
             # 'csharp': CSharpBuilder,
             'go': GoBuilder,
             'powershell': PowershellBuilder,
-            'rust': RustBuilder
         }
         return implementations[runner.language](runner)
 
@@ -88,17 +87,3 @@ class PowershellBuilder(Builder):
 
     def run_build(self):
         pass
-
-
-class RustBuilder(Builder):
-    def preprocess_sources(self):
-        os.chdir('template')
-        os.chdir('src')
-        with open('template.rs') as template:
-            script = chevron.render(template, self.runner.options)
-            with open(os.path.join('main.rs'), 'w') as f:
-                f.write(script)
-        os.chdir('..')
-
-    def run_build(self):
-        os.popen('cargo build --release')

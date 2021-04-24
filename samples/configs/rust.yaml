@@ -1,5 +1,0 @@
-method: shellcode
-language: rust
-algorithm: LSB
-options:
-  MAX_BITS: 2208
