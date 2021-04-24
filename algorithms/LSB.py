@@ -1,3 +1,5 @@
+from itertools import product
+
 from bitarray import bitarray
 from PIL import Image
 from .LSB_utils import __get_lsb, __set_lsb
@@ -9,9 +11,10 @@ def capacity(img: Image):
 
 
 def embed(img: Image, payload: bitarray, **kwargs):
-    assert len(payload) < capacity(img), '[-] Too much to handle!'
+    assert len(payload) <= capacity(img), \
+        f'[-] payload length ({len(payload)}) is greater than image capacity ({capacity(img)})!'
 
-    for y, x in zip(range(img.height), range(img.width)):
+    for y, x in product(range(img.height), range(img.width)):
         r, g, b = img.getpixel((x, y))
 
         """set lsb of each color to target value"""
@@ -25,15 +28,15 @@ def embed(img: Image, payload: bitarray, **kwargs):
 def extract(img: Image, payload_bits: int, **kwargs) -> bitarray:
     payload = bitarray()
 
-    for y, x in zip(range(img.height), range(img.width)):
+    for y, x in product(range(img.height), range(img.width)):
         for byte in img.getpixel((x, y)):
             if not payload_bits:
-                return payload
+                break
 
             bit = __get_lsb(byte)
             payload.append(bit)
             payload_bits -= 1
-
+    return payload
 
 # TODO: Reverse LSB
 #  for y in reversed(range(img.height))

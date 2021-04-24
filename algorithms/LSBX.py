@@ -1,4 +1,5 @@
 from enum import IntEnum
+from itertools import product
 
 from bitarray import bitarray
 from PIL import Image
@@ -11,30 +12,32 @@ def capacity(img: Image):
 
 
 def embed(img: Image, payload: bitarray, **kwargs):
-    assert len(payload) < capacity(img), '[-] Too much to handle!'
+    assert len(payload) <= capacity(img), \
+        f'[-] payload length ({len(payload)}) is greater than image capacity ({capacity(img)})!'
 
     idx = Channel[kwargs.get('channel') or 'R'].value
 
-    for y, x in zip(range(img.height), range(img.width)):
+    for y, x in product(range(img.height), range(img.width)):
         channels = list(img.getpixel((x, y)))
 
         if payload: channels[idx] = __set_lsb(channels[idx], payload.pop(0))
 
-        img.putpixel((x, y), channels)
+        img.putpixel((x, y), tuple(channels))
 
 
 def extract(img: Image, payload_bits: int, **kwargs) -> bitarray:
     idx = Channel[kwargs.get('channel') or 'R'].value
     payload = bitarray()
 
-    for y, x in zip(range(img.height), range(img.width)):
+    for y, x in product(range(img.height), range(img.width)):
         channels = list(img.getpixel((x, y)))
         if not payload_bits:
-            return payload
+            break
 
         bit = __get_lsb(channels[idx])
         payload.append(bit)
         payload_bits -= 1
+    return payload
 
 
 class Channel(IntEnum):

@@ -6,7 +6,7 @@ import argparse
 import os
 
 from PIL import Image
-from bitarray.util import deserialize
+from bitarray import bitarray
 
 from src import shellcode, builder
 from algorithms import LSB, LSBX
@@ -19,7 +19,9 @@ ALGORITHMS = {
 
 def embed_sc(args):
     sc = shellcode.from_args(args)
-    payload = deserialize(sc)
+    print(f'Got shellcode: {sc}')
+    payload = bitarray()
+    payload.frombytes(sc)
     algorithm = ALGORITHMS[args.algorithm]
 
     img = Image.open(args.src)
@@ -29,8 +31,9 @@ def embed_sc(args):
 
 def read_sc(args):
     img = Image.open(args.src)
-    payload = LSB.extract(img, args.max_bits)
-    return payload.tobytes()
+    algorithm = ALGORITHMS[args.algorithm]
+    payload = algorithm.extract(img, args.max_bits)
+    print(payload.tobytes())
 
 
 def get_runner(args):
@@ -70,7 +73,7 @@ if __name__ == '__main__':
     parser.add_argument('-o', dest='dst', type=str, help='Destination image')
 
     # read
-    parser.add_argument('--bits', dest='max_bits', type=str, help='Shellcode length')
+    parser.add_argument('--max-bits', dest='max_bits', type=int, help='Shellcode length')
 
     parser.add_argument('-a', dest='algorithm', type=str,
                         help=f'Algorithm to use. Available options: {", ".join(ALGORITHMS.keys())}')
