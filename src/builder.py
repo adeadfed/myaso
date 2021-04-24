@@ -89,7 +89,7 @@ class Builder:
         logger.debug('Finding you a template...')
         implementations = {
             'c': CBuilder,
-            # 'csharp': CSharpBuilder,
+            'csharp': CSharpBuilder,
             'go': GoBuilder,
             'powershell': PowershellBuilder,
         }
@@ -123,6 +123,13 @@ class CBuilder(Builder):
             f'-Wall '
             f'-o {self.build_dir}/{self.runner.name}'
         )
+
+
+class CSharpBuilder(Builder):
+    template_file = 'csharp/Program.cs'
+
+    def build(self):
+        os.popen(f'mcs -platform:{self.runner.arch} -reference:System.Drawing {self.build_dir}/{self.runner.name}')
 
 
 class GoBuilder(Builder):
