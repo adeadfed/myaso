@@ -54,7 +54,7 @@ if __name__ == '__main__':
                     'using VirtualAlloc/HeapAlloc. '
     )
 
-    parser.add_argument('command', metavar='<command>', help=f'One of {command_handlers.keys()}')
+    parser.add_argument('command', metavar='<command>', help=f'One of {", ".join(command_handlers.keys())}')
 
     # embed
     parser.add_argument('-s', '--sc', '--shellcode', dest='sc_file',
