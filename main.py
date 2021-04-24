@@ -4,9 +4,12 @@ Python implementation reads pixels left to right, bottom to top!
 """
 import argparse
 import os
+import sys
+from functools import partialmethod
 
 from PIL import Image
 from bitarray import bitarray
+from loguru import logger
 
 from src import shellcode, builder
 from algorithms import LSB, LSBX
@@ -19,21 +22,32 @@ ALGORITHMS = {
 
 def embed_sc(args):
     sc = shellcode.from_args(args)
-    print(f'Got shellcode: {sc}')
+    logger.debug(f'Shellcode: {sc}')
+
     payload = bitarray()
     payload.frombytes(sc)
-    algorithm = ALGORITHMS[args.algorithm]
+    logger.info(f'Payload size: {len(payload)} bits (save this number!)')
 
+    algorithm = ALGORITHMS[args.algorithm]
+    logger.debug(f'Algorithm: {algorithm}, extracting up to {args.max_bits} bits')
+
+    logger.debug(f'Source image: {args.src}')
     img = Image.open(args.src)
     algorithm.embed(img, payload)
+
     img.save(args.dst)
+    logger.artifact(f'Saved the stego to {args.dst}')
 
 
 def read_sc(args):
+    logger.debug(f'Source image: {args.src}')
     img = Image.open(args.src)
+
     algorithm = ALGORITHMS[args.algorithm]
+    logger.debug(f'Algorithm: {algorithm}, extracting up to {args.max_bits} bits')
+
     payload = algorithm.extract(img, args.max_bits)
-    print(payload.tobytes())
+    logger.success('Message', payload.tobytes())
 
 
 def get_runner(args):
@@ -76,6 +90,18 @@ if __name__ == '__main__':
     parser.add_argument('extra_options', nargs='*',
                         help='Options used when generating a Cobalt or MSF payload')
 
+    parser.add_argument('-v', '--verbose', action='store_true')
+
     args = parser.parse_args()
+
+    logger.level('ERROR', icon=r'[-]')
+    logger.level('SUCCESS', icon=r'[+]')
+    logger.level('DEBUG', icon=r'[!]', color='')
+    logger.level('INFO', icon=r'[!]', color='<blue>')
+    logger.level('ARTIFACT', no=1337, icon='🥩')
+    logger.__class__.artifact = partialmethod(logger.__class__.log, 'ARTIFACT')
+
+    logger.remove()
+    logger.add(sys.stdout, format='<level>{level.icon}</level> {message}', level='DEBUG' if args.verbose else 'INFO')
 
     command_handlers[args.command](args)
