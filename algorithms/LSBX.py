@@ -13,18 +13,18 @@ def capacity(img: Image):
 def embed(img: Image, payload: bitarray, **kwargs):
     assert len(payload) < capacity(img), '[-] Too much to handle!'
 
-    channel = Channel[kwargs.get('channel') or 'R']
+    idx = Channel[kwargs.get('channel') or 'R'].value
 
     for y, x in zip(range(img.height), range(img.width)):
         channels = list(img.getpixel((x, y)))
 
-        if payload: channels[channel.value] = __set_lsb(channels[channel.value], payload.pop(0))
+        if payload: channels[idx] = __set_lsb(channels[idx], payload.pop(0))
 
         img.putpixel((x, y), channels)
 
 
 def extract(img: Image, payload_bits: int, **kwargs) -> bitarray:
-    channel = Channel[kwargs.get('channel') or 'R']
+    idx = Channel[kwargs.get('channel') or 'R'].value
     payload = bitarray()
 
     for y, x in zip(range(img.height), range(img.width)):
@@ -32,7 +32,7 @@ def extract(img: Image, payload_bits: int, **kwargs) -> bitarray:
         if not payload_bits:
             return payload
 
-        bit = __get_lsb(channels[channel.value])
+        bit = __get_lsb(channels[idx])
         payload.append(bit)
         payload_bits -= 1
 
