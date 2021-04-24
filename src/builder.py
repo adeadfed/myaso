@@ -1,4 +1,5 @@
 import os.path
+from collections import defaultdict
 from shutil import copy
 from dataclasses import dataclass
 
@@ -47,19 +48,24 @@ def get_runner(runner_config: str):
 
 
 class Builder:
+    template_file = ''
+    build_dir = 'build'
+
     def __init__(self, runner: Runner):
         self.runner = runner
-        self.build_dir = 'build'
 
     @property
     def artifact_path(self) -> str:
         return os.path.join(self.runner.sources, self.build_dir, self.runner.name)
 
     def preprocess_sources(self):
-        raise NotImplementedError
+        with open(self.template_file) as template:
+            script = chevron.render(template, self.runner.params)
+            with open(os.path.join(self.build_dir, self.runner.name), 'w') as f:
+                f.write(script)
 
     def run_build(self):
-        raise NotImplementedError
+        pass
 
     def build(self):
         old_cwd = os.getcwd()
@@ -82,7 +88,7 @@ class Builder:
     def from_runner(cls, runner: Runner):
         logger.debug('Finding you a template...')
         implementations = {
-            # 'c': CBuilder,
+            'c': CBuilder,
             # 'csharp': CSharpBuilder,
             'go': GoBuilder,
             'powershell': PowershellBuilder,
@@ -93,13 +99,37 @@ class Builder:
             logger.error(f'Runner in {runner.language} not found')
 
 
-class GoBuilder(Builder):
-    def preprocess_sources(self):
-        with open('template.go') as template:
-            script = chevron.render(template, self.runner.params)
-            with open(os.path.join(self.build_dir, 'runner.go'), 'w') as f:
-                f.write(script)
+class CBuilder(Builder):
+    template_file = 'c/Source.cpp'
+    compilers = {
+        'x86': '/usr/bin/i686-w64-mingw32-g++',
+        'x64': '/usr/bin/x86_64-w64-mingw32-g++'
+    }
+    libs = defaultdict(list, {
+        'remote': ['winhttp', 'ole32'],
+        'cmd': ['gdiplus'],
+        'shellcode': ['gdiplus'],
+    })
 
+    def run_build(self):
+        libs = self.libs[self.runner.delivery_method] + self.libs[self.runner.payload_type]
+        libs = set(libs)
+        libs = ' '.join(f'-l{lib} -Wl,-Bstatic' for lib in libs)
+        os.popen(
+            f'{self.compilers[self.runner.arch]} '
+            f'{self.template_file} '
+            f'-s -static-libgcc -static-libstdc++ '
+            f'{libs} '
+            f'-Wall '
+            f'-o {self.build_dir}/{self.runner.name}'
+        )
+
+
+class GoBuilder(Builder):
+    template_file = 'template.go'
+
+    def preprocess_sources(self):
+        super(self).preprocess_sources()
         for file in ['go.mod', 'go.sum']:
             copy(file, 'build')
 
@@ -109,11 +139,4 @@ class GoBuilder(Builder):
 
 
 class PowershellBuilder(Builder):
-    def preprocess_sources(self):
-        with open('template.ps1') as template:
-            script = chevron.render(template, self.runner.params)
-            with open(os.path.join(self.build_dir, self.runner.name), 'w') as f:
-                f.write(script)
-
-    def run_build(self):
-        pass
+    template_file = 'template.ps1'

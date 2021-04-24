@@ -14,7 +14,7 @@ char get_lsb(char target, char source) {
 
 
 
-const int shellcode_len = 2208;
+const int shellcode_len = {{ PAYLOAD_BITS }};
 char* payload_data = new char[shellcode_len / 8];
 
 
