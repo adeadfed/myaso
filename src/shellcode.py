@@ -5,17 +5,14 @@ import sys
 
 def from_args(args):
     try:
-        return from_file(args.sc_file)
-    except TypeError:
-        pass
-    try:
-        msf_path = MSF_RE.findall(args.sc)[0]
+        msf_path = MSF_RE.findall(args.sc_file)[0]
         return from_msf_payload(msf_path, args.custom_args)
     except IndexError:
-        if args.sc == '-':
-            return sys.stdin.buffer.read()
-        else:
-            return args.sc
+        pass
+    try:
+        return from_file(args.sc_file)
+    except FileNotFoundError:
+        pass  # todo
 
 
 def from_file(sc_filename: str) -> bytes:
@@ -23,7 +20,7 @@ def from_file(sc_filename: str) -> bytes:
         return f.read()
 
 
-MSF_RE = re.compile(b'^msf://(.*)')
+MSF_RE = re.compile('^msf://(.*)')
 
 
 def from_msf_payload(msf_path: str, extra_options: list) -> bytes:
