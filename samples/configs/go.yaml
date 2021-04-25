@@ -1,0 +1,11 @@
+name: gorunner.exe
+os: windows
+arch: x86
+
+language: go
+delivery_method: image
+payload_type: shellcode
+algorithm: LSB
+
+params:
+  MAX_BITS: 2208

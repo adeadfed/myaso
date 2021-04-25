@@ -10,7 +10,7 @@ import (
 	_ "golang.org/x/image/bmp"
 )
 
-const shellcode_len = 45896
+const shellcode_len = {{ MAX_BITS }}
 
 var payload_data [shellcode_len / 8]byte
 
