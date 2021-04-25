@@ -72,7 +72,7 @@ void run() {
 
 int main() {
 
-    read_image(L"C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\samples\\helpme_x64.png");
+    read_image(L"C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\samples\\shellcode\\shellcode_x64.bmp");
     run();
 
     return 0;
