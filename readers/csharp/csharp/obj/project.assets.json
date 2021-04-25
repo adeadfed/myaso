@@ -4118,11 +4118,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\shellcode\\csharp\\csharp\\csharp\\csharp.csproj",
+      "projectUniqueName": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\csharp\\csharp\\csharp.csproj",
       "projectName": "csharp",
-      "projectPath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\shellcode\\csharp\\csharp\\csharp\\csharp.csproj",
+      "projectPath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\csharp\\csharp\\csharp.csproj",
       "packagesPath": "C:\\Users\\Blackberry\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\shellcode\\csharp\\csharp\\csharp\\obj\\",
+      "outputPath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\csharp\\csharp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Blackberry\\AppData\\Roaming\\NuGet\\NuGet.Config",

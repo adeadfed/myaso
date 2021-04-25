@@ -210,6 +210,10 @@ Gdiplus::Bitmap* load_image(LPCWSTR filename) {
 
 
 
+
+
+
+
 #if PAYLOAD_ALGORITHM == payload_algorithm_lsb
 char get_lsb(char target, char source) {
     return (target << 1) | (source & 1);

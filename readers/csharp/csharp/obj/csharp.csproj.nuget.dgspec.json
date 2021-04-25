@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\cmd\\csharp-cmd\\csharp-cmd\\csharp-cmd\\csharp-cmd.csproj": {}
+    "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\csharp\\csharp\\csharp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\cmd\\csharp-cmd\\csharp-cmd\\csharp-cmd\\csharp-cmd.csproj": {
+    "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\csharp\\csharp\\csharp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\cmd\\csharp-cmd\\csharp-cmd\\csharp-cmd\\csharp-cmd.csproj",
-        "projectName": "csharp-cmd",
-        "projectPath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\cmd\\csharp-cmd\\csharp-cmd\\csharp-cmd\\csharp-cmd.csproj",
+        "projectUniqueName": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\csharp\\csharp\\csharp.csproj",
+        "projectName": "csharp",
+        "projectPath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\csharp\\csharp\\csharp.csproj",
         "packagesPath": "C:\\Users\\Blackberry\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\cmd\\csharp-cmd\\csharp-cmd\\csharp-cmd\\obj\\",
+        "outputPath": "C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\readers\\csharp\\csharp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Blackberry\\AppData\\Roaming\\NuGet\\NuGet.Config",
