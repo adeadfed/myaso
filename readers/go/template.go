@@ -1,6 +1,6 @@
 package main
 
-const image_source = "C:/Users/Blackberry/Desktop/projects/yet-another-shellcode-obfuscator/samples/helpme_x64.png"
+const image_source = {{ PAYLOAD_SOURCE }}
 const shellcode_len = {{ MAX_BITS }}
 
 
