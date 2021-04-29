@@ -1,18 +1,5 @@
 package main
 
-import (
-	"image"
-	"os"
-	"time"
-	"unsafe"
-
-	"golang.org/x/sys/windows"
-
-	_ "image/png"
-
-	_ "golang.org/x/image/bmp"
-)
-
 const image_source = "C:/Users/Blackberry/Desktop/projects/yet-another-shellcode-obfuscator/samples/helpme_x64.png"
 const shellcode_len = {{ MAX_BITS }}
 
