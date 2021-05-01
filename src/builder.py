@@ -29,7 +29,7 @@ class Runner:
 
     @property
     def sources(self):
-        return os.path.join('readers', self.language, self.payload_type)
+        return os.path.join('readers', self.language)
 
     def __str__(self):
         return f'{self.name} ({self.os}/{self.arch}/{self.language}/{self.payload_type}, ' \
@@ -147,3 +147,13 @@ class GoBuilder(Builder):
 
 class PowershellBuilder(Builder):
     template_file = 'template.ps1'
+
+    def preprocess_sources(self):
+        with open(f'algorithms/{self.runner.algorithm.lower()}') as f:
+            self.runner.params.update({'ALGORITHM_CODE': f.read()})
+        with open(f'delivery_methods/{self.runner.delivery_method.lower()}') as f:
+            self.runner.params.update({'PAYLOAD_DELIVERY_CODE': f.read()})
+        with open(f'payload_types/{self.runner.payload_type.lower()}') as f:
+            self.runner.params.update({'PAYLOAD_EXEC_CODE': f.read()})
+
+        super().preprocess_sources()
