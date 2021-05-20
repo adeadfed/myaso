@@ -1,18 +1,24 @@
 #include "reader.h"
 
+int _tmain(int argc, TCHAR** argv) {
 
-int main() {
-    // Init Gdiplus
-    GdiplusStartupInput gdiplusStartupInput;
-    ULONG_PTR gdiplusToken;
-    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+    if (argc == 3) {
+        int payload_bits = _ttoi(argv[1]);
+        char * payload_data = new char[payload_bits / 8];
 
+        // Init Gdiplus
+        GdiplusStartupInput gdiplusStartupInput;
+        ULONG_PTR gdiplusToken;
+        GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
-    Gdiplus::Bitmap* bmp = load_image(L"C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\samples\\shellcode\\shellcode_x64.bmp");
-    read_image(bmp);
-    run();
+        // Do the job
+        Gdiplus::Bitmap* bmp = load_image(argv[2]);
+        read_image(bmp, payload_data, payload_bits);
+        run(payload_data, payload_bits);
 
-    GdiplusShutdown(gdiplusToken);
+        // Shutdown Gdiplus
+        GdiplusShutdown(gdiplusToken);
+    }
 
     return 0;
 }
