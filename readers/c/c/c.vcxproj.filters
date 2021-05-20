@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="reader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="reader.h" />
+    <ClInclude Include="algorithms\lsb.h">
+      <Filter>algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="delivery\local.h">
+      <Filter>delivery</Filter>
+    </ClInclude>
+    <ClInclude Include="delivery\remote.h">
+      <Filter>delivery</Filter>
+    </ClInclude>
+    <ClInclude Include="payloads\cmd.h">
+      <Filter>payloads</Filter>
+    </ClInclude>
+    <ClInclude Include="payloads\shellcode.h">
+      <Filter>payloads</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="delivery">
+      <UniqueIdentifier>{6400a47b-ac3e-4880-b3e2-f278d0073522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="algorithms">
+      <UniqueIdentifier>{5d59f2e6-28d6-46d3-a3d2-bfeae526c850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="payloads">
+      <UniqueIdentifier>{ae402feb-cea9-47f9-bb3e-08ae5e81d734}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
