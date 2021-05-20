@@ -1,6 +1,6 @@
 // +build payload_algorithm_lsbx
 
-package main
+package algorithms
 
 import (
 	"image"
@@ -10,15 +10,13 @@ func get_lsb(target byte, source byte) byte {
 	return (target << 1) | (source & 1)
 }
 
-func get_payload(img image.Image, payload_data []byte) {
-    var payload_data [shellcode_len / 8]byte
-
+func GetPayload(img image.Image, payload_data []byte) {
 	g := img.Bounds()
 
 	height := g.Dy()
 	width := g.Dx()
 
-	length := shellcode_len
+	length := len(payload_data) * 8
 	pos := 0
 
 	for i := 0; i < height; i++ {

