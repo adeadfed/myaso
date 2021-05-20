@@ -1,4 +1,5 @@
 import os.path
+import subprocess
 from collections import defaultdict
 from shutil import copy
 from dataclasses import dataclass
@@ -49,6 +50,7 @@ def get_runner(runner_config: str):
 
 class Builder:
     template_file = ''
+    sources_extension = ''
     build_dir = 'build'
 
     def __init__(self, runner: Runner):
@@ -61,7 +63,7 @@ class Builder:
     def preprocess_sources(self):
         with open(self.template_file) as template:
             script = chevron.render(template, self.runner.params)
-            with open(os.path.join(self.build_dir, self.runner.name), 'w') as f:
+            with open(os.path.join(self.build_dir, f'{self.runner.name}.{self.sources_extension}'), 'w') as f:
                 f.write(script)
 
     def run_build(self):
@@ -101,6 +103,7 @@ class Builder:
 
 class CBuilder(Builder):
     template_file = 'c/Source.cpp'
+    sources_extension = 'cpp'
     compilers = {
         'x86': '/usr/bin/i686-w64-mingw32-g++',
         'x64': '/usr/bin/x86_64-w64-mingw32-g++'
@@ -127,26 +130,47 @@ class CBuilder(Builder):
 
 class CSharpBuilder(Builder):
     template_file = 'csharp/Program.cs'
+    sources_extension = 'cs'
 
     def build(self):
         os.popen(f'mcs -platform:{self.runner.arch} -reference:System.Drawing {self.build_dir}/{self.runner.name}')
 
 
 class GoBuilder(Builder):
-    template_file = 'template.go'
+    build_dir = '.'
+    template_file = 'runner.go.template'
+    sources_extension = 'go'
+    architectures = {
+        'x86': '386',
+        'x64': 'amd64'
+    }
 
     def preprocess_sources(self):
-        super(self).preprocess_sources()
-        for file in ['go.mod', 'go.sum']:
-            copy(file, 'build')
+        super().preprocess_sources()
 
     def run_build(self):
-        os.chdir(self.build_dir)
-        os.popen('go build')
+        tags = ','.join([
+            f'payload_algorithm_{self.runner.algorithm.lower()}',
+            f'delivery_method_{self.runner.delivery_method.lower()}',
+            f'payload_type_{self.runner.payload_type.lower()}'
+        ])
+
+        print(subprocess.run(
+            f'go build -tags {tags} -ldflags "-s -w" -o build/{self.runner.name}.exe',
+            shell=True,
+            env=os.environ.update({
+                'GOARCH': self.architectures[self.runner.arch],
+                'GOOS': 'windows'
+            }),
+            capture_output=True
+        ))
+
+        os.remove(f'{self.runner.name}.{self.sources_extension}')
 
 
 class PowershellBuilder(Builder):
     template_file = 'template.ps1'
+    sources_extension = 'ps1'
 
     def preprocess_sources(self):
         with open(f'algorithms/{self.runner.algorithm.lower()}') as f:

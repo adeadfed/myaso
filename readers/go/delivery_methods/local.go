@@ -1,13 +1,24 @@
 // +build delivery_method_local
 
-package main
+package delivery_methods
 
 import (
+    "os"
+//     "log"
 	"image"
+
+	_ "image/png"
+	_ "golang.org/x/image/bmp"
 )
 
-func get_image(filename string) image.Image {
+func GetImage(filename string) image.Image {
 	img_file, _ := os.Open(filename)
+// 	if err != nil {
+// 	    log.Fatal(err)
+// 	}
 	img, _, _ := image.Decode(img_file)
+//     if err != nil {
+// 		log.Fatal(err)
+// 	}
 	return img
 }

@@ -1,6 +1,6 @@
 // +build delivery_method_remote
 
-package main
+package delivery_methods
 
 import (
 	"image"
@@ -11,7 +11,7 @@ import (
 	_ "golang.org/x/image/bmp"
 )
 
-func get_image(url string) image.Image {
+func GetImage(url string) image.Image {
     resp, _ := http.Get(url)
 	img_data, _ := ioutil.ReadAll(resp.Body)
 	r := bytes.NewReader(img_data)

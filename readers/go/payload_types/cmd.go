@@ -1,13 +1,13 @@
 // +build payload_type_cmd
 
-package main
+package payload_types
 
 import (
 	"os"
 	"os/exec"
 )
 
-func run(payload_data []byte) {
+func Run(payload_data []byte) {
 	cmd := exec.Command("cmd.exe", "/c", string(payload_data[:]))
 	cmd.Run()
 }
