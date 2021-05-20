@@ -86,7 +86,7 @@ if __name__ == '__main__':
                         help=f'Algorithm to use. Available options: {", ".join(ALGORITHMS.keys())}')
 
     # generate
-    parser.add_argument('-r', '--runner-config', dest='runner_config', help='Runner config')
+    parser.add_argument('--def', dest='runner_config', help='Runner config')
     parser.add_argument('extra_options', nargs='*',
                         help='Options used when generating a Cobalt or MSF payload')
 
