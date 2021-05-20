@@ -1,9 +1,9 @@
-name: gorunner.exe
+name: gorunner64_no_symbols
 os: windows
-arch: x86
+arch: x64
 
 language: go
-delivery_method: image
+delivery_method: local
 payload_type: shellcode
 algorithm: LSB
 
