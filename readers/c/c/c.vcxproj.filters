@@ -26,6 +26,15 @@
     <ClInclude Include="algorithms\lsb-x.h">
       <Filter>algorithms</Filter>
     </ClInclude>
+    <ClInclude Include="algorithms\algorithm.h">
+      <Filter>algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="delivery\delivery.h">
+      <Filter>delivery</Filter>
+    </ClInclude>
+    <ClInclude Include="payloads\payload.h">
+      <Filter>payloads</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="delivery">

