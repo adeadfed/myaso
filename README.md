@@ -20,6 +20,22 @@ by @adeadfed  Y8b d88P
 🥩 Runner is at readers\go\gorunner64_no_symbols.exe
 [*] Usage: gorunner64_no_symbols.exe 2208 sc64.bmp
 
+❯ py main.py embed -a LSB-X,G -i .\samples\cat.bmp -o .\samples\shellcode\sc_lsbx_green.bmp -s .\samples\shellcode\test_lsbx.txt --verbose --no-banner
+[*] Reading shellcode from file...
+[*] Shellcode: b'123456\r\n'
+[*] Payload size: 64 bits (save this number!)
+[*] Algorithm: LSB-X
+[*] Source image: .\samples\cat.bmp
+[*] LSB-X args: ('G',) 1
+� Saved the stego to .\samples\shellcode\sc_lsbx_green.bmp
+
+❯ py main.py read -a LSB-X,G -i .\samples\shellcode\sc_lsbx_green.bmp --verbose --max-bits 64 --no-banner
+[*] Source image: .\samples\shellcode\sc_lsbx_green.bmp
+[*] Algorithm: LSB-X
+[*] Algorithm: LSB-X,G, extracting up to 64 bits
+[*] LSB-X args: ('G',) 1
+[+] Message: b'123456\r\n'
+
 ```
 
 A steganographic shellcode obfuscator. The executor reads data from a BMP image and executes it using VirtualAlloc/HeapAlloc. 

@@ -3,6 +3,8 @@ from itertools import product
 
 from bitarray import bitarray
 from PIL import Image
+from loguru import logger
+
 from .LSB_utils import __get_lsb, __set_lsb
 
 
@@ -11,11 +13,12 @@ def capacity(img: Image):
     return img.height * img.width
 
 
-def embed(img: Image, payload: bitarray, **kwargs):
+def embed(img: Image, payload: bitarray, *args, **kwargs):
     assert len(payload) <= capacity(img), \
         f'[-] payload length ({len(payload)}) is greater than image capacity ({capacity(img)})!'
 
-    idx = Channel[kwargs.get('channel') or 'R'].value
+    idx = Channel[args[0]].value
+    logger.debug('LSB-X args: {} {}', args, idx)
 
     for y, x in product(range(img.height), range(img.width)):
         channels = list(img.getpixel((x, y)))
@@ -25,8 +28,9 @@ def embed(img: Image, payload: bitarray, **kwargs):
         img.putpixel((x, y), tuple(channels))
 
 
-def extract(img: Image, payload_bits: int, **kwargs) -> bitarray:
-    idx = Channel[kwargs.get('channel') or 'R'].value
+def extract(img: Image, payload_bits: int, *args, **kwargs) -> bitarray:
+    idx = Channel[args[0]].value
+    logger.debug('LSB-X args: {} {}', args, idx)
     payload = bitarray()
 
     for y, x in product(range(img.height), range(img.width)):

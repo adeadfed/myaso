@@ -10,7 +10,7 @@ def capacity(img: Image):
     return img.height * img.width * 3
 
 
-def embed(img: Image, payload: bitarray, **kwargs):
+def embed(img: Image, payload: bitarray, *args, **kwargs):
     assert len(payload) <= capacity(img), \
         f'[-] payload length ({len(payload)}) is greater than image capacity ({capacity(img)})!'
 
@@ -25,7 +25,7 @@ def embed(img: Image, payload: bitarray, **kwargs):
         img.putpixel((x, y), (r, g, b))
 
 
-def extract(img: Image, payload_bits: int, **kwargs) -> bitarray:
+def extract(img: Image, payload_bits: int, *args, **kwargs) -> bitarray:
     payload = bitarray()
 
     for y, x in product(range(img.height), range(img.width)):

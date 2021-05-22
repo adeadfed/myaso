@@ -28,12 +28,11 @@ def embed_sc(args):
     payload_bits = len(payload)
     logger.info(f'Payload size: {payload_bits} bits (save this number!)')
 
-    algorithm = ALGORITHMS[args.algorithm]
-    logger.debug(f'Algorithm: {args.algorithm}')
+    algorithm, algorithm_args = get_algorithm(args)
 
     logger.debug(f'Source image: {args.src}')
     img = Image.open(args.src)
-    algorithm.embed(img, payload)
+    algorithm.embed(img, payload, *algorithm_args)
 
     img.save(args.dst)
     logger.artifact(f'Saved the stego to {Fore.RED}{args.dst}{Style.RESET_ALL}')
@@ -42,14 +41,20 @@ def embed_sc(args):
         get_runner(args, PAYLOAD_BITS=payload_bits, SC_SOURCE=os.path.split(args.dst)[1])
 
 
+def get_algorithm(args):
+    algorithm, *algorithm_args = args.algorithm.split(',')
+    logger.debug('Algorithm: {}', algorithm)
+    return ALGORITHMS[algorithm], algorithm_args
+
+
 def read_sc(args):
     logger.debug(f'Source image: {args.src}')
     img = Image.open(args.src)
 
-    algorithm = ALGORITHMS[args.algorithm]
+    algorithm, algorithm_args = get_algorithm(args)
     logger.debug(f'Algorithm: {args.algorithm}, extracting up to {args.max_bits} bits')
 
-    payload = algorithm.extract(img, args.max_bits)
+    payload = algorithm.extract(img, args.max_bits, *algorithm_args)
     logger.success('Message: {}', payload.tobytes())
 
 
@@ -72,7 +77,7 @@ if __name__ == '__main__':
     )
 
     parser.add_argument('command', metavar='<command>', help=f'One of {", ".join(command_handlers.keys())}')
-    parser.add_argument('--no-banner', action='store_false')
+    parser.add_argument('--no-banner', action='store_true')
 
     # embed
     parser.add_argument('-s', '--sc', '--shellcode', dest='sc_file',
@@ -86,8 +91,9 @@ if __name__ == '__main__':
 
     # read
     parser.add_argument('--max-bits', type=int, help='Shellcode length')
-    parser.add_argument('-a', dest='algorithm',
-                        help=f'Algorithm to use. Available options: {", ".join(ALGORITHMS.keys())}')
+    parser.add_argument('-a', dest='algorithm', metavar='algorithm,arg1,arg2,...', type=str,
+                        help=f'Algorithm to use + comma-separated list of its arguments as in the docs. '
+                             f'Available options: {", ".join(ALGORITHMS.keys())}')
 
     # generate
     parser.add_argument('--def', dest='runner_config', help='Runner config')
@@ -107,7 +113,11 @@ if __name__ == '__main__':
     logger.__class__.artifact = partialmethod(logger.__class__.log, 'ARTIFACT')
 
     logger.remove()
-    logger.add(sys.stdout, format='<level>{level.icon}</level> {message}', level='DEBUG' if args.verbose else 'INFO')
+    logger.add(
+        sys.stdout,
+        format='<level>{level.icon}</level> {message}',
+        level='DEBUG' if args.verbose else 'INFO'
+    )
 
     if not args.no_banner:
         print(dedent(f"""                             
