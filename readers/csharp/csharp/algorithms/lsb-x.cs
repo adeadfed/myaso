@@ -2,8 +2,12 @@
 
 namespace csharp.Algorithms
 {
-    class Lsb
+    class LsbX
     {
+        private int channel = 0;
+        public LsbX(int channel) => this.channel = channel;
+
+
         public void read_image(Bitmap bm, byte[] payload_data)
         {
             int length = payload_data.Length * 8;
@@ -21,17 +25,14 @@ namespace csharp.Algorithms
                         pixel_color.B
                     };
 
-                    foreach (byte channel in channels)
+                    if (length <= 0)
                     {
-                        if (length <= 0)
-                        {
-                            return;
-                        }
-
-                        payload_data[pos / 8] = get_lsb(payload_data[pos / 8], channel);
-                        pos++;
-                        length--;
+                        return;
                     }
+
+                    payload_data[pos / 8] = get_lsb(payload_data[pos / 8], channels[channel]);
+                    pos++;
+                    length--;
                 }
             }
         }

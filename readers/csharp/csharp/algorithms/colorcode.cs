@@ -2,7 +2,7 @@
 
 namespace csharp.Algorithms
 {
-    class Lsb
+    class ColorCode
     {
         public void read_image(Bitmap bm, byte[] payload_data)
         {
@@ -28,7 +28,7 @@ namespace csharp.Algorithms
                             return;
                         }
 
-                        payload_data[pos / 8] = get_lsb(payload_data[pos / 8], channel);
+                        payload_data[pos / 8] = get_colorcode(payload_data[pos / 8], channel);
                         pos++;
                         length--;
                     }
@@ -36,9 +36,9 @@ namespace csharp.Algorithms
             }
         }
 
-        private static byte get_lsb(byte target, byte source)
+        private static byte get_colorcode(byte target, byte source)
         {
-            return (byte)((target << 1) | (source & 1));
+            return (byte)((target << 1) | (source > 128 ? 1 : 0));
         }
     }
 }

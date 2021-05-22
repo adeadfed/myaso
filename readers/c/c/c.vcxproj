@@ -148,6 +148,8 @@
     <ClCompile Include="reader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="algorithms\colorcode.h" />
+    <ClInclude Include="algorithms\lsb-x.h" />
     <ClInclude Include="algorithms\lsb.h" />
     <ClInclude Include="delivery\local.h" />
     <ClInclude Include="delivery\remote.h" />

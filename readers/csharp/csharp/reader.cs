@@ -11,9 +11,9 @@ namespace csharp
 
 
         // TEMPLATES GO HERE
-        static delivery.Remote  del  = new delivery.Remote();
-        static algorithms.Lsb   algs = new algorithms.Lsb();
-        static payloads.Cmd     pld  = new payloads.Cmd();
+        static Delivery.Local del  = new Delivery.Local();
+        static Algorithms.LsbX algs = new Algorithms.LsbX(1);
+        static Payloads.Cmd    pld  = new Payloads.Cmd();
 
         static void Main(string[] args)
         {

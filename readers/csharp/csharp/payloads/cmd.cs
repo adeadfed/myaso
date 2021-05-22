@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace csharp.payloads
+namespace csharp.Payloads
 {
     class Cmd
     {

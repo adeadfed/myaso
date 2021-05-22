@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace csharp.payloads
+namespace csharp.Payloads
 {
     class Shellcode
     {
