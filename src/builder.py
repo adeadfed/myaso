@@ -5,6 +5,7 @@ from shutil import copy
 from dataclasses import dataclass
 
 import chevron
+from colorama import Style, Fore
 from yaml import safe_load
 from loguru import logger
 
@@ -37,20 +38,25 @@ class Runner:
                f'algorithm={self.algorithm}, params={self.params})'
 
 
-def get_runner(runner_config: str):
+def get_runner(runner_config: str, **kwargs):
     runner = Runner.from_file(runner_config)
     builder = Builder.from_runner(runner)
 
     logger.success('Builder configured')
     logger.info(f'Configuration: {runner}')
-    builder.build()
-    logger.artifact(f'Runner is at {builder.artifact_path}')
-    logger.info(f'Usage: {runner.name} stego')
+    if builder.build():
+        logger.artifact(f'Runner is at {Fore.RED}{builder.artifact_path}{Style.RESET_ALL}')
+        if kwargs:
+            logger.info(f'Usage: {runner.name}.{builder.build_extension} {kwargs["PAYLOAD_BITS"]} {kwargs["SC_SOURCE"]}')
+        else:
+            logger.info(f'Usage: {runner.name}.{builder.build_extension} PAYLOAD_BITS SC_SOURCE')
+
 
 
 class Builder:
     template_file = ''
     sources_extension = ''
+    build_extension = 'exe'
     build_dir = 'build'
 
     def __init__(self, runner: Runner):
@@ -58,7 +64,11 @@ class Builder:
 
     @property
     def artifact_path(self) -> str:
-        return os.path.join(self.runner.sources, self.build_dir, self.runner.name)
+        return os.path.normpath(os.path.join(
+            self.runner.sources,
+            self.build_dir,
+            f'{self.runner.name}.{self.build_extension}'
+        ))
 
     def preprocess_sources(self):
         with open(self.template_file) as template:
@@ -69,6 +79,9 @@ class Builder:
     def run_build(self):
         pass
 
+    def cleanup(self):
+        pass
+
     def build(self):
         old_cwd = os.getcwd()
         os.chdir(self.runner.sources)
@@ -77,14 +90,23 @@ class Builder:
         except FileExistsError:
             pass
 
-        logger.debug('Preparing the sources...')
-        self.preprocess_sources()
+        success = False
+        try:
+            logger.debug('Preparing the sources...')
+            self.preprocess_sources()
 
-        logger.info('Starting the build...')
-        self.run_build()
-        logger.success('Build was successful!')
+            logger.info('Starting the build...')
+            self.run_build()
+            logger.success('Build was successful!')
+            success = True
+        except Exception as e:
+            logger.error('Build failed!')
+            logger.error(rf'Reason: {e}')
+        finally:
+            self.cleanup()
+            os.chdir(old_cwd)
 
-        os.chdir(old_cwd)
+        return success
 
     @classmethod
     def from_runner(cls, runner: Runner):
@@ -155,22 +177,26 @@ class GoBuilder(Builder):
             f'payload_type_{self.runner.payload_type.lower()}'
         ])
 
-        print(subprocess.run(
-            f'go build -tags {tags} -ldflags "-s -w" -o build/{self.runner.name}.exe',
+        o = subprocess.run(
+            f'go build -tags {tags} -ldflags "-s -w" -o build/{self.runner.name}.{self.build_extension}',
             shell=True,
             env=os.environ.update({
                 'GOARCH': self.architectures[self.runner.arch],
                 'GOOS': 'windows'
             }),
             capture_output=True
-        ))
+        )
+        if o.returncode:
+            raise RuntimeError(o.stderr)
 
+    def cleanup(self):
         os.remove(f'{self.runner.name}.{self.sources_extension}')
 
 
 class PowershellBuilder(Builder):
     template_file = 'template.ps1'
     sources_extension = 'ps1'
+    build_extension = sources_extension
 
     def preprocess_sources(self):
         with open(f'algorithms/{self.runner.algorithm.lower()}') as f:

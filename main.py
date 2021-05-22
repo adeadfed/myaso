@@ -1,14 +1,18 @@
 """
-C implementation reads pixels left to right, top to bottom
-Python implementation reads pixels left to right, bottom to top!
+ _._     _,-'""`-._
+(,-.`._,'(       |\`-/|
+    `-.-' \ )-`( , o o)
+          `-    \`_`"'-
 """
 import argparse
 import os
 import sys
+from textwrap import dedent
 from functools import partialmethod
 
 from PIL import Image
 from bitarray import bitarray
+from colorama import init, Back, Style, Fore
 from loguru import logger
 
 from src import shellcode, builder
@@ -26,7 +30,9 @@ def embed_sc(args):
 
     payload = bitarray()
     payload.frombytes(sc)
-    logger.info(f'Payload size: {len(payload)} bits (save this number!)')
+
+    payload_bits = len(payload)
+    logger.info(f'Payload size: {payload_bits} bits (save this number!)')
 
     algorithm = ALGORITHMS[args.algorithm]
     logger.debug(f'Algorithm: {args.algorithm}')
@@ -36,7 +42,10 @@ def embed_sc(args):
     algorithm.embed(img, payload)
 
     img.save(args.dst)
-    logger.artifact(f'Saved the stego to {args.dst}')
+    logger.artifact(f'Saved the stego to {Fore.RED}{args.dst}{Style.RESET_ALL}')
+
+    if args.runner_config:
+        get_runner(args, PAYLOAD_BITS=payload_bits, SC_SOURCE=os.path.split(args.dst)[1])
 
 
 def read_sc(args):
@@ -50,8 +59,8 @@ def read_sc(args):
     logger.success('Message: {}', payload.tobytes())
 
 
-def get_runner(args):
-    builder.get_runner(args.runner_config)
+def get_runner(args, **kwargs):
+    builder.get_runner(args.runner_config, **kwargs)
 
 
 command_handlers = {
@@ -94,14 +103,33 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    init()
     logger.level('ERROR', icon=r'[-]')
-    logger.level('SUCCESS', icon=r'[+]')
-    logger.level('DEBUG', icon=r'[!]', color='')
-    logger.level('INFO', icon=r'[!]', color='<blue>')
-    logger.level('ARTIFACT', no=1337, icon='🥩')
+    logger.level('SUCCESS', icon=r'[+]', color='<bold><green>')
+    logger.level('DEBUG', icon=r'[*]', color='')
+    logger.level('INFO', icon=r'[*]', color='<bold><yellow>')
+    logger.level('ARTIFACT', no=1337, icon=f'{Fore.RED}🥩{Style.RESET_ALL}')
     logger.__class__.artifact = partialmethod(logger.__class__.log, 'ARTIFACT')
 
     logger.remove()
     logger.add(sys.stdout, format='<level>{level.icon}</level> {message}', level='DEBUG' if args.verbose else 'INFO')
+
+    print(dedent(f"""                             
+        {Fore.RED}88888b.d88b.  888  888  8888b.  .d8888b   .d88b.           
+        888 "888 "88b 888  888     "88b 88K      d88""88b          
+        888  888  888 888  888 .d888888 "Y8888b. 888  888          
+        888  888  888 Y88b 888 888  888      X88 Y88..88P          
+        888  888  888  "Y88888 "Y888888  88888P'  "Y88P"           
+                           888                                     
+        {Style.RESET_ALL}by @adeadfed{Fore.RED}  Y8b d88P                                     
+           {Style.RESET_ALL}@harpsiford{Fore.RED} "Y88P"       {Style.RESET_ALL}
+    """))
+
+    """
+         _._     _,-'""`-._
+        (,-.`._,'(       |\`-/|
+            `-.-' \ )-`( , o o)
+                  `-    \`_`"'-   <steak>    
+    """
 
     command_handlers[args.command](args)

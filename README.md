@@ -1,5 +1,27 @@
 # MYASO
 
+```
+$ myaso embed -a LSB -i .\cat.bmp -o .\samples\shellcode\sc64.bmp -s .\sc_x64.bin --def .\go.yaml
+88888b.d88b.  888  888  8888b.  .d8888b   .d88b.           
+888 "888 "88b 888  888     "88b 88K      d88""88b          
+888  888  888 888  888 .d888888 "Y8888b. 888  888          
+888  888  888 Y88b 888 888  888      X88 Y88..88P          
+888  888  888  "Y88888 "Y888888  88888P'  "Y88P"           
+                   888                                     
+by @adeadfed  Y8b d88P 
+   @harpsiford "Y88P"       
+
+[*] Payload size: 2208 bits (save this number!)
+🥩 Saved the stego to .\samples\shellcode\sc64.bmp
+[+] Builder configured
+[*] Configuration: gorunner64_no_symbols (windows/x64/go/shellcode, algorithm=LSB, params={'MAX_BITS': 2208})
+[*] Starting the build...
+[+] Build was successful!
+🥩 Runner is at readers\go\gorunner64_no_symbols.exe
+[*] Usage: gorunner64_no_symbols.exe 2208 sc64.bmp
+
+```
+
 A steganographic shellcode obfuscator. The executor reads data from a BMP image and executes it using VirtualAlloc/HeapAlloc. 
 
 Has modules in the following languages:
@@ -18,25 +40,26 @@ Available algorithms:
 Supproted image formats:
 - [x] BMP
 - [x] PNG
-- [] JPEG (in progress)
+- [x] JPEG (in progress)
 
 ## Usage
 
 ### Generate image
 ```sh
-python main.py -f sc.bin -i image.bmp -o evil_image.bmp [-a <algorithm>]
-python main.py --sc "\xe4\xed..." -i image.bmp -o evil_image.bmp [-a <algorithm>]
+myaso embed -f sc.bin -i image.bmp -o evil_image.bmp [-a <algorithm>]
 ```
 
 ### Execute shellcode
 ```cmd
-c:\> reader.exe --size <sc_len> -f happy_cat.bmp
+c:\> reader.exe SC_BITS happy_cat.bmp
 ```
 
 ## Definition of Ready
-- [] add length parsing
-- [] parsing/embedding is abstract enough
+- [x] parsing/embedding is abstract enough
 - [x] console args
-- [] colored output
+- [x] colored output
 - [] write tests (at least for the Python part)
-- [] proper error handling
+- [] proper error handling (in progress)
+- [] interactive mode for embedding / generating
+- [] steak ascii art
+- [] algorithm args (`myaso -a ALGO,arg1,arg2`)
