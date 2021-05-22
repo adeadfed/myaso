@@ -72,6 +72,7 @@ if __name__ == '__main__':
     )
 
     parser.add_argument('command', metavar='<command>', help=f'One of {", ".join(command_handlers.keys())}')
+    parser.add_argument('--no-banner', action='store_false')
 
     # embed
     parser.add_argument('-s', '--sc', '--shellcode', dest='sc_file',
@@ -108,24 +109,25 @@ if __name__ == '__main__':
     logger.remove()
     logger.add(sys.stdout, format='<level>{level.icon}</level> {message}', level='DEBUG' if args.verbose else 'INFO')
 
-    print(dedent(f"""                             
-        {Fore.RED}88888b.d88b.  888  888  8888b.  .d8888b   .d88b.           
-        888 "888 "88b 888  888     "88b 88K      d88""88b          
-        888  888  888 888  888 .d888888 "Y8888b. 888  888          
-        888  888  888 Y88b 888 888  888      X88 Y88..88P          
-        888  888  888  "Y88888 "Y888888  88888P'  "Y88P"           
-                           888                                     
-        {Style.RESET_ALL}by @adeadfed{Fore.RED}  Y8b d88P                                     
-           {Style.RESET_ALL}@harpsiford{Fore.RED} "Y88P"       {Style.RESET_ALL}
-           
-           
-     _._     _,-'""`-._
-    (,-.`._,'(       |\`-/|
-        `-.-' \ )-`( , ^ ^)  {Fore.YELLOW}.-",,"-.{Style.RESET_ALL}
-              `-    \`_`"'- {Fore.YELLOW}`________`{Style.RESET_ALL}
-                            {Fore.RED}<  meat  >{Style.RESET_ALL}
-                            {Fore.GREEN}`""\""\"\"""'{Style.RESET_ALL}
-                            {Fore.YELLOW}'________'{Style.RESET_ALL}
-    """))
+    if not args.no_banner:
+        print(dedent(f"""                             
+            {Fore.RED}88888b.d88b.  888  888  8888b.  .d8888b   .d88b.           
+            888 "888 "88b 888  888     "88b 88K      d88""88b          
+            888  888  888 888  888 .d888888 "Y8888b. 888  888          
+            888  888  888 Y88b 888 888  888      X88 Y88..88P          
+            888  888  888  "Y88888 "Y888888  88888P'  "Y88P"           
+                               888                                     
+            {Style.RESET_ALL}by @adeadfed{Fore.RED}  Y8b d88P                                     
+               {Style.RESET_ALL}@harpsiford{Fore.RED} "Y88P"       {Style.RESET_ALL}
+               
+               
+         _._     _,-'""`-._
+        (,-.`._,'(       |\`-/|
+            `-.-' \ )-`( , ^ ^)  {Fore.YELLOW}.-",,"-.{Style.RESET_ALL}
+                  `-    \`_`"'- {Fore.YELLOW}`________`{Style.RESET_ALL}
+                                {Fore.RED}<  meat  >{Style.RESET_ALL}
+                                {Fore.GREEN}`""\""\"\"""'{Style.RESET_ALL}
+                                {Fore.YELLOW}'________'{Style.RESET_ALL}
+        """))
 
     command_handlers[args.command](args)
