@@ -6,6 +6,3 @@ language: go
 delivery_method: local
 payload_type: shellcode
 algorithm: LSB
-
-params:
-  MAX_BITS: 2208

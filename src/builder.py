@@ -2,7 +2,7 @@ import os.path
 import subprocess
 from collections import defaultdict
 from shutil import copy
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import chevron
 from colorama import Style, Fore
@@ -22,7 +22,7 @@ class Runner:
     payload_type: str
     algorithm: str
 
-    params: dict
+    params: dict = field(default_factory=dict)
 
     @classmethod
     def from_file(cls, filename: str):
