@@ -4,9 +4,12 @@
 
 
 // TEMPLATES GO HERE
-#include "delivery/remote.h"
-#include "algorithms/lsb.h"
-#include "payloads/cmd.h"
+#include "delivery/local.h"
+
+#define CHANNEL 1
+#include "algorithms/lsb-x.h"
+
+#include "payloads/shellcode.h"
 
 
 #pragma comment(lib,"gdiplus.lib")

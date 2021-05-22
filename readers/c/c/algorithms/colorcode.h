@@ -2,8 +2,8 @@
 #include <gdiplus.h>
 using namespace Gdiplus;
 
-char get_lsb(char target, char source) {
-    return (target << 1) | (source & 1);
+char get_colorcode(char target, char source) {
+    return (target << 1) | (source > 128);
 }
 
 void read_image(Gdiplus::Bitmap* bmp, char* payload_data, int payload_bits) {
@@ -28,7 +28,7 @@ void read_image(Gdiplus::Bitmap* bmp, char* payload_data, int payload_bits) {
                     return;
                 }
 
-                payload_data[pos / 8] = get_lsb(payload_data[pos / 8], channels[k]);
+                payload_data[pos / 8] = get_colorcode(payload_data[pos / 8], channels[k]);
                 pos++;
                 length--;
             }

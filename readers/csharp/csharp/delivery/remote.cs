@@ -2,7 +2,7 @@
 using System.Net;
 using System.Drawing;
 
-namespace csharp.delivery
+namespace csharp.Delivery
 {
     class Remote
     {

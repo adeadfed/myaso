@@ -20,6 +20,12 @@
     <ClInclude Include="payloads\shellcode.h">
       <Filter>payloads</Filter>
     </ClInclude>
+    <ClInclude Include="algorithms\colorcode.h">
+      <Filter>algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="algorithms\lsb-x.h">
+      <Filter>algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="delivery">
