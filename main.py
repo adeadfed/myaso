@@ -10,12 +10,7 @@ from colorama import init, Back, Style, Fore
 from loguru import logger
 
 from src import shellcode, builder
-from algorithms import LSB, LSBX
-
-ALGORITHMS = {
-    'LSB': LSB,
-    'LSB-X': LSBX
-}
+from algorithms import ALGORITHMS
 
 
 def embed_sc(args):
