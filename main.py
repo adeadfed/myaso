@@ -117,16 +117,15 @@ if __name__ == '__main__':
                            888                                     
         {Style.RESET_ALL}by @adeadfed{Fore.RED}  Y8b d88P                                     
            {Style.RESET_ALL}@harpsiford{Fore.RED} "Y88P"       {Style.RESET_ALL}
+           
+           
+     _._     _,-'""`-._
+    (,-.`._,'(       |\`-/|
+        `-.-' \ )-`( , ^ ^)  {Fore.YELLOW}.-",,"-.{Style.RESET_ALL}
+              `-    \`_`"'- {Fore.YELLOW}`________`{Style.RESET_ALL}
+                            {Fore.RED}<  meat  >{Style.RESET_ALL}
+                            {Fore.GREEN}`""\""\"\"""'{Style.RESET_ALL}
+                            {Fore.YELLOW}'________'{Style.RESET_ALL}
     """))
-
-    """
- _._     _,-'""`-._
-(,-.`._,'(       |\`-/|
-	`-.-' \ )-`( , ^ ^)  .-",,"-.
-		  `-    \`_`"'- `________`           
-						<  meat  >
-						`""\""\"\"""'
-						'________' 
-    """
 
     command_handlers[args.command](args)
