@@ -6,7 +6,7 @@ import (
 	"image"
 )
 
-func get_lsb(target byte, source byte) byte {
+func set_lsb(target byte, source byte) byte {
 	return (target << 1) | (source & 1)
 }
 

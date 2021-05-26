@@ -36,6 +36,9 @@ by @adeadfed  Y8b d88P
 [*] LSB-X args: ('G',) 1
 [+] Message: b'123456\r\n'
 
+❯ py main.py read  -a LSB-X,G,64               -i samples/shellcode/sc_lsbx_green.bmp   --verbose --no-banner
+❯ py main.py embed -a LSB-X,samples/cat.bmp,G  -o /samples/shellcode/sc_lsbx_green.bmp  --verbose --no-banner
+
 ```
 
 A steganographic shellcode obfuscator. The executor reads data from a BMP image and executes it using VirtualAlloc/HeapAlloc. 

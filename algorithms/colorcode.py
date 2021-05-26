@@ -1,11 +1,14 @@
 from itertools import product
+from math import sqrt
 
 from bitarray import bitarray
 from PIL import Image
 from .LSB_utils import __from_colorcode, __to_colorcode
 
 
-def embed(img: Image, payload: bitarray, *args, **kwargs):
+def embed(payload: bitarray, *args, **kwargs):
+    w = h = sqrt(len(payload))
+    img = Image.new(mode="RGB", size=(w, h))
     for y, x in product(range(img.height), range(img.width)):
         r, g, b = img.getpixel((x, y))
 

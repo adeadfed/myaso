@@ -6,11 +6,11 @@ from functools import partialmethod
 
 from PIL import Image
 from bitarray import bitarray
-from colorama import init, Back, Style, Fore
+from colorama import init, Style, Fore
 from loguru import logger
 
 from src import shellcode, builder
-from algorithms import ALGORITHMS
+from algorithms import ALGORITHMS, get_algorithm, extract_data
 
 
 def embed_sc(args):
@@ -36,20 +36,8 @@ def embed_sc(args):
         get_runner(args, PAYLOAD_BITS=payload_bits, SC_SOURCE=os.path.split(args.dst)[1])
 
 
-def get_algorithm(args):
-    algorithm, *algorithm_args = args.algorithm.split(',')
-    logger.debug('Algorithm: {}', algorithm)
-    return ALGORITHMS[algorithm], algorithm_args
-
-
 def read_sc(args):
-    logger.debug(f'Source image: {args.src}')
-    img = Image.open(args.src)
-
-    algorithm, algorithm_args = get_algorithm(args)
-    logger.debug(f'Algorithm: {args.algorithm}, extracting up to {args.max_bits} bits')
-
-    payload = algorithm.extract(img, args.max_bits, *algorithm_args)
+    payload = extract_data(args.algorithm)
     logger.success('Message: {}', payload.tobytes())
 
 

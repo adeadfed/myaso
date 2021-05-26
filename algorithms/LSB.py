@@ -2,7 +2,7 @@ from itertools import product
 
 from bitarray import bitarray
 from PIL import Image
-from .LSB_utils import __get_lsb, __set_lsb
+from .LSB_utils import get_lsb, set_lsb
 
 
 def capacity(img: Image):
@@ -10,7 +10,7 @@ def capacity(img: Image):
     return img.height * img.width * 3
 
 
-def embed(img: Image, payload: bitarray, *args, **kwargs):
+def embed(payload: bitarray, img: Image, *args, **kwargs) -> Image:
     assert len(payload) <= capacity(img), \
         f'[-] payload length ({len(payload)}) is greater than image capacity ({capacity(img)})!'
 
@@ -18,11 +18,13 @@ def embed(img: Image, payload: bitarray, *args, **kwargs):
         r, g, b = img.getpixel((x, y))
 
         """set lsb of each color to target value"""
-        if payload: r = __set_lsb(r, payload.pop(0))
-        if payload: g = __set_lsb(g, payload.pop(0))
-        if payload: b = __set_lsb(b, payload.pop(0))
+        if payload: r = set_lsb(r, payload.pop(0))
+        if payload: g = set_lsb(g, payload.pop(0))
+        if payload: b = set_lsb(b, payload.pop(0))
 
         img.putpixel((x, y), (r, g, b))
+
+    return img
 
 
 def extract(img: Image, payload_bits: int, *args, **kwargs) -> bitarray:
@@ -33,7 +35,7 @@ def extract(img: Image, payload_bits: int, *args, **kwargs) -> bitarray:
             if not payload_bits:
                 break
 
-            bit = __get_lsb(byte)
+            bit = get_lsb(byte)
             payload.append(bit)
             payload_bits -= 1
     return payload
