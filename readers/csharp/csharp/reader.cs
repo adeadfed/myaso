@@ -1,7 +1,10 @@
 ﻿using System.Drawing;
 
+using Reader.Algorithms;
+using Reader.Delivery;
+using Reader.Payloads;
 
-namespace csharp
+namespace Reader
 {
     class Reader
     {
@@ -10,10 +13,9 @@ namespace csharp
         static Bitmap bm;
 
 
-        // TEMPLATES GO HERE
-        static Delivery.Local del  = new Delivery.Local();
-        static Algorithms.LsbX algs = new Algorithms.LsbX(1);
-        static Payloads.Cmd    pld  = new Payloads.Cmd();
+        static IDelivery  del  = new Local();
+        static IAlgorithm algs = new LsbX(1);
+        static IPayload   pld  = new Cmd();
 
         static void Main(string[] args)
         {
@@ -22,9 +24,9 @@ namespace csharp
                 int payload_bits = System.Int32.Parse(args[0]);
                 payload_data = new byte[payload_bits / 8];
 
-                bm = del.load_image(args[1]);
-                algs.read_image(bm, payload_data);
-                pld.run(payload_data);
+                bm = del.loadImage(args[1]);
+                algs.readImage(bm, payload_data);
+                pld.Run(payload_data);
             }
         }
     }

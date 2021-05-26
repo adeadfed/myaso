@@ -1,22 +1,31 @@
-#include <Windows.h>
+#pragma once
+#include "payload.h"
 
-void run(char* payload_data, int payload_bits) {
-    STARTUPINFOA si;
-    ZeroMemory(&si, sizeof(STARTUPINFOA));
-    PROCESS_INFORMATION pi;
+namespace Reader {
+    class Cmd : public Payload {
+    public:
+        using Payload::Payload;
 
-    CreateProcessA(
-        NULL,
-        payload_data,
-        NULL,
-        NULL,
-        FALSE,
-        NULL,
-        NULL,
-        NULL,
-        &si,
-        &pi
-    );
-    Sleep(3000);
+        void Run() {
+            STARTUPINFOA si;
+            ZeroMemory(&si, sizeof(STARTUPINFOA));
+            PROCESS_INFORMATION pi;
+
+            CreateProcessA(
+                NULL,
+                payload,
+                NULL,
+                NULL,
+                FALSE,
+                NULL,
+                NULL,
+                NULL,
+                &si,
+                &pi
+            );
+            Sleep(3000);
+        }
+    };
 }
+
 

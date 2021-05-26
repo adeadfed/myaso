@@ -1,10 +1,10 @@
 ﻿using System.Drawing;
 
-namespace csharp.Algorithms
+namespace Reader.Algorithms
 {
-    class Lsb
+    class Lsb : IAlgorithm
     {
-        public void read_image(Bitmap bm, byte[] payload_data)
+        void IAlgorithm.readImage(Bitmap bm, byte[] payload_data)
         {
             int length = payload_data.Length * 8;
             int pos = 0;
@@ -28,7 +28,7 @@ namespace csharp.Algorithms
                             return;
                         }
 
-                        payload_data[pos / 8] = get_lsb(payload_data[pos / 8], channel);
+                        payload_data[pos / 8] = getLsb(payload_data[pos / 8], channel);
                         pos++;
                         length--;
                     }
@@ -36,7 +36,7 @@ namespace csharp.Algorithms
             }
         }
 
-        private static byte get_lsb(byte target, byte source)
+        private static byte getLsb(byte target, byte source)
         {
             return (byte)((target << 1) | (source & 1));
         }

@@ -1,10 +1,10 @@
 ﻿using System.Drawing;
 
-namespace csharp.Delivery
+namespace Reader.Delivery
 {
-    class Local
+    class Local : IDelivery
     {
-        public Bitmap load_image(string filename)
+        Bitmap IDelivery.loadImage(string filename)
         {
             return new Bitmap(filename);
         }

