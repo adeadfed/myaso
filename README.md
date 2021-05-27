@@ -48,9 +48,7 @@ Has modules in the following languages:
 - [x] C#
 - [x] Powershell
 - [x] Go
-- [] VB
-- [] Python
-- [] Rust
+- [ ] Microsoft VBA
 
 Available algorithms:
 - [x] LSB (generic)
