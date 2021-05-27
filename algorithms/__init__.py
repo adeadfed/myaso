@@ -1,7 +1,10 @@
+from typing import Tuple
+
 from PIL.Image import Image
 from loguru import logger
 
 from . import LSB, LSBX, colorcode
+from .IAlgorithm import IAlgorithm
 
 ALGORITHMS = {
     'LSB': LSB.LSB,
@@ -10,9 +13,9 @@ ALGORITHMS = {
 }
 
 
-def get_algorithm(algorithm):
+def get_algorithm(algorithm) -> IAlgorithm:
     algorithm, *algorithm_args = algorithm.split(',')
-    return ALGORITHMS[algorithm](), algorithm_args
+    return ALGORITHMS[algorithm](*algorithm_args)
 
 
 def extract_data(input_file, algorithm):

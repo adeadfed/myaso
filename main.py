@@ -10,7 +10,7 @@ from colorama import init, Style, Fore
 from loguru import logger
 
 from src import shellcode, builder
-from algorithms import ALGORITHMS
+from algorithms import ALGORITHMS, get_algorithm
 from src.image_builder import get_image
 
 
@@ -23,13 +23,12 @@ def embed_sc(args):
 
     payload_bits = len(payload)
     logger.info(f'Payload size: {payload_bits} bits (save this number!)')
-
-    algorithm = ALGORITHMS[args.algorithm]
     logger.debug(f'Algorithm: {args.algorithm}')
 
-    img = get_image(args.src, algorithm, payload_bits)
+    algorithm = get_algorithm(args.algorithm)
 
-    algorithm.embed(img, payload)
+    img = get_image(args.src, algorithm, payload_bits)
+    algorithm.embed(payload, img)
 
     img.save(args.dst)
     logger.artifact(f'Saved the stego to {Fore.RED}{args.dst}{Style.RESET_ALL}')
@@ -40,10 +39,10 @@ def embed_sc(args):
 
 def read_sc(args):
     logger.debug(f'Source image: {args.src}')
-    img = Image.open(args.src)
-
-    algorithm = ALGORITHMS[args.algorithm]
     logger.debug(f'Algorithm: {args.algorithm}, extracting up to {args.max_bits} bits')
+
+    img = Image.open(args.src)
+    algorithm = get_algorithm(args.algorithm)
 
     payload = algorithm.extract(img, args.max_bits)
     logger.success('Message: {}', payload.tobytes())

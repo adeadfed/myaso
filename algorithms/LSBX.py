@@ -15,6 +15,11 @@ class Channel(IntEnum):
 
 
 class LSBX(LSB):
+    def __init__(self, channel_name):
+        super().__init__()
+        self.channel_idx = Channel[channel_name].value
+        logger.debug('LSB-X args: {} ', self.channel_idx)
+
     def capacity(self, img: Image):
         """Maximum number of least significant bits in ONE channel"""
         return img.height * img.width
@@ -23,19 +28,15 @@ class LSBX(LSB):
         assert len(payload) <= self.capacity(img), \
             f'[-] payload length ({len(payload)}) is greater than image capacity ({self.capacity(img)})!'
 
-        idx = Channel[args[0]].value
-        logger.debug('LSB-X args: {} {}', args, idx)
-
         for y, x in product(range(img.height), range(img.width)):
             channels = list(img.getpixel((x, y)))
 
-            if payload: channels[idx] = self.set_lsb(channels[idx], payload.pop(0))
+            if payload: channels[self.channel_idx] = self.set_lsb(channels[self.channel_idx], payload.pop(0))
 
             img.putpixel((x, y), tuple(channels))
 
     def extract(self, img: Image, payload_bits: int, *args, **kwargs) -> bitarray:
-        idx = Channel[args[0]].value
-        logger.debug('LSB-X args: {} {}', args, idx)
+        logger.debug('LSB-X args: {} {}', args, self.channel_idx)
         payload = bitarray()
 
         for y, x in product(range(img.height), range(img.width)):
@@ -43,7 +44,7 @@ class LSBX(LSB):
             if not payload_bits:
                 break
 
-            bit = self.get_lsb(channels[idx])
+            bit = self.get_lsb(channels[self.channel_idx])
             payload.append(bit)
             payload_bits -= 1
         return payload

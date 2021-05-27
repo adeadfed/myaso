@@ -5,6 +5,9 @@ from PIL.Image import Image
 
 
 class IAlgorithm(ABC):
+    def __init__(self, *args):
+        pass
+
     def capacity(self, img: Image):
         """Maximum number of least significant bits in ONE channel"""
         return img.height * img.width
