@@ -58,7 +58,7 @@ Available algorithms:
 - [x] LSBM
 - [x] ColorCode
 
-Supproted image formats:
+Supported image formats:
 - [x] BMP
 - [x] PNG
 - [x] JPEG (in progress)
