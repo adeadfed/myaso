@@ -1,20 +1,20 @@
 #pragma once
 #include "algorithm.h"
 
-namespace Reader {
+namespace Algorithms {
     class LSB : public Algorithm {
     private:
-        char getLsb(char target, char source) {
+        uint8_t getLsb(uint8_t target, uint8_t source) {
             return (target << 1) | (source & 1);
         }
     public:
         // inherit constructors from parent
         LSB() : Algorithm() {};
-        LSB(Bitmap* bm, int pb) : Algorithm(bm, pb) {};
+        LSB(int pb) : Algorithm(pb) {};
 
-        void readImage() {
+        void readImage(Bitmap * bmp) {
             Color c;
-            char channels[3];
+            uint8_t channels[3];
 
             int length = payload_bits;
             int pos = 0;

@@ -1,20 +1,20 @@
 #pragma once
 #include "algorithm.h"
 
-namespace Reader {
+namespace Algorithms {
     class Colorcode : public Algorithm {
     private:
-        char getColorcode(char target, char source) {
-            return (target << 1) | (source > 128);
+        uint8_t getColorcode(uint8_t target, uint8_t source) {
+            return (target << 1) | (source > (uint8_t)128);
         }
     public:
         // inherit constructors from parent
         Colorcode() : Algorithm() {}
-        Colorcode(Bitmap* bm, int pb) : Algorithm(bm, pb) {}
+        Colorcode(int pb) : Algorithm(pb) {}
 
-        void readImage() {
+        void readImage(Bitmap * bmp) {
             Color c;
-            char channels[3];
+            uint8_t channels[3];
 
             int length = payload_bits;
             int pos = 0;

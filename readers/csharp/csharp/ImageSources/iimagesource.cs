@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace Reader.Delivery
+namespace Reader.ImageSources
 {
-    interface IDelivery
+    interface IImageSource
     {
         Bitmap loadImage(string filename);
     }

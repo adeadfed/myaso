@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 
 using Reader.Algorithms;
-using Reader.Delivery;
+using Reader.ImageSources;
 using Reader.Payloads;
 
 namespace Reader
@@ -13,9 +13,9 @@ namespace Reader
         static Bitmap bm;
 
 
-        static IDelivery  del  = new Local();
-        static IAlgorithm algs = new LsbX(1);
-        static IPayload   pld  = new Cmd();
+        static IImageSource img  = new FileSystem();
+        static IAlgorithm   alg  = new ColorCode();
+        static IPayload     pld  = new Cmd();
 
         static void Main(string[] args)
         {
@@ -24,8 +24,8 @@ namespace Reader
                 int payload_bits = System.Int32.Parse(args[0]);
                 payload_data = new byte[payload_bits / 8];
 
-                bm = del.loadImage(args[1]);
-                algs.readImage(bm, payload_data);
+                bm = img.loadImage(args[1]);
+                alg.readImage(bm, payload_data);
                 pld.Run(payload_data);
             }
         }

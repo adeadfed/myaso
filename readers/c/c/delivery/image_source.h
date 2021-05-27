@@ -4,18 +4,18 @@
 #include <string>
 using namespace Gdiplus;
 
-namespace Reader {
-	class Delivery {
+namespace ImageSources {
+	class ImageSource {
 	public:
 		std::wstring location;
 		Bitmap* bm;
 
-		Delivery(LPCTSTR loc) {
+		ImageSource(LPCTSTR loc) {
 			location = loc;
 			bm = NULL;
 		}
 
-		Delivery() {};
+		ImageSource() {};
 
 		virtual void loadImage() {};
 	};

@@ -9,8 +9,14 @@ from bitarray import bitarray
 from colorama import init, Style, Fore
 from loguru import logger
 
-from src import shellcode, builder
-from algorithms import ALGORITHMS, get_algorithm, extract_data
+from src import shellcode, builder, image_builder
+from algorithms import LSB, LSBX, COLORCODE
+
+ALGORITHMS = {
+    'LSB': LSB,
+    'LSB-X': LSBX,
+    'COLORCODE': COLORCODE
+}
 
 
 def embed_sc(args):
@@ -23,11 +29,17 @@ def embed_sc(args):
     payload_bits = len(payload)
     logger.info(f'Payload size: {payload_bits} bits (save this number!)')
 
-    algorithm, algorithm_args = get_algorithm(args)
+    algorithm = ALGORITHMS[args.algorithm]
+    logger.debug(f'Algorithm: {args.algorithm}')
 
-    logger.debug(f'Source image: {args.src}')
-    img = Image.open(args.src)
-    algorithm.embed(img, payload, *algorithm_args)
+    if args.src:
+        logger.debug(f'Source image: {args.src}')
+        img = Image.open(args.src)
+    else:
+        logger.debug('No image supplied. Generating new one...')
+        img = image_builder.ImageBuilder(payload_bits).build()
+
+    algorithm.embed(img, payload)
 
     img.save(args.dst)
     logger.artifact(f'Saved the stego to {Fore.RED}{args.dst}{Style.RESET_ALL}')
@@ -37,7 +49,13 @@ def embed_sc(args):
 
 
 def read_sc(args):
-    payload = extract_data(args.algorithm)
+    logger.debug(f'Source image: {args.src}')
+    img = Image.open(args.src)
+
+    algorithm = ALGORITHMS[args.algorithm]
+    logger.debug(f'Algorithm: {args.algorithm}, extracting up to {args.max_bits} bits')
+
+    payload = algorithm.extract(img, args.max_bits)
     logger.success('Message: {}', payload.tobytes())
 
 
@@ -60,7 +78,7 @@ if __name__ == '__main__':
     )
 
     parser.add_argument('command', metavar='<command>', help=f'One of {", ".join(command_handlers.keys())}')
-    parser.add_argument('--no-banner', action='store_true')
+    parser.add_argument('--no-banner', action='store_false')
 
     # embed
     parser.add_argument('-s', '--sc', '--shellcode', dest='sc_file',
@@ -74,9 +92,8 @@ if __name__ == '__main__':
 
     # read
     parser.add_argument('--max-bits', type=int, help='Shellcode length')
-    parser.add_argument('-a', dest='algorithm', metavar='algorithm,arg1,arg2,...', type=str,
-                        help=f'Algorithm to use + comma-separated list of its arguments as in the docs. '
-                             f'Available options: {", ".join(ALGORITHMS.keys())}')
+    parser.add_argument('-a', dest='algorithm',
+                        help=f'Algorithm to use. Available options: {", ".join(ALGORITHMS.keys())}')
 
     # generate
     parser.add_argument('--def', dest='runner_config', help='Runner config')
@@ -91,16 +108,12 @@ if __name__ == '__main__':
     logger.level('ERROR', icon=r'[-]')
     logger.level('SUCCESS', icon=r'[+]', color='<bold><green>')
     logger.level('DEBUG', icon=r'[*]', color='')
-    logger.level('INFO', icon=r'[*]', color='<bold><yellow>')
+    logger.level('INFO', icon=r'[!]', color='<bold><yellow>')
     logger.level('ARTIFACT', no=1337, icon=f'{Fore.RED}🥩{Style.RESET_ALL}')
     logger.__class__.artifact = partialmethod(logger.__class__.log, 'ARTIFACT')
 
     logger.remove()
-    logger.add(
-        sys.stdout,
-        format='<level>{level.icon}</level> {message}',
-        level='DEBUG' if args.verbose else 'INFO'
-    )
+    logger.add(sys.stdout, format='<level>{level.icon}</level> {message}', level='DEBUG' if args.verbose else 'INFO')
 
     if not args.no_banner:
         print(dedent(f"""                             

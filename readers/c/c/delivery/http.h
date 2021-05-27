@@ -1,23 +1,23 @@
 #pragma once
-#include "delivery.h"
+#include "image_source.h"
 #include <winhttp.h>
 #pragma comment(lib, "winhttp.lib")
 
-namespace Reader {
-    class Remote: public Delivery {
+namespace ImageSources {
+    class Http: public ImageSource {
     public:
         // inherit constructors from parent
-        Remote(LPCTSTR loc) : Delivery(loc) { }
-        Remote() : Delivery() {}
+        Http(LPCTSTR loc) : ImageSource(loc) { }
+        Http() : ImageSource() {}
 
         void readImage() {
             HINTERNET hSession, hConnect, hRequest;
 
-            std::wstring file_path = L'/' + parse_url(L'/');
+            std::wstring file_path = L'/' + parseUrl(L'/');
 
-            int port = std::stoi(parse_url(L':'));
+            int port = std::stoi(parseUrl(L':'));
 
-            std::wstring host = parse_url(L'/');
+            std::wstring host = parseUrl(L'/');
 
             int flag = (location == L"https:/") ? WINHTTP_FLAG_SECURE : 0;
 
@@ -98,7 +98,7 @@ namespace Reader {
             bm = Bitmap::FromStream(img_stream);
         }
     private:
-        std::wstring parse_url(wchar_t delim) {
+        std::wstring parseUrl(wchar_t delim) {
             int pos = location.find_last_of(delim);
             std::wstring res = location.substr(pos + 1, std::wstring::npos);
 
