@@ -31,6 +31,7 @@ def extract(img: Image, payload_bits: int, **kwargs) -> bitarray:
 
 
 def __set_colorcode(value):
+    # return 255 if value else 0
     return randrange(140, 255) if value else randrange(110) 
 
 def __get_colorcode(byte):
