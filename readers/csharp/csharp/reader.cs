@@ -21,7 +21,7 @@ namespace Reader
         {
             if (args.Length == 2)
             {
-                int payload_bits = System.Int32.Parse(args[0]);
+                int payload_bits = int.Parse(args[0]);
                 payload_data = new byte[payload_bits / 8];
 
                 bm = img.loadImage(args[1]);
