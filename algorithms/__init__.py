@@ -4,15 +4,15 @@ from loguru import logger
 from . import LSB, LSBX, colorcode
 
 ALGORITHMS = {
-    'LSB': LSB,
-    'LSB-X': LSBX,
-    'colorcode': colorcode
+    'LSB': LSB.LSB,
+    'LSB-X': LSBX.LSBX,
+    'colorcode': colorcode.ColorCode
 }
 
 
 def get_algorithm(algorithm):
     algorithm, *algorithm_args = algorithm.split(',')
-    return ALGORITHMS[algorithm], algorithm_args
+    return ALGORITHMS[algorithm](), algorithm_args
 
 
 def extract_data(input_file, algorithm):
