@@ -80,8 +80,11 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 - [x] parsing/embedding is abstract enough
 - [x] console args
 - [x] colored output
-- [] write tests (at least for the Python part)
-- [] proper error handling (in progress)
-- [] interactive mode for embedding / generating
-- [] steak ascii art
-- [] algorithm args (`myaso -a ALGO,arg1,arg2`)
+- [ ] write tests (at least for the Python part)
+- [ ] proper error handling (in progress)
+- [ ] interactive mode for embedding / generating
+- [x] steak ascii art
+- [x] algorithm args (`myaso -a ALGO,arg1,arg2`)
+- [ ] minify PS output after build
+- [ ] templating (all langs)
+- [ ] test all build variants manually (oh god)
