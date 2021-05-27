@@ -73,6 +73,9 @@ myaso embed -f sc.bin -i image.bmp -o evil_image.bmp [-a <algorithm>]
 c:\> reader.exe SC_BITS happy_cat.bmp
 ```
 
+## Is it any good?
+yes.
+
 ## Definition of Ready
 - [x] parsing/embedding is abstract enough
 - [x] console args
