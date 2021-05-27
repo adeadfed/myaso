@@ -1,11 +1,19 @@
+from abc import ABC
+
 from bitarray import bitarray
+from PIL.Image import Image
 
 
-class IAlgorithm:
-    @staticmethod
-    def embed(payload: bitarray, output_file: str, *args, **kwargs):
+class IAlgorithm(ABC):
+    def capacity(self, img: Image):
+        """Maximum number of least significant bits in ONE channel"""
+        return img.height * img.width
+
+    def embed(self, payload: bitarray, img: Image, *args, **kwargs):
         raise NotImplementedError
 
-    @staticmethod
-    def extract(input_file: str, payload_bits: int, *args, **kwargs) -> bitarray:
+    def extract(self, img: Image, payload_bits: int, *args, **kwargs) -> bitarray:
+        raise NotImplementedError
+
+    def pixels_for(self, n):
         raise NotImplementedError

@@ -4,6 +4,8 @@ from random import sample
 from PIL import Image
 from loguru import logger
 
+from algorithms.IAlgorithm import IAlgorithm
+
 
 def get_image(src, algorithm, bits):
     if src:
@@ -19,7 +21,7 @@ def closest_square_of(n):
 
 
 class ImageBuilder:
-    def __init__(self, algorithm):
+    def __init__(self, algorithm: IAlgorithm):
         self.algorithm = algorithm
 
     def build(self, n):
