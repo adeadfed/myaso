@@ -9,12 +9,13 @@ from bitarray import bitarray
 from colorama import init, Back, Style, Fore
 from loguru import logger
 
-from src import shellcode, builder
-from algorithms import LSB, LSBX
+from src import shellcode, builder, image_builder
+from algorithms import LSB, LSBX, COLORCODE
 
 ALGORITHMS = {
     'LSB': LSB,
-    'LSB-X': LSBX
+    'LSB-X': LSBX,
+    'COLORCODE': COLORCODE
 }
 
 
@@ -31,8 +32,13 @@ def embed_sc(args):
     algorithm = ALGORITHMS[args.algorithm]
     logger.debug(f'Algorithm: {args.algorithm}')
 
-    logger.debug(f'Source image: {args.src}')
-    img = Image.open(args.src)
+    if args.src:
+        logger.debug(f'Source image: {args.src}')
+        img = Image.open(args.src)
+    else:
+        logger.debug('No image supplied. Generating new one...')
+        img = image_builder.ImageBuilder(payload_bits).build()
+    
     algorithm.embed(img, payload)
 
     img.save(args.dst)
@@ -102,7 +108,7 @@ if __name__ == '__main__':
     logger.level('ERROR', icon=r'[-]')
     logger.level('SUCCESS', icon=r'[+]', color='<bold><green>')
     logger.level('DEBUG', icon=r'[*]', color='')
-    logger.level('INFO', icon=r'[*]', color='<bold><yellow>')
+    logger.level('INFO', icon=r'[!]', color='<bold><yellow>')
     logger.level('ARTIFACT', no=1337, icon=f'{Fore.RED}🥩{Style.RESET_ALL}')
     logger.__class__.artifact = partialmethod(logger.__class__.log, 'ARTIFACT')
 
