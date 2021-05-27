@@ -1,11 +1,12 @@
 from PIL.Image import Image
 from loguru import logger
 
-from . import LSB, LSBX, colorcode
+from . import LSB, LSBM, LSBX, colorcode
 from .IAlgorithm import IAlgorithm
 
 ALGORITHMS = {
     'LSB': LSB.LSB,
+    'LSBM': LSBM.LSBM,
     'LSB-X': LSBX.LSBX,
     'colorcode': colorcode.ColorCode
 }

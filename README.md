@@ -54,7 +54,9 @@ Has modules in the following languages:
 
 Available algorithms:
 - [x] LSB (generic)
-- [] LSB-X (channel X only)
+- [x] LSB-X (channel X only)
+- [x] LSBM
+- [x] ColorCode
 
 Supproted image formats:
 - [x] BMP
