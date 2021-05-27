@@ -1,7 +1,6 @@
 import os.path
 import subprocess
 from collections import defaultdict
-from shutil import copy
 from dataclasses import dataclass, field
 
 import chevron
@@ -50,7 +49,6 @@ def get_runner(runner_config: str, **kwargs):
             logger.info(f'Usage: {runner.name}.{builder.build_extension} {kwargs["PAYLOAD_BITS"]} {kwargs["SC_SOURCE"]}')
         else:
             logger.info(f'Usage: {runner.name}.{builder.build_extension} PAYLOAD_BITS SC_SOURCE')
-
 
 
 class Builder:

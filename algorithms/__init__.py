@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from PIL.Image import Image
 from loguru import logger
 
