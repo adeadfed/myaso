@@ -67,7 +67,7 @@ if __name__ == '__main__':
     )
 
     parser.add_argument('command', metavar='<command>', help=f'One of {", ".join(command_handlers.keys())}')
-    parser.add_argument('--no-banner', action='store_false')
+    parser.add_argument('--no-banner', action='store_true')
 
     # embed
     parser.add_argument('-s', '--sc', '--shellcode', dest='sc_file',
