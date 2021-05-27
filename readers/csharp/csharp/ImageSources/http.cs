@@ -2,11 +2,11 @@
 using System.Net;
 using System.Drawing;
 
-namespace Reader.Delivery
+namespace Reader.ImageSources
 {
-    class Remote : IDelivery
+    class Http : IImageSource
     {
-        Bitmap IDelivery.loadImage(string file_uri)
+        Bitmap IImageSource.loadImage(string file_uri)
         {
             WebClient client = new WebClient();
             Stream stream = client.OpenRead(file_uri);
