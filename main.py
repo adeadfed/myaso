@@ -9,14 +9,9 @@ from bitarray import bitarray
 from colorama import init, Style, Fore
 from loguru import logger
 
-from src import shellcode, builder, image_builder
-from algorithms import LSB, LSBX, COLORCODE
-
-ALGORITHMS = {
-    'LSB': LSB,
-    'LSB-X': LSBX,
-    'COLORCODE': COLORCODE
-}
+from src import shellcode, builder
+from algorithms import ALGORITHMS
+from src.image_builder import get_image
 
 
 def embed_sc(args):
@@ -32,12 +27,7 @@ def embed_sc(args):
     algorithm = ALGORITHMS[args.algorithm]
     logger.debug(f'Algorithm: {args.algorithm}')
 
-    if args.src:
-        logger.debug(f'Source image: {args.src}')
-        img = Image.open(args.src)
-    else:
-        logger.debug('No image supplied. Generating new one...')
-        img = image_builder.ImageBuilder(payload_bits).build()
+    img = get_image(args.src, algorithm, payload_bits)
 
     algorithm.embed(img, payload)
 
