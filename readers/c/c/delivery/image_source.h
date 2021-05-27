@@ -6,18 +6,16 @@ using namespace Gdiplus;
 
 namespace ImageSources {
 	class ImageSource {
+		Bitmap* bm;
 	public:
 		std::wstring location;
-		Bitmap* bm;
 
-		ImageSource(LPCTSTR loc) {
+		ImageSource(LPCTSTR loc = L"") {
 			location = loc;
 			bm = NULL;
 		}
 
-		ImageSource() {};
-
-		virtual void loadImage() {};
+		virtual Bitmap* loadImage() {};
 	};
 };
 
