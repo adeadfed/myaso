@@ -74,7 +74,7 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 ```
 
 ## Is it any good?
-yes.
+[yes.](https://news.ycombinator.com/item?id=3067434)
 
 ## Definition of Ready
 - [x] parsing/embedding is abstract enough
