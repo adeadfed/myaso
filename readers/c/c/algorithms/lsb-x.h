@@ -1,12 +1,12 @@
 #pragma once
 #include "algorithm.h"
 
-namespace Reader {
+namespace Algorithms {
     class LSBX : public Algorithm {
     private:
         int channel;
 
-        char getLsb(char target, char source) {
+        uint8_t getLsb(uint8_t target, uint8_t source) {
             return (target << 1) | (source & 1);
         }
 
@@ -14,13 +14,13 @@ namespace Reader {
         // inherit default constructor from parent
         LSBX() : Algorithm() {}
         // redefine main constructor to include payload specific params
-        LSBX(Bitmap* bm, int pb, int c) : Algorithm(bm, pb) {
+        LSBX(int pb, int c) : Algorithm(pb) {
             channel = c;
         }
 
-        void readImage() {
+        void readImage(Bitmap * bmp) {
             Color c;
-            char channels[3];
+            uint8_t channels[3];
 
             int length = payload_bits;
             int pos = 0;

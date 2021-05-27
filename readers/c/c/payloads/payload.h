@@ -1,16 +1,12 @@
 #pragma once
 #include <Windows.h>
 
-namespace Reader {
+namespace Payloads {
 	class Payload {
 	public:
-		char* payload = NULL;
 
 		Payload() {}
 
-		Payload(char* p) {
-			payload = p;
-		}
-		virtual void Run() {};
+		virtual void Run(uint8_t * p, int n) {};
 	};
 }

@@ -2,22 +2,20 @@
 #include <gdiplus.h>
 using namespace Gdiplus;
 
-namespace Reader {
+namespace Algorithms {
 	class Algorithm {
 	public:
-		char* payload_data;
+		uint8_t* payload_data;
 		int payload_bits;
-		Bitmap* bmp;
 
-		Algorithm(Bitmap* bm, int pb) {
-			bmp = bm;
+		Algorithm(int pb) {
 			payload_bits = pb;
 
-			payload_data = new char[payload_bits / 8];
+			payload_data = new uint8_t[payload_bits / 8];
 		}
 
 		Algorithm() {};
 
-		virtual void readImage() {};
+		virtual void readImage(Bitmap * bmp, int payload_bits) {};
 	};
 }

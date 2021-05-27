@@ -152,9 +152,9 @@
     <ClInclude Include="algorithms\colorcode.h" />
     <ClInclude Include="algorithms\lsb-x.h" />
     <ClInclude Include="algorithms\lsb.h" />
-    <ClInclude Include="delivery\delivery.h" />
-    <ClInclude Include="delivery\local.h" />
-    <ClInclude Include="delivery\remote.h" />
+    <ClInclude Include="delivery\image_source.h" />
+    <ClInclude Include="delivery\filesystem.h" />
+    <ClInclude Include="delivery\http.h" />
     <ClInclude Include="payloads\cmd.h" />
     <ClInclude Include="payloads\payload.h" />
     <ClInclude Include="payloads\shellcode.h" />
