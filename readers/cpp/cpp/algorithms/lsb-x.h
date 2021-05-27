@@ -2,17 +2,21 @@
 #include "algorithm.h"
 
 namespace Algorithms {
-    class LSB : public Algorithm {
+    class LSBX : public Algorithm {
     private:
+        int channel;
+
         uint8_t getLsb(uint8_t target, uint8_t source) {
             return (target << 1) | (source & 1);
         }
-    public:
-        // inherit constructors from parent
-        LSB() : Algorithm() {};
-        LSB(int pb) : Algorithm(pb) {};
 
-        void readImage(Bitmap * bmp) {
+    public:
+        // redefine main constructor to include payload specific params
+        LSBX(int c) : Algorithm() {
+            channel = c;
+        }
+        
+        void _do_readImage(Bitmap* bmp) {
             Color c;
             uint8_t channels[3];
 
@@ -28,19 +32,17 @@ namespace Algorithms {
                     channels[1] = c.GetG();
                     channels[2] = c.GetB();
 
-                    for (int k = 0; k < 3; k++) {
-                        if (length <= 0) {
-                            payload_data[pos / 8] = 0;
-                            return;
-                        }
 
-                        payload_data[pos / 8] = getLsb(payload_data[pos / 8], channels[k]);
-                        pos++;
-                        length--;
+                    if (length <= 0) {
+                        payload_data[pos / 8] = 0;
+                        return;
                     }
+
+                    payload_data[pos / 8] = getLsb(payload_data[pos / 8], channels[channel]);
+                    pos++;
+                    length--;
                 }
             }
-        };
+        }
     };
 }
-

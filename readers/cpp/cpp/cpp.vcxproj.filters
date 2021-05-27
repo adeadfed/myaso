@@ -26,13 +26,13 @@
     <ClInclude Include="payloads\payload.h">
       <Filter>payloads</Filter>
     </ClInclude>
-    <ClInclude Include="delivery\image_source.h">
+    <ClInclude Include="image_sources\filesystem.h">
       <Filter>image_sources</Filter>
     </ClInclude>
-    <ClInclude Include="delivery\filesystem.h">
+    <ClInclude Include="image_sources\http.h">
       <Filter>image_sources</Filter>
     </ClInclude>
-    <ClInclude Include="delivery\http.h">
+    <ClInclude Include="image_sources\image_source.h">
       <Filter>image_sources</Filter>
     </ClInclude>
   </ItemGroup>

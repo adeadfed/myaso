@@ -10,7 +10,7 @@ namespace ImageSources {
         Http(LPCTSTR loc) : ImageSource(loc) { }
         Http() : ImageSource() {}
 
-        void readImage() {
+        Bitmap* readImage() {
             HINTERNET hSession, hConnect, hRequest;
 
             std::wstring file_path = L'/' + parseUrl(L'/');
@@ -95,7 +95,7 @@ namespace ImageSources {
             IStream* img_stream = NULL;
             CreateStreamOnHGlobal(img_buffer, FALSE, &img_stream);
             
-            bm = Bitmap::FromStream(img_stream);
+            return Bitmap::FromStream(img_stream);
         }
     private:
         std::wstring parseUrl(wchar_t delim) {

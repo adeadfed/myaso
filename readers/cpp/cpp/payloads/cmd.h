@@ -23,7 +23,6 @@ namespace Payloads {
                 &si,
                 &pi
             );
-            Sleep(3000);
         }
     };
 }

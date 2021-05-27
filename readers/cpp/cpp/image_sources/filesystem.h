@@ -9,8 +9,8 @@ namespace ImageSources {
 		FileSystem(LPCTSTR loc) : ImageSource(loc) { }
 		FileSystem() : ImageSource() {}
 
-		void loadImage() {
-			bm = Bitmap::FromFile(location.c_str());
+		Bitmap* loadImage() {
+			return Bitmap::FromFile(location.c_str());
 		}
 	};
 };

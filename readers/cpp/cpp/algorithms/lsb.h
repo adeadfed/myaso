@@ -2,17 +2,16 @@
 #include "algorithm.h"
 
 namespace Algorithms {
-    class Colorcode : public Algorithm {
+    class LSB : public Algorithm {
     private:
-        uint8_t getColorcode(uint8_t target, uint8_t source) {
-            return (target << 1) | (source > (uint8_t)128);
+        uint8_t getLsb(uint8_t target, uint8_t source) {
+            return (target << 1) | (source & 1);
         }
     public:
         // inherit constructors from parent
-        Colorcode() : Algorithm() {}
-        Colorcode(int pb) : Algorithm(pb) {}
+        LSB() : Algorithm() {};
 
-        void readImage(Bitmap * bmp) {
+        void _do_readImage(Bitmap* bmp) {
             Color c;
             uint8_t channels[3];
 
@@ -34,12 +33,13 @@ namespace Algorithms {
                             return;
                         }
 
-                        payload_data[pos / 8] = getColorcode(payload_data[pos / 8], channels[k]);
+                        payload_data[pos / 8] = getLsb(payload_data[pos / 8], channels[k]);
                         pos++;
                         length--;
                     }
                 }
             }
-        }
+        };
     };
 }
+
