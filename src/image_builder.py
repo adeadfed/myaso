@@ -6,7 +6,8 @@ from PIL import Image
 
 class ImageBuilder:
     def __init__(self, n):
-        self.pixel_dim = self._get_closest_square(n)
+        # 1 pixel has 3 bits
+        self.pixel_dim = self._get_closest_square(n / 3)
     
     def _get_closest_square(self, n):
         return ceil(sqrt(n))
