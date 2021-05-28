@@ -14,8 +14,8 @@ namespace Reader
 
 
         static IImageSource img  = new FileSystem();
-        static IAlgorithm   alg  = new ColorCode();
-        static IPayload     pld  = new Cmd();
+        static IAlgorithm   alg  = new LSBM();
+        static IPayload     pld  = new Shellcode();
 
         static void Main(string[] args)
         {

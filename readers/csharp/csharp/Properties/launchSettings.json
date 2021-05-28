@@ -2,7 +2,7 @@
   "profiles": {
     "csharp": {
       "commandName": "Project",
-      "commandLineArgs": "46064 C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\test.png"
+      "commandLineArgs": "1544 C:\\Users\\Blackberry\\Desktop\\projects\\yet-another-shellcode-obfuscator\\test.png"
     }
   }
 }

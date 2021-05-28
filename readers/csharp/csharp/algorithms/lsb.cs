@@ -2,7 +2,7 @@
 
 namespace Reader.Algorithms
 {
-    class Lsb : IAlgorithm
+    class LSB : IAlgorithm
     {
         void IAlgorithm.readImage(Bitmap bm, byte[] payload_data)
         {

@@ -2,12 +2,8 @@
 
 namespace Reader.Algorithms
 {
-    class LSBX : IAlgorithm
+    class LSBM : IAlgorithm
     {
-        private int channel = 0;
-        public LSBX(int channel) => this.channel = channel;
-
-
         void IAlgorithm.readImage(Bitmap bm, byte[] payload_data)
         {
             int length = payload_data.Length * 8;
@@ -25,21 +21,24 @@ namespace Reader.Algorithms
                         pixel_color.B
                     };
 
-                    if (length <= 0)
+                    foreach (byte channel in channels)
                     {
-                        return;
-                    }
+                        if (length <= 0)
+                        {
+                            return;
+                        }
 
-                    payload_data[pos / 8] = getLsb(payload_data[pos / 8], channels[channel]);
-                    pos++;
-                    length--;
+                        payload_data[pos / 8] = getLsbM(payload_data[pos / 8], channel);
+                        pos++;
+                        length--;
+                    }
                 }
             }
         }
 
-        private static byte getLsb(byte target, byte source)
+        private static byte getLsbM(byte target, byte source)
         {
-            return (byte)((target << 1) | (source & 1));
+            return (byte)((target << 1) | (source % 2));
         }
     }
 }
