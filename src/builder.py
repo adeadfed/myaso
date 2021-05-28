@@ -8,6 +8,8 @@ from colorama import Style, Fore
 from yaml import safe_load
 from loguru import logger
 
+from algorithms.LSBX import Channel
+
 
 @dataclass
 class Runner:
@@ -110,7 +112,7 @@ class Builder:
     def from_runner(cls, runner: Runner):
         logger.debug('Finding you a template...')
         implementations = {
-            'c': CBuilder,
+            'c': CppBuilder,
             'csharp': CSharpBuilder,
             'go': GoBuilder,
             'powershell': PowershellBuilder,
@@ -121,8 +123,8 @@ class Builder:
             logger.error(f'Runner in {runner.language} not found')
 
 
-class CBuilder(Builder):
-    template_file = 'c/Source.cpp'
+class CppBuilder(Builder):
+    template_file = 'cpp/reader.cpp.template'
     sources_extension = 'cpp'
     compilers = {
         'x86': '/usr/bin/i686-w64-mingw32-g++',
@@ -130,12 +132,16 @@ class CBuilder(Builder):
     }
     libs = defaultdict(list, {
         'remote': ['winhttp', 'ole32'],
-        'cmd': ['gdiplus'],
-        'shellcode': ['gdiplus'],
     })
 
+    def preprocess_sources(self):
+        # TODO: remove hardcoded values, let algos decide on the params
+        if self.runner.algorithm == 'LSB-X':
+            self.runner.params['algorithm_args'] = f"{Channel[self.runner.params.get('channel') or 'R'].value}"
+        super().preprocess_sources()
+
     def run_build(self):
-        libs = self.libs[self.runner.delivery_method] + self.libs[self.runner.payload_type]
+        libs = ['gdiplus'] + self.libs[self.runner.delivery_method] + self.libs[self.runner.payload_type]
         libs = set(libs)
         libs = ' '.join(f'-l{lib} -Wl,-Bstatic' for lib in libs)
         os.popen(
