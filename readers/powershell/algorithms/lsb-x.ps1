@@ -11,7 +11,7 @@ function get_payload($BitMap, $length) {
     foreach($y in (0..($BitMap.Height-1))) {
         foreach($x in (0..($BitMap.Width-1))) {
             $Pixel = $BitMap.GetPixel($x,$y)
-            $byte = $Pixel | Select-Object -ExpandProperty "{{{ LSBX_CHANNEL }}}"
+            $byte = $Pixel | Select-Object -ExpandProperty {{{ LSBX_CHANNEL }}}
 
             if ($length -le 0) {
                 return $bytes
