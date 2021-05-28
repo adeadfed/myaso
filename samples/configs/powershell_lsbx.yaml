@@ -1,12 +1,13 @@
-name: runner
+name: runner_x
 os: windows
 arch: x64
 
 language: powershell
 delivery_method: local
 payload_type: shellcode
-algorithm: LSB
+algorithm: LSB-X
 
 params:
   MAX_BITS: 2208
   PAYLOAD_SOURCE: "./samples/shellcode/shellcode_x64.bmp"
+  LSBX_CHANNEL: R

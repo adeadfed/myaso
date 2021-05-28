@@ -1,11 +1,11 @@
-name: runner
+name: runner_m
 os: windows
 arch: x64
 
 language: powershell
 delivery_method: local
 payload_type: shellcode
-algorithm: LSB
+algorithm: LSBM
 
 params:
   MAX_BITS: 2208
