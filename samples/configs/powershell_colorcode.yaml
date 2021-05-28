@@ -9,4 +9,4 @@ algorithm: colorcode
 
 params:
   MAX_BITS: 2208
-  PAYLOAD_SOURCE: "./samples/shellcode/shellcode_x64.bmp"
+  PAYLOAD_SOURCE: "./samples/shellcode/shellcode_x64_colorcode.bmp"
