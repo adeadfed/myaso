@@ -197,11 +197,13 @@ class PowershellBuilder(Builder):
     build_extension = sources_extension
 
     def preprocess_sources(self):
-        with open(f'algorithms/{self.runner.algorithm.lower()}') as f:
-            self.runner.params.update({'ALGORITHM_CODE': f.read()})
-        with open(f'delivery_methods/{self.runner.delivery_method.lower()}') as f:
-            self.runner.params.update({'PAYLOAD_DELIVERY_CODE': f.read()})
-        with open(f'payload_types/{self.runner.payload_type.lower()}') as f:
-            self.runner.params.update({'PAYLOAD_EXEC_CODE': f.read()})
+        with open(f'algorithms/{self.runner.algorithm.lower()}.{self.sources_extension}') as f:
+            self.runner.params.update({'ALGORITHM_CODE': chevron.render(f.read(), self.runner.params)})
+
+        with open(f'delivery_methods/{self.runner.delivery_method.lower()}.{self.sources_extension}') as f:
+            self.runner.params.update({'PAYLOAD_DELIVERY_CODE': chevron.render(f.read(), self.runner.params)})
+
+        with open(f'payload_types/{self.runner.payload_type.lower()}.{self.sources_extension}') as f:
+            self.runner.params.update({'PAYLOAD_EXEC_CODE': chevron.render(f.read(), self.runner.params)})
 
         super().preprocess_sources()
