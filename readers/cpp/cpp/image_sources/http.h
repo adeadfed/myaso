@@ -5,12 +5,14 @@
 
 namespace ImageSources {
     class Http: public ImageSource {
+        std::wstring location;
     public:
         // inherit constructors from parent
-        Http(LPCTSTR loc) : ImageSource(loc) { }
         Http() : ImageSource() {}
 
-        Bitmap* readImage() {
+        Bitmap* readImage(LPCTSTR loc) {
+            location = std::wstring(loc);
+
             HINTERNET hSession, hConnect, hRequest;
 
             std::wstring file_path = L'/' + parseUrl(L'/');
@@ -19,7 +21,7 @@ namespace ImageSources {
 
             std::wstring host = parseUrl(L'/');
 
-            int flag = (location == L"https:/") ? WINHTTP_FLAG_SECURE : 0;
+            int flag = (loc == L"https:/") ? WINHTTP_FLAG_SECURE : 0;
 
 
             hSession = WinHttpOpen(

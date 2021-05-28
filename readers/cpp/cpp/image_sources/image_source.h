@@ -7,13 +7,9 @@ using namespace Gdiplus;
 namespace ImageSources {
 	class ImageSource {
 	public:
-		std::wstring location;
+		ImageSource() {}
 
-		ImageSource(LPCTSTR loc = L"") {
-			location = loc;
-		}
-
-		virtual Bitmap* loadImage() {
+		virtual Bitmap* loadImage(LPCTSTR loc = L"") {
 			return NULL;
 		};
 	};

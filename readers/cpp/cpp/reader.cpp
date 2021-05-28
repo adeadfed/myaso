@@ -12,8 +12,8 @@ int _tmain(int argc, TCHAR** argv) {
         LPCTSTR location = argv[2];
 
         // TEMPLATES GO HERE
-        auto img = ImageSources::FileSystem(location);
-        Bitmap* bmp = img.loadImage();
+        auto img = ImageSources::FileSystem();
+        Bitmap* bmp = img.loadImage(location);
 
 
         auto alg = Algorithms::LSBM();

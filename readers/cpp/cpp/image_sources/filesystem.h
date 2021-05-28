@@ -6,11 +6,10 @@ namespace ImageSources {
 	class FileSystem : public ImageSource {
 	public:
 		// inherit constructors from parent
-		FileSystem(LPCTSTR loc) : ImageSource(loc) { }
 		FileSystem() : ImageSource() {}
 
-		Bitmap* loadImage() {
-			return Bitmap::FromFile(location.c_str());
+		Bitmap* loadImage(LPCTSTR loc) {
+			return Bitmap::FromFile(loc);
 		}
 	};
 };
