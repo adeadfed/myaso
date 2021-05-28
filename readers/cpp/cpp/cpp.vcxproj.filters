@@ -35,6 +35,9 @@
     <ClInclude Include="image_sources\image_source.h">
       <Filter>image_sources</Filter>
     </ClInclude>
+    <ClInclude Include="algorithms\lsbm.h">
+      <Filter>algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="algorithms">

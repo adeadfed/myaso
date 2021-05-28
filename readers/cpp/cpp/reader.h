@@ -16,6 +16,7 @@
 // Algorithm classes:
 #include "algorithms/colorcode.h"
 #include "algorithms/lsb-x.h"
+#include "algorithms/lsbm.h"
 #include "algorithms/lsb.h"
 
 // Payload classes:

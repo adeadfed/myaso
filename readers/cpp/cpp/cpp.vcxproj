@@ -152,6 +152,7 @@
     <ClInclude Include="algorithms\colorcode.h" />
     <ClInclude Include="algorithms\lsb-x.h" />
     <ClInclude Include="algorithms\lsb.h" />
+    <ClInclude Include="algorithms\lsbm.h" />
     <ClInclude Include="image_sources\filesystem.h" />
     <ClInclude Include="image_sources\http.h" />
     <ClInclude Include="image_sources\image_source.h" />

