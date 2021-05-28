@@ -19,17 +19,19 @@ func GetPayload(img image.Image, payload_data []byte) {
 	length := len(payload_data) * 8
 	pos := 0
 
+	channels := make([]uint32, 3)
+
 	for i := 0; i < height; i++ {
 		for j := 0; j < width; j++ {
 
-			r, g, b, _ := img.At(j, i).RGBA()
+			channels[0], channels[1], channels[2], _ = img.At(j, i).RGBA()
 
-			for _, channel := range [3]byte{byte(r), byte(g), byte(b)} {
+			for _, channel := range channels {
 				if length <= 0 {
 					return
 				}
 
-				payload_data[pos/8] = get_lsb(payload_data[pos/8], channel)
+				payload_data[pos/8] = get_lsb(payload_data[pos/8], byte(channel))
 				pos++
 				length--
 			}

@@ -6,8 +6,12 @@ import (
 	"image"
 )
 
-func get_colorcode(b byte) byte {
-    return 1 if b > 128 else 0
+func get_colorcode(target byte, source byte) byte {
+	if source > 128 {
+		return (target << 1) | 1
+	} else {
+		return (target << 1) | 0
+	}
 }
 
 func GetPayload(img image.Image, payload_data []byte) {
@@ -19,19 +23,21 @@ func GetPayload(img image.Image, payload_data []byte) {
 	length := len(payload_data) * 8
 	pos := 0
 
+	channels := make([]uint32, 3)
+
 	for i := 0; i < height; i++ {
 		for j := 0; j < width; j++ {
 
-			r, g, b, _ := img.At(j, i).RGBA()
-            channel = r
+			channels[0], channels[1], channels[2], _ = img.At(j, i).RGBA()
+			for _, channel := range channels {
+				if length <= 0 {
+					return
+				}
 
-            if length <= 0 {
-                return
-            }
-
-            payload_data[pos/8] = get_colorcode(payload_data[pos/8], channel)
-            pos++
-            length--
+				payload_data[pos/8] = get_colorcode(payload_data[pos/8], byte(channel))
+				pos++
+				length--
+			}
 		}
 	}
 }
