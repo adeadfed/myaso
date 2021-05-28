@@ -1,9 +1,7 @@
-function get_colorcode([byte]$b) {
-    if ($b -gt 128) {
-        return 1
-    } else {
-        return 0
-    }
+function get_colorcode([byte]$target, [byte]$source) {
+    $a = $target -shl 1
+    $b = [byte]($source -gt 128)
+    $a -bor $b
 }
 
 function get_payload($BitMap, $length) {
