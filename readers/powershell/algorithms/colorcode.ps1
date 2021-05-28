@@ -22,7 +22,7 @@ function get_payload($BitMap, $length) {
                 }
 
                 $idx = [int][Math]::Floor($pos / 8)
-                $bytes[$idx] = get_colorcode $byte
+                $bytes[$idx] = get_colorcode $bytes[$idx] $byte
 
                 $pos += 1
                 $length -= 1
