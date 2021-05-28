@@ -22,7 +22,7 @@ function get_payload($BitMap, $length) {
                 }
 
                 $idx = [int][Math]::Floor($pos / 8)
-                $bytes[$idx] = get_lsbm $byte
+                $bytes[$idx] = get_lsbm $bytes[$idx] $byte
 
                 $pos += 1
                 $length -= 1
