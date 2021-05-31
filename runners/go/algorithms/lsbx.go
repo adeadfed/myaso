@@ -1,16 +1,14 @@
-// +build payload_algorithm_lsbx
-
 package algorithms
 
 import (
 	"image"
 )
 
-func get_lsb(target byte, source byte, channel int) byte {
-	return (target << 1) | (source & 1)
+type LSBX struct {
+	Channel int
 }
 
-func GetPayload(img image.Image, payload_data []byte) {
+func (lsbx LSBX) Read(img image.Image, payload_data []byte) {
 	g := img.Bounds()
 
 	height := g.Dy()
@@ -19,7 +17,7 @@ func GetPayload(img image.Image, payload_data []byte) {
 	length := len(payload_data) * 8
 	pos := 0
 
-	channels := make([]byte, 3)
+	channels := make([]uint32, 3)
 
 	for i := 0; i < height; i++ {
 		for j := 0; j < width; j++ {
@@ -30,7 +28,7 @@ func GetPayload(img image.Image, payload_data []byte) {
 				return
 			}
 
-			payload_data[pos/8] = get_lsb(payload_data[pos/8], byte(channels[channel]))
+			payload_data[pos/8] = get_lsb(payload_data[pos/8], byte(channels[lsbx.Channel]))
 			pos++
 			length--
 		}

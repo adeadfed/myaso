@@ -4,11 +4,13 @@ import (
 	"image"
 )
 
+type LSBM struct{}
+
 func get_lsbm(target byte, source byte) byte {
 	return (target << 1) | (source % 2)
 }
 
-func GetPayload(img image.Image, payload_data []byte) {
+func (lsbm LSBM) Read(img image.Image, payload_data []byte) {
 	g := img.Bounds()
 
 	height := g.Dy()

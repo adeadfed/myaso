@@ -6,6 +6,8 @@ import (
 	"image"
 )
 
+type ColorCode struct{}
+
 func get_colorcode(target byte, source byte) byte {
 	if source > 128 {
 		return (target << 1) | 1
@@ -14,7 +16,7 @@ func get_colorcode(target byte, source byte) byte {
 	}
 }
 
-func GetPayload(img image.Image, payload_data []byte) {
+func (cc ColorCode) Read(img image.Image, payload_data []byte) {
 	g := img.Bounds()
 
 	height := g.Dy()

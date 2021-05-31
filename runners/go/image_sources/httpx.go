@@ -1,18 +1,22 @@
-// +build delivery_method_remote
-
-package delivery_methods
+package image_sources
 
 import (
+	"bytes"
 	"image"
-    "io/ioutil"
+	"io/ioutil"
 	"net/http"
 
 	_ "image/png"
+
 	_ "golang.org/x/image/bmp"
 )
 
-func GetImage(url string) image.Image {
-    resp, _ := http.Get(url)
+type HttpX struct {
+}
+
+func (hx HttpX) Load(location string) image.Image {
+	resp, _ := http.Get(location)
+
 	img_data, _ := ioutil.ReadAll(resp.Body)
 	r := bytes.NewReader(img_data)
 

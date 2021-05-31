@@ -1,17 +1,15 @@
-// +build payload_type_cmd
-
 package payloads
 
 import (
 	"os/exec"
+	"strings"
 )
 
-type cmd struct {
-	exe  string
-	args []string
-}
+type Cmd struct{}
 
-func (c cmd) run() {
-	cmd := exec.Command(c.exe, c.args...)
+func (c Cmd) Run(payload_data []byte) {
+	payload_args := strings.Split(string(payload_data), " ")
+
+	cmd := exec.Command(payload_args[0], payload_args[1:]...)
 	cmd.Run()
 }
