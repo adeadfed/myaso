@@ -4,6 +4,6 @@ namespace Reader.ImageSources
 {
     interface IImageSource
     {
-        Bitmap loadImage(string filename);
+        Bitmap load(string filename);
     }
 }

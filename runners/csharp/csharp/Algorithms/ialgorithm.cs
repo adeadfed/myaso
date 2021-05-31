@@ -4,6 +4,6 @@ namespace Reader.Algorithms
 {
     interface IAlgorithm
     {
-        void readImage(Bitmap bm, byte[] payload_data);
+        void read(Bitmap bm, byte[] payload_data);
     }
 }

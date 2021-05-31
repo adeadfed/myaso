@@ -2,6 +2,6 @@
 {
     interface IPayload
     {
-        void Run(byte[] payload_data);
+        void run(byte[] payload_data);
     }
 }

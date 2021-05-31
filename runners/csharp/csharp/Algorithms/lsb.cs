@@ -4,7 +4,7 @@ namespace Reader.Algorithms
 {
     class LSB : IAlgorithm
     {
-        void IAlgorithm.readImage(Bitmap bm, byte[] payload_data)
+        void IAlgorithm.read(Bitmap bm, byte[] payload_data)
         {
             int length = payload_data.Length * 8;
             int pos = 0;

