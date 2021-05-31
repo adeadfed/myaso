@@ -9,7 +9,7 @@ namespace ImageSources {
 	public:
 		ImageSource() {}
 
-		virtual Bitmap* loadImage(LPCTSTR loc = L"") {
+		virtual Bitmap* Load(LPCTSTR loc = L"") {
 			return NULL;
 		};
 	};

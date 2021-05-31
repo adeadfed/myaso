@@ -6,7 +6,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>1544 C:\Users\Blackberry\Desktop\projects\yet-another-shellcode-obfuscator\test.png</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>193 C:\Users\Blackberry\Desktop\projects\myaso\test.png</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

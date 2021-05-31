@@ -8,7 +8,7 @@ namespace ImageSources {
 		// inherit constructors from parent
 		FileSystem() : ImageSource() {}
 
-		Bitmap* loadImage(LPCTSTR loc) {
+		Bitmap* Load(LPCTSTR loc) {
 			return Bitmap::FromFile(loc);
 		}
 	};

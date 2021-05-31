@@ -10,12 +10,12 @@
 */
 
 // ImageSource classes:
-#include "image_sources/filesystem.h"
-#include "image_sources/http.h"
+#include "image_sources/image_file.h"
+#include "image_sources/httpx.h"
 
 // Algorithm classes:
 #include "algorithms/colorcode.h"
-#include "algorithms/lsb-x.h"
+#include "algorithms/lsbx.h"
 #include "algorithms/lsbm.h"
 #include "algorithms/lsb.h"
 

@@ -150,11 +150,11 @@
   <ItemGroup>
     <ClInclude Include="algorithms\algorithm.h" />
     <ClInclude Include="algorithms\colorcode.h" />
-    <ClInclude Include="algorithms\lsb-x.h" />
+    <ClInclude Include="algorithms\lsbx.h" />
     <ClInclude Include="algorithms\lsb.h" />
     <ClInclude Include="algorithms\lsbm.h" />
-    <ClInclude Include="image_sources\filesystem.h" />
-    <ClInclude Include="image_sources\http.h" />
+    <ClInclude Include="image_sources\image_file.h" />
+    <ClInclude Include="image_sources\httpx.h" />
     <ClInclude Include="image_sources\image_source.h" />
     <ClInclude Include="payloads\cmd.h" />
     <ClInclude Include="payloads\payload.h" />
