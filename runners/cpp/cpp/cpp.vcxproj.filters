@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="reader.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="reader.h" />
     <ClInclude Include="algorithms\lsb.h">
       <Filter>algorithms</Filter>
     </ClInclude>
@@ -38,6 +34,7 @@
     <ClInclude Include="image_sources\httpx.h">
       <Filter>image_sources</Filter>
     </ClInclude>
+    <ClInclude Include="runner.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="algorithms">
@@ -49,5 +46,8 @@
     <Filter Include="image_sources">
       <UniqueIdentifier>{6400a47b-ac3e-4880-b3e2-f278d0073522}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="runner.cpp" />
   </ItemGroup>
 </Project>

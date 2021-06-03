@@ -145,7 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="reader.cpp" />
+    <ClCompile Include="runner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithms\algorithm.h" />
@@ -159,7 +159,7 @@
     <ClInclude Include="payloads\cmd.h" />
     <ClInclude Include="payloads\payload.h" />
     <ClInclude Include="payloads\shellcode.h" />
-    <ClInclude Include="reader.h" />
+    <ClInclude Include="runner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
