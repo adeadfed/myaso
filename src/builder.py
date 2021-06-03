@@ -32,7 +32,7 @@ class Runner:
 
     @property
     def sources(self):
-        return os.path.join('readers', self.language)
+        return os.path.join('runners', self.language)
 
     def __str__(self):
         return f'{self.name} ({self.os}/{self.arch}/{self.language}/{self.payload}, ' \
@@ -156,10 +156,53 @@ class CppBuilder(Builder):
 
 
 class CSharpBuilder(Builder):
-    template_file = 'csharp/reader.cs.mst'
+    template_file = 'csharp/runner.cs.mst'
     sources_extension = 'cs'
+    build_dir = '.'
 
-    def build(self):
+    # TODO: drop templated .cs file to csharp/
+    # TODO: mcs includes
+
+    def preprocess_sources(self):
+        class_mapping = {
+            'image_sources': {
+                'image_file': 'ImageFile',
+                'httpx': 'HTTPX'
+            },
+            'payloads': {
+                'shellcode': 'Shellcode',
+                'cmd': 'Cmd'
+            },
+            'algorithms': {
+                'LSB': 'LSB',
+                'LSBM': 'LSBM',
+                'LSBX': 'LSBX',
+                'ColorCode': 'ColorCode'
+            }
+        }
+
+        self.runner.params.update({
+            'image_source': class_mapping['image_sources'][self.runner.image_source],
+            'payload': class_mapping['payloads'][self.runner.payload],
+            'algorithm': self.runner.algorithm
+        })
+
+        self.runner.name = f'csharp/{self.runner.name}'
+
+        try:
+            args = self.runner.params['args']
+            self.runner.params.update({
+                'image_source_args': args.get('image_source'),
+                'algorithm_args': args.get('algorithm'),
+                'payload_args': args.get('payload'),
+            })
+        except KeyError:
+            pass
+
+        super().preprocess_sources()
+
+    def run_build(self):
+        os.chdir('csharp')
         os.popen(f'mcs -platform:{self.runner.arch} '
                  f'-reference:System.Drawing '
                  f'{self.build_dir}/{self.runner.name}')
