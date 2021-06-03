@@ -125,7 +125,7 @@ class Builder:
 
 
 class CppBuilder(Builder):
-    template_file = 'cpp/reader.cpp.template'
+    template_file = 'cpp/reader.cpp.mst'
     sources_extension = 'cpp'
     compilers = {
         'x86': '/usr/bin/i686-w64-mingw32-g++',
@@ -156,16 +156,18 @@ class CppBuilder(Builder):
 
 
 class CSharpBuilder(Builder):
-    template_file = 'csharp/Program.cs'
+    template_file = 'csharp/reader.cs.mst'
     sources_extension = 'cs'
 
     def build(self):
-        os.popen(f'mcs -platform:{self.runner.arch} -reference:System.Drawing {self.build_dir}/{self.runner.name}')
+        os.popen(f'mcs -platform:{self.runner.arch} '
+                 f'-reference:System.Drawing '
+                 f'{self.build_dir}/{self.runner.name}')
 
 
 class GoBuilder(Builder):
     build_dir = '.'
-    template_file = 'runner.go.template'
+    template_file = 'runner.go.mst'
     sources_extension = 'go'
     architectures = {
         'x86': '386',
@@ -199,7 +201,7 @@ class GoBuilder(Builder):
 
 
 class PowershellBuilder(Builder):
-    template_file = 'template.ps1'
+    template_file = 'runner.ps1.mst'
     sources_extension = 'ps1'
     build_extension = sources_extension
 
@@ -210,7 +212,7 @@ class PowershellBuilder(Builder):
         with open(f'delivery_methods/{self.runner.delivery_method.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'PAYLOAD_DELIVERY_CODE': chevron.render(f.read(), self.runner.params)})
 
-        with open(f'payload_types/{self.runner.payload_type.lower()}.{self.sources_extension}') as f:
+        with open(f'payloads/{self.runner.payload_type.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'PAYLOAD_EXEC_CODE': chevron.render(f.read(), self.runner.params)})
 
         super().preprocess_sources()
