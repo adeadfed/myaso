@@ -1,12 +1,12 @@
 ﻿using System.Drawing;
 
-using Reader.Algorithms;
-using Reader.ImageSources;
-using Reader.Payloads;
+using Runner.Algorithms;
+using Runner.ImageSources;
+using Runner.Payloads;
 
-namespace Reader
+namespace Runner
 {
-    class Reader
+    class Runner
     {
         static byte[] payload_data;
 

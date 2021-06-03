@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Reader.Payloads
+namespace Runner.Payloads
 {
     class Cmd : IPayload
     {

@@ -1,4 +1,4 @@
-#include "reader.h"
+#include "runner.h"
 
 int _tmain(int argc, TCHAR** argv) {
     if (argc == 3) {      

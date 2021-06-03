@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Reader.ImageSources
+namespace Runner.ImageSources
 {
     class ImageFile : IImageSource
     {

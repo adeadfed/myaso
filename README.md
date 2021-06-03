@@ -48,7 +48,7 @@ Has modules in the following languages:
 - [x] C#
 - [x] Powershell
 - [x] Go
-- [ ] Microsoft VBA
+- [x] Microsoft VBA (beta)
 
 Available algorithms:
 - [x] LSB (generic)
@@ -59,7 +59,7 @@ Available algorithms:
 Supported image formats:
 - [x] BMP
 - [x] PNG
-- [x] JPEG (in progress)
+- [ ] JPEG (TBD)
 
 ## Usage
 
