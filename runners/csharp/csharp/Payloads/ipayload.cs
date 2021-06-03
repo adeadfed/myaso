@@ -1,4 +1,4 @@
-﻿namespace Reader.Payloads
+﻿namespace Runner.Payloads
 {
     interface IPayload
     {

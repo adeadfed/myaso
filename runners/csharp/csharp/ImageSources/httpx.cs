@@ -2,7 +2,7 @@
 using System.Net;
 using System.Drawing;
 
-namespace Reader.ImageSources
+namespace Runner.ImageSources
 {
     class HTTPX : IImageSource
     {

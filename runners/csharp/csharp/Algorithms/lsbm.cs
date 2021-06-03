@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Reader.Algorithms
+namespace Runner.Algorithms
 {
     class LSBM : IAlgorithm
     {
