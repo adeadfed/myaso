@@ -13,7 +13,7 @@ from algorithms.LSBX import Channel
 
 @dataclass
 class Runner:
-    """Shellcode runner. Knows how to build itself"""
+    """Payload runner. Used as a config for Builder"""
     name: str
     os: str
     arch: str
@@ -54,6 +54,7 @@ def get_runner(runner_config: str, **kwargs):
 
 
 class Builder:
+    """A language-specific templating engine"""
     template_file = ''
     sources_extension = ''
     build_extension = 'exe'
