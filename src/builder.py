@@ -19,8 +19,8 @@ class Runner:
     arch: str
 
     language: str
-    delivery_method: str
-    payload_type: str
+    image_source: str
+    payload: str
     algorithm: str
 
     params: dict = field(default_factory=dict)
@@ -35,7 +35,7 @@ class Runner:
         return os.path.join('readers', self.language)
 
     def __str__(self):
-        return f'{self.name} ({self.os}/{self.arch}/{self.language}/{self.payload_type}, ' \
+        return f'{self.name} ({self.os}/{self.arch}/{self.language}/{self.payload}, ' \
                f'algorithm={self.algorithm}, params={self.params})'
 
 
@@ -142,7 +142,7 @@ class CppBuilder(Builder):
         super().preprocess_sources()
 
     def run_build(self):
-        libs = ['gdiplus'] + self.libs[self.runner.delivery_method] + self.libs[self.runner.payload_type]
+        libs = ['gdiplus'] + self.libs[self.runner.image_source] + self.libs[self.runner.payload]
         libs = set(libs)
         libs = ' '.join(f'-l{lib} -Wl,-Bstatic' for lib in libs)
         os.popen(
@@ -180,8 +180,8 @@ class GoBuilder(Builder):
     def run_build(self):
         tags = ','.join([
             f'payload_algorithm_{self.runner.algorithm.lower()}',
-            f'delivery_method_{self.runner.delivery_method.lower()}',
-            f'payload_type_{self.runner.payload_type.lower()}'
+            f'delivery_method_{self.runner.image_source.lower()}',
+            f'payload_type_{self.runner.payload.lower()}'
         ])
 
         o = subprocess.run(
@@ -209,10 +209,10 @@ class PowershellBuilder(Builder):
         with open(f'algorithms/{self.runner.algorithm.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'ALGORITHM_CODE': chevron.render(f.read(), self.runner.params)})
 
-        with open(f'delivery_methods/{self.runner.delivery_method.lower()}.{self.sources_extension}') as f:
+        with open(f'delivery_methods/{self.runner.image_source.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'PAYLOAD_DELIVERY_CODE': chevron.render(f.read(), self.runner.params)})
 
-        with open(f'payloads/{self.runner.payload_type.lower()}.{self.sources_extension}') as f:
+        with open(f'payloads/{self.runner.payload.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'PAYLOAD_EXEC_CODE': chevron.render(f.read(), self.runner.params)})
 
         super().preprocess_sources()

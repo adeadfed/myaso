@@ -1,0 +1,8 @@
+name: csharp_runner
+os: windows
+arch: x64
+
+language: csharp
+image_source: image_file
+payload: shellcode
+algorithm: LSB
