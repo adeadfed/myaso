@@ -3,8 +3,8 @@ os: windows
 arch: x64
 
 language: powershell
-delivery_method: local
-payload_type: shellcode
+image_source: local
+payload: shellcode
 algorithm: colorcode
 
 params:

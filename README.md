@@ -86,5 +86,5 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 - [x] steak ascii art
 - [x] algorithm args (`myaso -a ALGO,arg1,arg2`)
 - [ ] minify PS output after build
-- [ ] templating (all langs)
+- [x] templating (all langs)
 - [ ] test all build variants manually (oh god)

