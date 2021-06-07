@@ -66,6 +66,9 @@ Supported payload types:
 - [x] Shellcode 
 - [ ] In-memory PE
 
+Supported payload mutations:
+- [ ] Obfuscate PS runner
+
 ## Usage
 
 ### Generate image
@@ -92,7 +95,7 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 - [ ] proper error handling (in progress)
 - [x] steak ascii art
 - [x] algorithm args (`myaso -a ALGO,arg1,arg2`)
-- [ ] minify PS output after build
+- [x] minify PS output after build
 - [x] templating (all langs)
 - [ ] test all build variants manually (oh god)
 
