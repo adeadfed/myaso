@@ -61,6 +61,11 @@ Supported image formats:
 - [x] PNG
 - [ ] JPEG (TBD)
 
+Supported payload types:
+- [x] CMD commands
+- [x] Shellcode 
+- [ ] In-memory PE
+
 ## Usage
 
 ### Generate image
@@ -76,15 +81,22 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 ## Is it any good?
 [yes.](https://news.ycombinator.com/item?id=3067434)
 
+## Known issues
+- [ ] python script takes ages to process large payloads (>1 MB)
+
 ## Definition of Ready
 - [x] parsing/embedding is abstract enough
 - [x] console args
 - [x] colored output
 - [ ] write tests (at least for the Python part)
 - [ ] proper error handling (in progress)
-- [ ] interactive mode for embedding / generating
 - [x] steak ascii art
 - [x] algorithm args (`myaso -a ALGO,arg1,arg2`)
 - [ ] minify PS output after build
 - [x] templating (all langs)
 - [ ] test all build variants manually (oh god)
+
+## Roadmap
+- [ ] interactive mode for embedding / generating
+- [ ] add in-memory PE runners
+- [ ] speed-up payload embedding in python
