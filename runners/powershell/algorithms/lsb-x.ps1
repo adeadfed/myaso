@@ -4,16 +4,17 @@ function get_lsb([byte]$target, [byte]$source) {
     $a -bor $b
 }
 
-function get_payload($BitMap, $length) {
+function read($BitMap, $length) {
     [Int32]$pos = 0
-    $bytes = New-Object byte[] ($length / 8)
+    $bytes = New-Object byte[] ($length)
+    $bit_length = $length * 8
 
     foreach($y in (0..($BitMap.Height-1))) {
         foreach($x in (0..($BitMap.Width-1))) {
             $Pixel = $BitMap.GetPixel($x,$y)
             $byte = $Pixel | Select-Object -ExpandProperty {{{ LSBX_CHANNEL }}}
 
-            if ($length -le 0) {
+            if ($bit_length -le 0) {
                 return $bytes
             }
 
@@ -21,7 +22,7 @@ function get_payload($BitMap, $length) {
             $bytes[$idx] = get_lsb $bytes[$idx] $byte
 
             $pos += 1
-            $length -= 1
+            $bit_length -= 1
         }
     }
 }
