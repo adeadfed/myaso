@@ -24,7 +24,6 @@ script_vars = set(re.findall(var_regex, contents))
 script_vars = sorted(script_vars, key=len, reverse=True)
 
 script_funcs = set(x[0] for x in re.findall(func_regex, contents))
-print(script_funcs)
 script_funcs = sorted(script_funcs, key=len, reverse=True)
 
 # specify here a list of variables to be ignored upon replacing
@@ -32,7 +31,6 @@ const_vars = ['$true', '$false']
 
 for var in const_vars:
     try:
-        print(var)
         script_vars.remove(var)
     except ValueError:
         pass
