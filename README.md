@@ -100,6 +100,7 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 - [ ] test all build variants manually (oh god)
 
 ## Roadmap
+- [ ] JPEG support 
 - [ ] interactive mode for embedding / generating
 - [ ] add in-memory PE runners
 - [ ] speed-up payload embedding in python
