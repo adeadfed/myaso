@@ -100,3 +100,4 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 - [ ] interactive mode for embedding / generating
 - [ ] add in-memory PE runners
 - [ ] speed-up payload embedding in python
+- [ ] payload mutations
