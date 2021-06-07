@@ -1,10 +1,10 @@
-function get_colorcode([byte]$target, [byte]$source) {
+function GetColorcode([byte]$target, [byte]$source) {
     $a = $target -shl 1
     $b = [byte]($source -gt 128)
     $a -bor $b
 }
 
-function read($BitMap, $length) {
+function Read($BitMap, $length) {
     [Int32]$pos = 0
     $bytes = New-Object byte[] ($length)
     $bit_length = $length * 8
@@ -23,7 +23,7 @@ function read($BitMap, $length) {
                 }
 
                 $idx = [int][Math]::Floor($pos / 8)
-                $bytes[$idx] = get_colorcode $bytes[$idx] $byte
+                $bytes[$idx] = GetColorcode $bytes[$idx] $byte
 
                 $pos += 1
                 $bit_length -= 1

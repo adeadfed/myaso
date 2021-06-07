@@ -1,10 +1,10 @@
-function get_lsbm([byte]$target, [byte]$source) {
+function GetLsbm([byte]$target, [byte]$source) {
     $a = $target -shl 1
     $b = $source % 2
     $a -bor $b
 }
 
-function read($BitMap, $length) {
+function Read($BitMap, $length) {
     [Int32]$pos = 0
     $bytes = New-Object byte[] ($length)
     $bit_length = $length * 8
@@ -23,7 +23,7 @@ function read($BitMap, $length) {
                 }
 
                 $idx = [int][Math]::Floor($pos / 8)
-                $bytes[$idx] = get_lsbm $bytes[$idx] $byte
+                $bytes[$idx] = GetLsbm $bytes[$idx] $byte
 
                 $pos += 1
                 $bit_length -= 1

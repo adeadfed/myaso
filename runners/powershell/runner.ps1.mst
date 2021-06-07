@@ -7,7 +7,7 @@
 
 $BitMap = {{{ PAYLOAD_DELIVERY_CODE }}}
 
-$payload_data = read $BitMap $length
+$payload_data = Read $BitMap $length
 
 {{{ PAYLOAD_EXEC_CODE }}}
 
