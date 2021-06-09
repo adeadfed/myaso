@@ -202,10 +202,17 @@ class CSharpBuilder(Builder):
         super().preprocess_sources()
 
     def run_build(self):
-        os.chdir('csharp')
-        os.popen(f'mcs -platform:{self.runner.arch} '
-                 f'-reference:System.Drawing '
-                 f'{self.build_dir}/{self.runner.name}')
+        # os.chdir('csharp')
+        logger.debug(os.getcwd())
+        cmd = (
+            f'mcs -platform:{self.runner.arch} '
+            f'/reference:System.Drawing.dll '
+            f'{self.build_dir}/{self.runner.name}.{self.sources_extension}'
+        )
+        # mcs -platform:x64 -lib:/usr/lib/mono/4.5/ ./csharp_runner.cs ./Algorithms/* ./Payloads/* ./ImageSources/*
+        logger.debug(cmd)
+        os.popen(cmd)
+        # os.chdir('..')
 
 
 class GoBuilder(Builder):
