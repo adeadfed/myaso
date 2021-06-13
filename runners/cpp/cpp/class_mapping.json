@@ -1,0 +1,16 @@
+{
+    "image_sources": {
+        "image_file": "FileSystem",
+        "httpx": "Http"
+    },
+    "payloads": {
+        "shellcode": "Shellcode",
+        "cmd": "Cmd"
+    },
+    "algorithms": {
+        "LSB": "LSB",
+        "LSBM": "LSBM",
+        "LSBX": "LSBX",
+        "ColorCode": "ColorCode"
+    }
+}
