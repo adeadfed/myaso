@@ -55,10 +55,9 @@ def get_runner(runner_config: str, **kwargs):
 
 class Builder:
     """A language-specific templating engine"""
-    template_file = ''
     sources_extension = ''
     build_extension = 'exe'
-    build_dir = 'build'
+    build_dir = '.'
 
     def __init__(self, runner: Runner):
         self.runner = runner
@@ -72,10 +71,14 @@ class Builder:
         ))
 
     def preprocess_sources(self):
-        with open(self.template_file) as template:
+        with open(f'{self.main_file}.mst') as template:
             script = chevron.render(template, self.runner.params)
-            with open(os.path.join(self.build_dir, f'{self.runner.name}.{self.sources_extension}'), 'w') as f:
+            with open(f'{self.main_file}', 'w') as f:
                 f.write(script)
+
+    @property
+    def main_file(self):
+        return f'runner.{self.sources_extension}'
 
     def run_build(self):
         pass
@@ -93,6 +96,7 @@ class Builder:
 
         success = False
         try:
+            os.chdir(self.build_dir)
             logger.debug('Preparing the sources...')
             self.preprocess_sources()
 
@@ -126,8 +130,8 @@ class Builder:
 
 
 class CppBuilder(Builder):
-    template_file = 'cpp/reader.cpp.mst'
     sources_extension = 'cpp'
+    build_dir = 'cpp'
     compilers = {
         'x86': '/usr/bin/i686-w64-mingw32-g++',
         'x64': '/usr/bin/x86_64-w64-mingw32-g++'
@@ -148,7 +152,7 @@ class CppBuilder(Builder):
         libs = ' '.join(f'-l{lib} -Wl,-Bstatic' for lib in libs)
         os.popen(
             f'{self.compilers[self.runner.arch]} '
-            f'{self.template_file} '
+            f'{self.main_file} '
             f'-s -static-libgcc -static-libstdc++ '
             f'{libs} '
             f'-Wall '
@@ -157,7 +161,6 @@ class CppBuilder(Builder):
 
 
 class CSharpBuilder(Builder):
-    template_file = 'csharp/runner.cs.mst'
     sources_extension = 'cs'
     build_dir = 'csharp'
 
@@ -188,8 +191,6 @@ class CSharpBuilder(Builder):
             'algorithm': self.runner.algorithm
         })
 
-        # self.runner.name = f'csharp/{self.runner.name}'
-
         try:
             args = self.runner.params['args']
             self.runner.params.update({
@@ -203,7 +204,6 @@ class CSharpBuilder(Builder):
         super().preprocess_sources()
 
     def run_build(self):
-        os.chdir(self.build_dir)
         logger.debug(os.getcwd())
         cmd = (
             f'mcs -platform:{self.runner.arch} '
@@ -213,12 +213,10 @@ class CSharpBuilder(Builder):
         )
         logger.debug(cmd)
         assert (o := subprocess.run(cmd, shell=True, capture_output=True)).returncode == 0, (o.stdout, o.stderr)
-        os.chdir('..')
 
 
 class GoBuilder(Builder):
     build_dir = '.'
-    template_file = 'runner.go.mst'
     sources_extension = 'go'
     architectures = {
         'x86': '386',
@@ -252,7 +250,6 @@ class GoBuilder(Builder):
 
 
 class PowershellBuilder(Builder):
-    template_file = 'runner.ps1.mst'
     sources_extension = 'ps1'
     build_extension = sources_extension
 
