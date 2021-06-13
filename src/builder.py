@@ -159,7 +159,7 @@ class CppBuilder(Builder):
 class CSharpBuilder(Builder):
     template_file = 'csharp/runner.cs.mst'
     sources_extension = 'cs'
-    build_dir = '.'
+    build_dir = 'csharp'
 
     # TODO: drop templated .cs file to csharp/
     # TODO: mcs includes
@@ -188,7 +188,7 @@ class CSharpBuilder(Builder):
             'algorithm': self.runner.algorithm
         })
 
-        self.runner.name = f'csharp/{self.runner.name}'
+        # self.runner.name = f'csharp/{self.runner.name}'
 
         try:
             args = self.runner.params['args']
@@ -203,17 +203,17 @@ class CSharpBuilder(Builder):
         super().preprocess_sources()
 
     def run_build(self):
-        # os.chdir('csharp')
+        os.chdir(self.build_dir)
         logger.debug(os.getcwd())
         cmd = (
             f'mcs -platform:{self.runner.arch} '
-            f'/reference:System.Drawing.dll '
-            f'{self.build_dir}/{self.runner.name}.{self.sources_extension}'
+            f'/reference:System.Drawing '
+            f'{self.runner.name}.{self.sources_extension} '
+            f'./Algorithms/* ./Payloads/* ./ImageSources/*'
         )
-        # mcs -platform:x64 -lib:/usr/lib/mono/4.5/ ./csharp_runner.cs ./Algorithms/* ./Payloads/* ./ImageSources/*
         logger.debug(cmd)
-        os.popen(cmd)
-        # os.chdir('..')
+        assert (o := subprocess.run(cmd, shell=True, capture_output=True)).returncode == 0, (o.stdout, o.stderr)
+        os.chdir('..')
 
 
 class GoBuilder(Builder):
