@@ -122,6 +122,7 @@ class Builder:
             return implementations[runner.language](runner)
         except KeyError:
             logger.error(f'Runner in {runner.language} not found')
+            exit(-1)
 
 
 class CppBuilder(Builder):
