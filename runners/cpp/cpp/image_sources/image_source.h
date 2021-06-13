@@ -1,5 +1,5 @@
 #pragma once
-#include <Windows.h>
+#include <windows.h>
 #include <gdiplus.h>
 #include <string>
 using namespace Gdiplus;
