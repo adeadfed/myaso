@@ -113,7 +113,7 @@ class Builder:
     def from_runner(cls, runner: Runner):
         logger.debug('Finding you a template...')
         implementations = {
-            'c': CppBuilder,
+            'cpp': CppBuilder,
             'csharp': CSharpBuilder,
             'go': GoBuilder,
             'powershell': PowershellBuilder,
