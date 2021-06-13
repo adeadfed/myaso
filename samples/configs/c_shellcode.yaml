@@ -1,0 +1,8 @@
+name: c_runner
+os: windows
+arch: x64
+
+language: cpp
+image_source: image_file
+payload: shellcode
+algorithm: LSB
