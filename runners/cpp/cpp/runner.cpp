@@ -1,6 +1,6 @@
 #include "runner.h"
 
-int _tmain(int argc, TCHAR** argv) {
+int main(int argc, wchar_t** argv) {
     if (argc == 3) {      
         // Init Gdiplus
         GdiplusStartupInput gdiplusStartupInput;
@@ -8,8 +8,8 @@ int _tmain(int argc, TCHAR** argv) {
         GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
         // Do the job
-        int payload_size = _ttoi(argv[1]);
-        LPCTSTR location = argv[2];
+        int payload_size = _wtoi(argv[1]);
+        const wchar_t* location = argv[2];
 
         // TEMPLATES GO HERE
         auto img = ImageSources::FileSystem();

@@ -10,7 +10,7 @@ namespace ImageSources {
         // inherit constructors from parent
         Http() : ImageSource() {}
 
-        Bitmap* Load(LPCTSTR loc) {
+        Bitmap* Load(const wchar_t* loc) {
             location = std::wstring(loc);
 
             HINTERNET hSession, hConnect, hRequest;
