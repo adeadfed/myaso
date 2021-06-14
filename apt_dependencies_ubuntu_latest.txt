@@ -1,0 +1,14 @@
+git clone https://github.com/adeadfed/myaso /opt/myaso
+
+# python builder
+apt install python3.9 python3-pip -y
+pip3 install -r /opt/myaso/requirements.txt
+
+# cpp compiler
+apt install g++-mingw-w64-i686 g++-mingw-w64-x86-64 -y
+
+# csharp compiler
+apt install libgdiplus mono-complete -y 
+
+# go compiler
+apt install golang -y
