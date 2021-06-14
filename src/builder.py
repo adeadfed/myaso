@@ -247,7 +247,7 @@ class PowershellBuilder(Builder):
         with open(f'algorithms/{self.runner.algorithm.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'ALGORITHM_CODE': chevron.render(f.read(), self.runner.params)})
 
-        with open(f'delivery_methods/{self.runner.image_source.lower()}.{self.sources_extension}') as f:
+        with open(f'image_sources/{self.runner.image_source.lower()}.{self.sources_extension}') as f:
             self.runner.params.update({'PAYLOAD_DELIVERY_CODE': chevron.render(f.read(), self.runner.params)})
 
         with open(f'payloads/{self.runner.payload.lower()}.{self.sources_extension}') as f:
