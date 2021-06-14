@@ -3,7 +3,7 @@ os: windows
 arch: x64
 
 language: powershell
-image_source: local
+image_source: image_file
 payload: shellcode
 algorithm: LSBM
 
