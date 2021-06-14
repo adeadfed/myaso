@@ -86,6 +86,10 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 
 ## Known issues
 - [ ] python script takes ages to process large payloads (>1 MB)
+- [ ] PS builder templates wrong byte_length e.g. (should be 276 -> templates 2208 (276 * 8, length in bits))
+- [ ] C++ runners are not working and crash
+- [ ] C# builder searches for csharp_runner.cs, not runner.cs
+- [ ] Go builder not working (no template braces in the .mst file, searching for file with wrong name)
 
 ## Definition of Ready
 - [x] parsing/embedding is abstract enough
@@ -98,6 +102,7 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 - [x] minify PS output after build
 - [x] templating (all langs)
 - [ ] test all build variants manually (oh god)
+- [ ] docker image
 
 ## Roadmap
 - [ ] JPEG support 
