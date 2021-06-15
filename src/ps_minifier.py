@@ -9,7 +9,7 @@ with open('../../test.ps1', 'rb') as f:
     contents = f.read().decode('utf-8')
 
 multi_tab_regex = r'(\s){2,}'                                # replaces multiple whitespace characters with ';'
-wspace_operator_regex = r'\s(([\[\]=|+\-*\/])+)\s'           # replaces whitespaces on the sides of operator e.g. a = b -> a=b
+wspace_operator_regex = r'\s(([\[\]=|+\-*\/,])+)\s'           # replaces whitespaces on the sides of operator e.g. a = b -> a=b
 wspace_declaration_regex = r'([\[\]()$,{}])\s([\[\]()$,{}])' # replaces whitespaces inbetween declarations e.g. function a() {...} -> function a(){...}
 
 func_regex = r'function ((\w)+)'                             # matches format of function names 
