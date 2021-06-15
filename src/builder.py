@@ -87,9 +87,6 @@ class Builder:
     def run_build(self):
         pass
 
-    def cleanup(self):
-        pass
-
     def build(self):
         old_cwd = os.getcwd()
         os.chdir(self.runner.sources)
@@ -112,7 +109,6 @@ class Builder:
             logger.error('Build failed!')
             logger.error(rf'Reason: {e}')
         finally:
-            self.cleanup()
             os.chdir(old_cwd)
 
         return success
@@ -216,17 +212,12 @@ class GoBuilder(Builder):
     }
 
     def preprocess_sources(self):
+        self.add_class_map_to_template_arguments()
         super().preprocess_sources()
 
     def run_build(self):
-        tags = ','.join([
-            f'payload_algorithm_{self.runner.algorithm.lower()}',
-            f'delivery_method_{self.runner.image_source.lower()}',
-            f'payload_type_{self.runner.payload.lower()}'
-        ])
-
         o = subprocess.run(
-            f'go build -tags {tags} -ldflags "-s -w" -o build/{self.runner.name}.{self.build_extension}',
+            f'go build -ldflags "-s -w" -o {self.runner.name}.{self.build_extension}',
             shell=True,
             env=os.environ.update({
                 'GOARCH': self.architectures[self.runner.arch],
@@ -236,9 +227,6 @@ class GoBuilder(Builder):
         )
         if o.returncode:
             raise RuntimeError(o.stderr)
-
-    def cleanup(self):
-        os.remove(f'{self.runner.name}.{self.sources_extension}')
 
 
 class PowershellBuilder(Builder):
