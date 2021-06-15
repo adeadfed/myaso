@@ -6,7 +6,6 @@ Debug/
 Release/
 env/
 __pycache__/
-readers/rust/reader/target/
-Cargo.lock
 build/
 target/
+samples/shellcode/
