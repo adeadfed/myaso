@@ -1,6 +1,6 @@
 #include "runner.h"
 
-int main(int argc, wchar_t** argv) {
+int wmain(int argc, wchar_t** argv) {
     if (argc == 3) {      
         // Init Gdiplus
         GdiplusStartupInput gdiplusStartupInput;

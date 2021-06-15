@@ -1,6 +1,6 @@
 #include "runner.h"
 
-int main(int argc, wchar_t** argv) {
+int wmain(int argc, wchar_t** argv) {
     if (argc == 3) {
         // Init Gdiplus
         GdiplusStartupInput gdiplusStartupInput;
@@ -9,7 +9,7 @@ int main(int argc, wchar_t** argv) {
 
         // Do the job
         int payload_bits = _wtoi(argv[1]);
-        const wchar_t * location = argv[2];
+        const wchar_t* location = argv[2];
 
         auto img = ImageSources::{{ image_source }}({{{ image_source_args }}});
         Bitmap* bmp = img.Load(location);

@@ -177,6 +177,7 @@ class CppBuilder(Builder):
             f'-s -static-libgcc -static-libstdc++ '
             f'{libs} '
             f'-Wall '
+            f'-municode '
             f'-o {self.runner.name}.{self.build_extension}'
         )
         logger.debug(os.getcwd())
