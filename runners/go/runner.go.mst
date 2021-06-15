@@ -16,9 +16,9 @@ func main() {
 
 		location := os.Args[2]
 
-		src := ImageFile{}
-		alg := LSBX{1}
-		pld := Shellcode{}
+		src := {{{ image_source }}}{  {{{ image_source_args }}}  }
+		alg := {{{ algorithm }}}{  {{{ algorithm_args }}}  }
+		pld := {{{ payload }}}{  {{{ payload_args }}}  }
 
 		img := src.Load(location)
 		alg.Read(img, payload_data)
