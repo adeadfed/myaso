@@ -8,5 +8,5 @@ payload: shellcode
 algorithm: LSB
 
 params:
-  MAX_BITS: 2208
-  PAYLOAD_SOURCE: "./samples/shellcode/shellcode_x64.bmp"
+  BYTE_LENGTH: 276
+  IMAGE_SOURCE: "./samples/shellcode/shellcode_x64.bmp"

@@ -1,8 +1,8 @@
-name: gorunner64_no_symbols
+name: go_runner
 os: windows
 arch: x64
 
 language: go
-image_source: local
+image_source: image_file
 payload: shellcode
 algorithm: LSB
