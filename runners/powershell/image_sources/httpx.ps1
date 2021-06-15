@@ -1,1 +1,1 @@
-[System.Drawing.Image]::FromStream((Invoke-WebRequest -Uri $payload_source).RawContentStream, $true, $true)
+[System.Drawing.Image]::FromStream((Invoke-WebRequest -Uri $image_source).RawContentStream, $true, $true)

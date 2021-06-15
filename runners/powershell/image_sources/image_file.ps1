@@ -1,1 +1,1 @@
-[System.Drawing.Image]::FromFile((Get-Item $payload_source).fullname, $true)
+[System.Drawing.Image]::FromFile((Get-Item $image_source).fullname, $true)
