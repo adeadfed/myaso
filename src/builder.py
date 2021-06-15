@@ -10,6 +10,7 @@ from yaml import safe_load
 from loguru import logger
 
 from algorithms.LSBX import Channel
+from src.ps_minifier import minify_PS
 
 
 @dataclass
@@ -255,3 +256,10 @@ class PowershellBuilder(Builder):
             self.runner.params.update({'PAYLOAD_EXEC_CODE': chevron.render(f.read(), self.runner.params)})
 
         super().preprocess_sources()
+
+        with open(f'{self.main_file}', 'r') as f:
+            script = f.read()
+
+        with open(f'{self.main_file}', 'w') as f:
+            f.write(minify_PS(script))
+
