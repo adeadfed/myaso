@@ -89,7 +89,7 @@ c:\> reader.exe SC_BITS happy_cat.bmp
 - [x] PS builder templates wrong byte_length e.g. (should be 276 -> templates 2208 (276 * 8, length in bits))
 - [x] PS builder does not use minifier (/src/ps_minifier.py)
 - [x] C++ runners are not working and crash
-- [x] C# builder searches for csharp_runner.cs, not runner.cs
+- [ ] C# builder searches for csharp_runner.cs, not runner.cs
 - [x] Go builder not working (no template braces in the .mst file, searching for file with wrong name)
 
 ## Definition of Ready
