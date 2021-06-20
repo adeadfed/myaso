@@ -21,20 +21,20 @@ def embed_sc(args):
     payload = bitarray()
     payload.frombytes(sc)
 
-    payload_bits = len(payload)
-    logger.info(f'Payload size: {payload_bits} bits (save this number!)')
+    byte_length = len(payload)
+    logger.info(f'Payload size: {byte_length} bits (save this number!)')
     logger.debug(f'Algorithm: {args.algorithm}')
 
     algorithm = get_algorithm(args.algorithm)
 
-    img = get_image(args.src, algorithm, payload_bits)
+    img = get_image(args.src, algorithm, byte_length)
     algorithm.embed(payload, img)
 
     img.save(args.dst)
     logger.artifact(f'Saved the stego to {Fore.RED}{args.dst}{Style.RESET_ALL}')
 
     if args.runner_config:
-        get_runner(args, PAYLOAD_BITS=payload_bits, SC_SOURCE=os.path.split(args.dst)[1])
+        get_runner(args, BYTE_LENGTH=byte_length, PAYLOAD_SOURCE=os.path.split(args.dst)[1])
 
 
 def read_sc(args):

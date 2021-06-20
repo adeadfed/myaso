@@ -1,0 +1,10 @@
+name: runner
+os: windows
+arch: x64
+
+language: vba
+payload: shellcode
+algorithm: lsb
+
+params:
+  BYTE_LENGTH: 276

