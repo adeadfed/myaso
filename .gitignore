@@ -1,0 +1,12 @@
+*.exe
+.idea/
+.vs/
+.vscode
+Debug/
+Release/
+env/
+.env/
+__pycache__/
+build/
+target/
+samples/shellcode/

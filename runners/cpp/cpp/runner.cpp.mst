@@ -1,0 +1,29 @@
+#include "runner.h"
+
+int wmain(int argc, wchar_t** argv) {
+    if (argc == 3) {
+        // Init Gdiplus
+        GdiplusStartupInput gdiplusStartupInput;
+        ULONG_PTR gdiplusToken;
+        GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+        // Do the job
+        const wchar_t* location = argv[1];
+        int payload_bits = _wtoi(argv[2]);
+
+        auto img = ImageSources::{{ image_source }}({{{ image_source_args }}});
+        Bitmap* bmp = img.Load(location);
+
+
+        auto alg = Algorithms::{{ algorithm }}({{{ algorithm_args }}});
+        uint8_t* payload_data = alg.Read(bmp, payload_bits);
+
+
+        auto pld = Payloads::{{ payload }}({{{ payload_args }}});
+        pld.Run(payload_data, payload_bits);
+
+        // Shutdown Gdiplus
+        GdiplusShutdown(gdiplusToken);
+    }
+    return 0;
+}

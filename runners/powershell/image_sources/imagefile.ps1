@@ -1,0 +1,1 @@
+[System.Drawing.Image]::FromFile((Get-Item $image_source).fullname, $true)

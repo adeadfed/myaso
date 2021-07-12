@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "csharp": {
+      "commandName": "Project",
+      "commandLineArgs": "561 http://192.168.132.132/msf.png"
+    }
+  }
+}
