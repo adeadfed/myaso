@@ -3,7 +3,7 @@ from enum import Enum
 from PIL.Image import Image
 from loguru import logger
 
-from . import LSB, LSBM, LSBX, colorcode
+from . import LSB, LSBM, LSBX, colorcode, PVD
 from .IAlgorithm import IAlgorithm
 
 
@@ -12,6 +12,7 @@ class Algorithms(Enum):
     LSBM = 'LSBM'
     LSBX = 'LSBX'
     ColorCode = 'ColorCode'
+    PVD = 'PVD'
 
     @property
     def implementation(self):
@@ -19,7 +20,8 @@ class Algorithms(Enum):
             'LSB': LSB.LSB,
             'LSBM': LSBM.LSBM,
             'LSBX': LSBX.LSBX,
-            'colorcode': colorcode.ColorCode
+            'colorcode': colorcode.ColorCode,
+            'PVD': PVD.PVD
         }
         return ALGORITHMS[self.value]
 

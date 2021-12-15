@@ -17,7 +17,8 @@ algorithm_selection = {
         'LSB',
         'LSBX',
         'LSBM',
-        'ColorCode'
+        'ColorCode',
+        'PVD'
     ],
     'default': 'LSB'
 }
