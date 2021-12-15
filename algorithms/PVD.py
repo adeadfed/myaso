@@ -7,6 +7,8 @@ from PIL import Image
 from .IAlgorithm import IAlgorithm
 from .utils import chunks
 
+# PVD requires even pixels nearby
+# TODO: fix PVD extreme cases
 class PVD(IAlgorithm):
     def capacity(self, img: Image):
         """Number of bits to be embedded in worst case scenario"""
@@ -54,6 +56,7 @@ class PVD(IAlgorithm):
         return img
 
     def extract(self, img: Image, payload_bits: int, *args, **kwargs) -> bitarray:
+
         # take greyscale pixels
         pixels = list(img.getdata())
 
