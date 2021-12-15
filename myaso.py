@@ -47,7 +47,7 @@ def embed(
     payload.frombytes(sc)
     bit_length = len(payload)
 
-    logger.info(f'Payload size: {byte_length} bytes (save this number!)')
+    logger.info(f'Payload size: {byte_length} bytes, {bit_length} bits (save this number!)')
     logger.debug(f'Algorithm: {algorithm.value}')
 
     algorithm = algorithm.implementation(**to_kwargs(ctx))
