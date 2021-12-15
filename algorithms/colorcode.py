@@ -42,3 +42,6 @@ class ColorCode(IAlgorithm):
 
     def pixels_for(self, n):
         return n / 3
+
+    def img_mode(self):
+        return "RGB"

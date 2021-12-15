@@ -54,3 +54,6 @@ class LSB(IAlgorithm):
     def get_lsb(self, byte):
         """get last bit by doing bitwise AND with 0b00000001"""
         return byte & 0b1
+
+    def img_mode(self):
+        return "RGB"

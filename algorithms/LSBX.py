@@ -51,3 +51,6 @@ class LSBX(LSB):
 
     def pixels_for(self, n):
         return n
+
+    def img_mode(self):
+        return "RGB"

@@ -52,4 +52,5 @@ class LSBM(LSB):
     def get_lsbm(self, byte):
         return byte % 2
 
-
+    def img_mode(self):
+        return "RGB"

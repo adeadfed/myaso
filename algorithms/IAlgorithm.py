@@ -20,3 +20,6 @@ class IAlgorithm(ABC):
 
     def pixels_for(self, n):
         raise NotImplementedError
+
+    def img_mode(self):
+        raise NotImplementedError

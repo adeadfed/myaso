@@ -27,7 +27,7 @@ class ImageBuilder:
     def build(self, n):
         pixel_dim = closest_square_of(self.algorithm.pixels_for(n))
         img = Image.new(
-            mode="RGB", 
+            mode=self.algorithm.img_mode(), 
             size=(
                 pixel_dim,
                 pixel_dim
