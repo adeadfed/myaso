@@ -24,7 +24,7 @@ class LSBX(LSB):
         """Maximum number of least significant bits in ONE channel"""
         return img.height * img.width
 
-    def embed(self, payload: bitarray, img: Image, *args, **kwargs):
+    def embed(self, payload: bitarray, img: Image, *args, **kwargs) -> Image:
         assert len(payload) <= self.capacity(img), \
             f'[-] payload length ({len(payload)}) is greater than image capacity ({self.capacity(img)})!'
 

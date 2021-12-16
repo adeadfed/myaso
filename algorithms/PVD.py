@@ -14,11 +14,14 @@ class PVD(IAlgorithm):
         """Number of bits to be embedded in worst case scenario"""
         return img.height * img.width // 2
 
-    def embed(self, payload: bitarray, img: Image, *args, **kwargs):
+    def embed(self, payload: bitarray, img: Image, *args, **kwargs) -> Image:
+        # just to be sure that we are dealing with greyscale image
+        img = img.convert('L')
+
         # last byte is sometimes chewed up, add padding
         payload += bitarray('00000000')
         assert len(payload) <= self.capacity(img), \
-                f'[-] payload length ({len(payload)}) is greater than image capacity ({capacity(img)})!'
+                f'[-] payload length ({len(payload)}) is greater than image capacity ({self.capacity(img)})!'
         
         # take grayscale pixels
         pixels = list(img.getdata())
@@ -57,6 +60,7 @@ class PVD(IAlgorithm):
 
     def extract(self, img: Image, payload_bits: int, *args, **kwargs) -> bitarray:
 
+        img = img.convert('L')
         # take greyscale pixels
         pixels = list(img.getdata())
 

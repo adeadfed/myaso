@@ -16,7 +16,7 @@ def get_colorcode(byte):
 
 
 class ColorCode(IAlgorithm):
-    def embed(self, payload: bitarray, img: Image, *args, **kwargs):
+    def embed(self, payload: bitarray, img: Image, *args, **kwargs) -> Image:
         for (y, x), pixel_bits in zip(product(range(img.height), range(img.width)), chunks(payload, 3)):
             r, g, b = img.getpixel((x, y))
 

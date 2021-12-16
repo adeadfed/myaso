@@ -12,7 +12,7 @@ class LSB(IAlgorithm):
         """Maximum number of least significant bits"""
         return img.height * img.width * 3
 
-    def embed(self, payload: bitarray, img: Image, *args, **kwargs):
+    def embed(self, payload: bitarray, img: Image, *args, **kwargs) -> Image:
         assert len(payload) <= self.capacity(img), \
             f'[-] payload length ({len(payload)}) is greater than image capacity ({self.capacity(img)})!'
 

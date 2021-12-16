@@ -52,7 +52,7 @@ def embed(
 
     algorithm = algorithm.implementation(**to_kwargs(ctx))
     img = get_image(image, algorithm, bit_length)
-    algorithm.embed(payload, img)
+    img = algorithm.embed(payload, img)
 
     img.save(dst)
     logger.artifact(f'Saved the stego to {Fore.RED}{dst}{Style.RESET_ALL}')

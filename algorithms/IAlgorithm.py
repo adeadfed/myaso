@@ -12,7 +12,7 @@ class IAlgorithm(ABC):
         """Maximum number of least significant bits in ONE channel"""
         return img.height * img.width
 
-    def embed(self, payload: bitarray, img: Image, *args, **kwargs):
+    def embed(self, payload: bitarray, img: Image, *args, **kwargs) -> Image:
         raise NotImplementedError
 
     def extract(self, img: Image, payload_bits: int, *args, **kwargs) -> bitarray:
