@@ -95,7 +95,7 @@ class PVD(IAlgorithm):
     PF_SQUARE_RANGES = {
         range(0, 2)    : 1,
         range(2, 6)    : 2,
-        range(3, 12)   : 3,
+        range(6, 12)   : 3,
         range(12, 20)  : 4,
         range(20, 30)  : 5,
         range(30, 42)  : 6,
