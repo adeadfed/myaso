@@ -4,6 +4,6 @@ namespace Runner.Algorithms
 {
     interface IAlgorithm
     {
-        void read(Bitmap bm, byte[] payload_data);
+        void Read(Bitmap bm, byte[] payload_data);
     }
 }

@@ -4,6 +4,6 @@ namespace Runner.ImageSources
 {
     interface IImageSource
     {
-        Bitmap load(string filename);
+        Bitmap Load(string filename);
     }
 }

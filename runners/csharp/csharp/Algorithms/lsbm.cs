@@ -4,7 +4,7 @@ namespace Runner.Algorithms
 {
     class LSBM : IAlgorithm
     {
-        void IAlgorithm.read(Bitmap bm, byte[] payload_data)
+        void IAlgorithm.Read(Bitmap bm, byte[] payload_data)
         {
             int length = payload_data.Length * 8;
             int pos = 0;
@@ -28,7 +28,7 @@ namespace Runner.Algorithms
                             return;
                         }
 
-                        payload_data[pos / 8] = getLsbM(payload_data[pos / 8], channel);
+                        payload_data[pos / 8] = GetLsbM(payload_data[pos / 8], channel);
                         pos++;
                         length--;
                     }
@@ -36,7 +36,7 @@ namespace Runner.Algorithms
             }
         }
 
-        private static byte getLsbM(byte target, byte source)
+        private static byte GetLsbM(byte target, byte source)
         {
             return (byte)((target << 1) | (source % 2));
         }

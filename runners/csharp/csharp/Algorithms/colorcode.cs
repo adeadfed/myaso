@@ -4,7 +4,7 @@ namespace Runner.Algorithms
 {
     class ColorCode : IAlgorithm
     {
-        void IAlgorithm.read(Bitmap bm, byte[] payload_data)
+        void IAlgorithm.Read(Bitmap bm, byte[] payload_data)
         {
             int length = payload_data.Length * 8;
             int pos = 0;
@@ -28,7 +28,7 @@ namespace Runner.Algorithms
                             return;
                         }
 
-                        payload_data[pos / 8] = getColorcode(payload_data[pos / 8], channel);
+                        payload_data[pos / 8] = GetColorcode(payload_data[pos / 8], channel);
                         pos++;
                         length--;
                     }
@@ -36,7 +36,7 @@ namespace Runner.Algorithms
             }
         }
 
-        private static byte getColorcode(byte target, byte source)
+        private static byte GetColorcode(byte target, byte source)
         {
             return (byte)((target << 1) | (source > 128 ? 1 : 0));
         }

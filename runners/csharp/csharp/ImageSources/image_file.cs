@@ -4,9 +4,6 @@ namespace Runner.ImageSources
 {
     class ImageFile : IImageSource
     {
-        Bitmap IImageSource.load(string filename)
-        {
-            return new Bitmap(filename);
-        }
+        Bitmap IImageSource.Load(string filename) => new Bitmap(filename);
     }
 }

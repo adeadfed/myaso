@@ -8,7 +8,7 @@ namespace Runner.Algorithms
         public LSBX(int channel) => this.channel = channel;
 
 
-        void IAlgorithm.read(Bitmap bm, byte[] payload_data)
+        void IAlgorithm.Read(Bitmap bm, byte[] payload_data)
         {
             int length = payload_data.Length * 8;
             int pos = 0;
@@ -30,14 +30,14 @@ namespace Runner.Algorithms
                         return;
                     }
 
-                    payload_data[pos / 8] = getLsb(payload_data[pos / 8], channels[channel]);
+                    payload_data[pos / 8] = GetLsb(payload_data[pos / 8], channels[channel]);
                     pos++;
                     length--;
                 }
             }
         }
 
-        private static byte getLsb(byte target, byte source)
+        private static byte GetLsb(byte target, byte source)
         {
             return (byte)((target << 1) | (source & 1));
         }
