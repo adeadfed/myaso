@@ -34,6 +34,9 @@ class ImageBuilder:
             )
         )
         
+        # TODO: alrogithms can supply their own parameters for pictures entirely
+        # e.g. PVD: grayscale image, min pixel value = 50, max pixel value = 200
+        
         # TODO: change the way images are generated
         if self.algorithm.img_mode() == "RGB":
             # generate list of (R,G,B) tuples with the length of pixel_dim**2
